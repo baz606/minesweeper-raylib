@@ -41,5 +41,9 @@ private:
   void UpdateGame();
   void GenerateOutput();
 
+  void DrawLogo();
+
   bool isEnd;
+
+  void UnLoadData();
 };

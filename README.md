@@ -1,4 +1,4 @@
-# minesweeper-unreal
+# minesweeper-raylib
 This is my attempt to building a full minesweeper game using raylib: https://www.raylib.com/ </br>
 
 ## <u>How to build (for Windows 10):</u>

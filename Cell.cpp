@@ -20,3 +20,8 @@ void Cell::SetRectangle(float x, float y, float width, float height)
 {
   rectangle = { x, y, width, height };
 }
+
+void Cell::Draw()
+{
+  DrawRectangleRec(rectangle, color);
+}

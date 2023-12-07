@@ -22,8 +22,8 @@ public:
   void SetRectangle(float x, float y, float width, float height);
 
   Vector2Int* GetPosition() { return &position; }
-  Rectangle* GetRectangle() { return &rectangle; }
-  Color* GetColor() { return &color; }
+
+  void Draw();
 
   // Length of this squared cell. Each cell will be the same length
   static const int LENGTH = 100;

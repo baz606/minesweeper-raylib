@@ -66,6 +66,7 @@ void Game::GenerateOutput()
   // Render/Draw graphics
   BeginDrawing();
   ClearBackground(RAYWHITE);
+  DrawFPS(SCREEN_WIDTH - 100, 20);
   // Draw a big/invisible rectangle where cells will reside
   DrawRectangleRec(plane, RAYWHITE);
   // Draw the grid cells
@@ -73,7 +74,7 @@ void Game::GenerateOutput()
   {
     for (auto cell : row)
     {
-      DrawRectangleRec(*cell->GetRectangle(), *cell->GetColor());
+      cell->Draw();
     }
   }
   //DrawText("Test Window", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 50, BLACK);
@@ -84,7 +85,6 @@ void Game::GenerateOutput()
 //    Rectangle rectangle1 = GetCollisionRec(grid, Rectangle(GetMouseX(), GetMouseY()));
 //    printf("(%f, %f, %f, %f)\n", rectangle1.x, rectangle1.y, rectangle1.width, rectangle1.height);
 //  }
-  DrawFPS(SCREEN_WIDTH - 100, 20);
   DrawLogo();
   EndDrawing();
 }

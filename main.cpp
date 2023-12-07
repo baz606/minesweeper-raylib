@@ -1,24 +1,16 @@
-#include "raylib.h"
+#include "Game.h"
 
 int main()
 {
-  // Initializing window
-  // Preserve 4:3 aspect ratio to give an arcade game vibe
-  const int SCREEN_WIDTH = 1280;
-  const int SCREEN_HEIGHT = 960;
+  Game game(1280, 960, "Minesweeper");
+  game.Initialize();
 
-  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "minesweeper-raylib");
-  SetTargetFPS(60);
-
-  while (!WindowShouldClose())
+  while (!game.ExitGame())
   {
-    // Draw
-    BeginDrawing();
-    ClearBackground(RAYWHITE);
-    DrawText("Test Window", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 50, BLACK);
-    EndDrawing();
+    // Run main game loop
+    game.RunGame();
   }
-
+  game.CloseGame();
   // Clean up - close window and OpenGL context
-  CloseWindow();
+  return 0;
 }

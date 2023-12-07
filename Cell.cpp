@@ -5,12 +5,11 @@
 #include "Cell.h"
 
 Cell::Cell()
+:color(DARKGRAY)
 {
 }
 
-Cell::~Cell()
-{
-}
+Cell::~Cell() = default;
 
 void Cell::SetPosition(int x, int y)
 {

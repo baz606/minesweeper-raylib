@@ -9,7 +9,8 @@ Game::Game(int screenWidth, int screenHeight, const char* title)
 ,SCREEN_HEIGHT(screenHeight)
 ,title(title)
 {
-  plane = { 0, 0, 900, 900 };
+  rows = 0;
+  columns = 0;
 }
 
 Game::~Game()
@@ -24,15 +25,23 @@ void Game::Initialize()
   isEnd = false;
 
   // Set up grid so it can be draw
-  rows = 9; columns = 9;
-//  for (int i = 0; i < rows; i++)
-//  {
-//    for (int j = 0; j < columns; j++)
-//    {
-//      Cell* cell = new Cell();
-//      cell->SetPosition(i, j);
-//    }
-//  }
+  plane = { 0, 0, 900, 900 };
+  rows = plane.width / Cell::LENGTH;
+  columns = plane.height / Cell::LENGTH;
+  float padding = 5.0f;
+
+  grid.resize(rows);
+  for (int i = 0; i < rows; i++)
+  {
+    grid[i].resize(columns);
+    for (int j = 0; j < columns; j++)
+    {
+      Cell* cell = new Cell();
+      cell->SetPosition(i, j);
+      cell->SetRectangle(i * (Cell::LENGTH + padding), j * (Cell::LENGTH + padding), Cell::LENGTH, Cell::LENGTH);
+      grid[i][j] = cell;
+    }
+  }
 }
 
 void Game::RunGame()
@@ -59,6 +68,14 @@ void Game::GenerateOutput()
   ClearBackground(RAYWHITE);
   // Draw a big/invisible rectangle where cells will reside
   DrawRectangleRec(plane, RAYWHITE);
+  // Draw the grid cells
+  for (auto row : grid)
+  {
+    for (auto cell : row)
+    {
+      DrawRectangleRec(*cell->GetRectangle(), *cell->GetColor());
+    }
+  }
   //DrawText("Test Window", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 50, BLACK);
 //  Rectangle rectangle = { 0, 0, 100, 100 };
 //  DrawRectangleRec(rectangle, BLACK);
@@ -68,6 +85,7 @@ void Game::GenerateOutput()
 //    printf("(%f, %f, %f, %f)\n", rectangle1.x, rectangle1.y, rectangle1.width, rectangle1.height);
 //  }
   DrawFPS(SCREEN_WIDTH - 100, 20);
+  DrawLogo();
   EndDrawing();
 }
 
@@ -81,5 +99,25 @@ bool Game::ExitGame()
 
 void Game::CloseGame()
 {
+  UnLoadData();
   CloseWindow();
+}
+
+void Game::UnLoadData()
+{
+  // Deallocate memory of grid
+  for (auto row : grid)
+  {
+    for (auto cell : row)
+    {
+      delete cell;
+    }
+    row.clear();
+  }
+  grid.clear();
+}
+
+void Game::DrawLogo()
+{
+  DrawText("@baz606", SCREEN_WIDTH - 300, SCREEN_HEIGHT / 2, 50, BLUE);
 }

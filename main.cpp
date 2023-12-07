@@ -10,7 +10,7 @@ int main()
     // Run main game loop
     game.RunGame();
   }
+  // Clean up - close window and deallocate memory
   game.CloseGame();
-  // Clean up - close window and OpenGL context
   return 0;
 }

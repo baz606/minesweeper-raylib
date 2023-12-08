@@ -39,9 +39,10 @@ void Game::Initialize()
       Cell* cell = new Cell();
       cell->SetPosition(i, j);
       cell->SetRectangle(j * (Cell::LENGTH + padding), i * (Cell::LENGTH + padding), Cell::LENGTH, Cell::LENGTH);
+      cell->SetScreenPosition((j * (Cell::LENGTH + padding)) + (Cell::LENGTH / 2), (i * (Cell::LENGTH + padding)) + (Cell::LENGTH / 2));
       cell->SetCellType(UNEXPOSE);
       grid[i][j] = cell;
-      printf("(%d,%d) ", cell->GetPosition()->x, cell->GetPosition()->y);
+      printf("(%f,%f) ", cell->GetScreenPosition()->x, cell->GetScreenPosition()->y);
     }
     printf("\n");
   }
@@ -51,12 +52,12 @@ void Game::Initialize()
 
 void Game::RunGame()
 {
-  GetInput();
+  ProcessInputs();
   UpdateGame();
   GenerateOutput();
 }
 
-void Game::GetInput()
+void Game::ProcessInputs()
 {
   // Get player input
 }
@@ -132,15 +133,29 @@ void Game::SetMineCells()
   totalMines = 9;
   int i = 0, j = 0, k = 0;
   SetRandomSeed(time(nullptr));
+  std::vector<Cell*> mineCells;
   while (k < totalMines)
   {
     i = GetRandomValue(0, rows - 1);
     j = GetRandomValue(0, columns - 1);
     // Set Mine cell
-    grid[i][j]->SetCellType(MINE);
-    // Set Adjacent cells around mine cell
-    SetAdjacentCellsAround(grid[i][j]);
+    if (grid[i][j]->GetCellType() == UNEXPOSE)
+    {
+      grid[i][j]->SetCellType(MINE);
+      mineCells.push_back(grid[i][j]);
+    }
+    else
+    {
+      // This randomly selected cell is either a MINE or ADJACENT cell already
+      continue;
+    }
     k++;
+  }
+
+  for (auto cell : mineCells)
+  {
+    // Set adjacent cells around this mine cell
+    SetAdjacentCellsAround(cell);
   }
 }
 
@@ -149,11 +164,13 @@ void Game::SetAdjacentCellsAround(Cell* cell)
   std::vector<Cell*> adjacentCells;
   GetAdjacentCellsFor(cell, adjacentCells);
 
-  for (auto cell : adjacentCells)
+  for (auto adjCell : adjacentCells)
   {
-    if(cell->GetCellType() == UNEXPOSE)
+    if(adjCell->GetCellType() != MINE)
     {
-      cell->SetCellType(ADJACENT);
+      // If not a mine cell, set adjacent cell type and increment the number of mines around it
+      adjCell->SetCellType(ADJACENT);
+      adjCell->IncrementNumOfMines();
     }
   }
 }

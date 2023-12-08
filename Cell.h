@@ -29,23 +29,30 @@ public:
   void SetPosition(int x, int y);
   void SetRectangle(float x, float y, float width, float height);
   void SetCellType(CellType cellType) { this->cellType = cellType; }
+  void SetScreenPosition(float x, float y);
 
-  Vector2Int* GetPosition() { return &position; }
+  const Vector2Int* GetPosition() { return &position; }
+  const Vector2* GetScreenPosition() { return &screenPosition; };
   CellType GetCellType() { return cellType; }
 
   void Draw();
+  void IncrementNumOfMines();
 
   // Length of this squared cell. Each cell will be the same length
   static const int LENGTH = 100;
 
 private:
+  // Screen position, i.e. coordinates for this Cell
+  Vector2 screenPosition;
   // Index position in the 2D array of cells - easier to calculate adjacent cells
-  Vector2Int position{};
+  Vector2Int position;
   // The rectangle struct associated with this Cell that will be drawn on screen
   // Can be used to check for collision when a user selects this cell
-  Rectangle rectangle{};
+  Rectangle rectangle;
   // Color for this cell
   Color color;
   // Current state of the cell
   CellType cellType;
+  // Number of mines around this cell
+  int numOfMines;
 };

@@ -12,6 +12,14 @@ struct Vector2Int
   int y;
 };
 
+enum CellType
+{
+  UNEXPOSE,
+  EXPOSE,
+  ADJACENT,
+  MINE
+};
+
 class Cell
 {
 public:
@@ -20,8 +28,10 @@ public:
 
   void SetPosition(int x, int y);
   void SetRectangle(float x, float y, float width, float height);
+  void SetCellType(CellType cellType) { this->cellType = cellType; }
 
   Vector2Int* GetPosition() { return &position; }
+  CellType GetCellType() { return cellType; }
 
   void Draw();
 
@@ -36,4 +46,6 @@ private:
   Rectangle rectangle{};
   // Color for this cell
   Color color;
+  // Current state of the cell
+  CellType cellType;
 };

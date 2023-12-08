@@ -36,6 +36,7 @@ private:
   std::vector<std::vector<Cell*>> grid;
   int rows;
   int columns;
+  int totalMines;
 
   void GetInput();
   void UpdateGame();
@@ -46,4 +47,10 @@ private:
   bool isEnd;
 
   void UnLoadData();
+
+  void SetMineCells();
+
+  void SetAdjacentCellsAround(Cell* cell);
+
+  void GetAdjacentCellsFor(Cell* cell, std::vector<Cell*>& adjacentCells);
 };

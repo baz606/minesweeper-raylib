@@ -2,6 +2,7 @@
 // Created by shehbaz on 12/6/2023.
 //
 
+#include <cmath>
 #include "Game.h"
 
 Game::Game(int screenWidth, int screenHeight, const char* title)
@@ -25,10 +26,10 @@ void Game::Initialize()
   isEnd = false;
 
   // Set up grid so it can be draw
-  plane = { 0, 0, 900, 900 };
-  rows = plane.width / Cell::LENGTH;
-  columns = plane.height / Cell::LENGTH;
-  float padding = 5.0f;
+  plane = { 0, 0, 910, 910 };
+  rows = 9;
+  columns = 9;
+  int padding = 0;
 
   grid.resize(rows);
   for (int i = 0; i < rows; i++)
@@ -42,7 +43,7 @@ void Game::Initialize()
       cell->SetScreenPosition((j * (Cell::LENGTH + padding)) + (Cell::LENGTH / 2), (i * (Cell::LENGTH + padding)) + (Cell::LENGTH / 2));
       cell->SetCellType(UNEXPOSE);
       grid[i][j] = cell;
-      printf("(%f,%f) ", cell->GetScreenPosition()->x, cell->GetScreenPosition()->y);
+      printf("(%d,%d) ", cell->GetScreenPosition()->x, cell->GetScreenPosition()->y);
     }
     printf("\n");
   }
@@ -65,13 +66,24 @@ void Game::ProcessInputs()
 void Game::UpdateGame()
 {
   // Update game world
+//  if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+//  {
+//    printf("(%d, %d)\n", GetMouseX(), GetMouseY());
+//    printf("Index = (%d, %d)\n", GetMouseY() / Cell::LENGTH, GetMouseX() / Cell::LENGTH);
+//    int i = std::lround(GetMouseY() / Cell::LENGTH);
+//    int j = std::lround(GetMouseX() / Cell::LENGTH);
+//    if (i >= 0 && i < rows && j >= 0 && j < columns)
+//    {
+//      grid[i][j]->SetColor(BLACK);
+//    }
+//  }
 }
 
 void Game::GenerateOutput()
 {
   // Render/Draw graphics
   BeginDrawing();
-  ClearBackground(RAYWHITE);
+  ClearBackground(LIGHTGRAY);
   DrawFPS(SCREEN_WIDTH - 100, 20);
   // Draw a big/invisible rectangle where cells will reside
   DrawRectangleRec(plane, RAYWHITE);

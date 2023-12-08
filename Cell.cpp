@@ -23,5 +23,13 @@ void Cell::SetRectangle(float x, float y, float width, float height)
 
 void Cell::Draw()
 {
+  if (cellType == MINE)
+  {
+    color = RED;
+  }
+  else if (cellType == ADJACENT)
+  {
+    color = BLUE;
+  }
   DrawRectangleRec(rectangle, color);
 }

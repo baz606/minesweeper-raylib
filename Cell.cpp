@@ -2,10 +2,12 @@
 // Created by shehbaz on 12/6/2023.
 //
 
+#include <string>
 #include "Cell.h"
 
 Cell::Cell()
 :color(DARKGRAY)
+,numOfMines(0)
 {
 }
 
@@ -27,9 +29,22 @@ void Cell::Draw()
   {
     color = RED;
   }
-  else if (cellType == ADJACENT)
+  if (cellType == ADJACENT)
   {
     color = BLUE;
+    DrawRectangleRec(rectangle, color);
+    DrawText(std::to_string(numOfMines).c_str(), screenPosition.x - 10, screenPosition.y - 15, 40, WHITE);
+    return;
   }
   DrawRectangleRec(rectangle, color);
+}
+
+void Cell::SetScreenPosition(float x, float y)
+{
+  screenPosition = { x, y };
+}
+
+void Cell::IncrementNumOfMines()
+{
+  numOfMines++;
 }

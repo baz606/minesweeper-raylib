@@ -38,7 +38,7 @@ private:
   int columns;
   int totalMines;
 
-  void GetInput();
+  void ProcessInputs();
   void UpdateGame();
   void GenerateOutput();
 

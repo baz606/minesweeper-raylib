@@ -25,6 +25,7 @@ void Cell::SetRectangle(float x, float y, float width, float height)
 
 void Cell::Draw()
 {
+  // This whole method will need to be re-written when I add the expose method
   if (cellType == MINE)
   {
     color = RED;
@@ -33,13 +34,15 @@ void Cell::Draw()
   {
     color = BLUE;
     DrawRectangleRec(rectangle, color);
+    DrawRectangleLinesEx(rectangle, 2, BLACK);
     DrawText(std::to_string(numOfMines).c_str(), screenPosition.x - 10, screenPosition.y - 15, 40, WHITE);
     return;
   }
   DrawRectangleRec(rectangle, color);
+  DrawRectangleLinesEx(rectangle, 2, BLACK);
 }
 
-void Cell::SetScreenPosition(float x, float y)
+void Cell::SetScreenPosition(int x, int y)
 {
   screenPosition = { x, y };
 }
@@ -47,4 +50,9 @@ void Cell::SetScreenPosition(float x, float y)
 void Cell::IncrementNumOfMines()
 {
   numOfMines++;
+}
+
+void Cell::SetColor(Color color)
+{
+  this->color = color;
 }

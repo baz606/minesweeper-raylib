@@ -29,10 +29,11 @@ public:
   void SetPosition(int x, int y);
   void SetRectangle(float x, float y, float width, float height);
   void SetCellType(CellType cellType) { this->cellType = cellType; }
-  void SetScreenPosition(float x, float y);
+  void SetScreenPosition(int x, int y);
+  void SetColor(Color color);
 
   const Vector2Int* GetPosition() { return &position; }
-  const Vector2* GetScreenPosition() { return &screenPosition; };
+  const Vector2Int* GetScreenPosition() { return &screenPosition; };
   CellType GetCellType() { return cellType; }
 
   void Draw();
@@ -43,7 +44,7 @@ public:
 
 private:
   // Screen position, i.e. coordinates for this Cell
-  Vector2 screenPosition;
+  Vector2Int screenPosition;
   // Index position in the 2D array of cells - easier to calculate adjacent cells
   Vector2Int position;
   // The rectangle struct associated with this Cell that will be drawn on screen

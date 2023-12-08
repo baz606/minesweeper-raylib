@@ -1,5 +1,6 @@
 # minesweeper-raylib
 This is my attempt to building a full minesweeper game using raylib: https://www.raylib.com/ </br>
+I am not following any particular game object model so this code is going to be messy.</br>
 
 ## <u>How to build (for Windows 10):</u>
 1. Install cmake for windows: https://cmake.org/download/

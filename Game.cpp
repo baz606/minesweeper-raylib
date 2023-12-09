@@ -51,7 +51,6 @@ void Game::Initialize()
 
 void Game::ResetGame()
 {
-  mineCells.clear();
   for (auto& row : grid)
   {
     for (auto cell : row)
@@ -167,6 +166,7 @@ void Game::SetMineCells()
   totalMines = 9;
   int i = 0, j = 0, k = 0;
   SetRandomSeed(time(nullptr));
+  mineCells.clear();
   while (k < totalMines)
   {
     i = GetRandomValue(0, rows - 1);

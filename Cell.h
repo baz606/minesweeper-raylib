@@ -17,7 +17,10 @@ enum CellType
   UNEXPOSE,
   EXPOSE,
   ADJACENT,
-  MINE
+  ADJACENT_UNEXPOSE,
+  MINE,
+  SEALED,
+  SEALED_MINE
 };
 
 class Cell
@@ -42,9 +45,9 @@ public:
   // Length of this squared cell. Each cell will be the same length
   static const int LENGTH = 100;
 
-  void SetShowNumOfMines(bool show);
-
   void ResetVals();
+
+  void ToggleSeal();
 
 private:
   // Screen position, i.e. coordinates for this Cell
@@ -60,6 +63,4 @@ private:
   CellType cellType;
   // Number of mines around this cell
   int numOfMines;
-  // Whether to show number of mines on a cell
-  bool showNumOfMines;
 };

@@ -72,17 +72,30 @@ void Game::RunGame()
 void Game::ProcessInputs()
 {
   // Get player input
-  if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && gameState == PLAYING)
+  if (gameState == PLAYING)
   {
-    // Check which cell the user selected
-    int i = std::lround(GetMouseY() / Cell::LENGTH);
-    int j = std::lround(GetMouseX() / Cell::LENGTH);
-    if (i >= 0 && i < rows && j >= 0 && j < columns)
+    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
     {
-      Expose(grid[i][j]);
+      // Check which cell the user selected
+      int i = std::lround(GetMouseY() / Cell::LENGTH);
+      int j = std::lround(GetMouseX() / Cell::LENGTH);
+      if (i >= 0 && i < rows && j >= 0 && j < columns)
+      {
+        Expose(grid[i][j]);
+      }
+    }
+    else if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT))
+    {
+      // Check which cell the user selected to seal
+      int i = std::lround(GetMouseY() / Cell::LENGTH);
+      int j = std::lround(GetMouseX() / Cell::LENGTH);
+      if (i >= 0 && i < rows && j >= 0 && j < columns)
+      {
+        grid[i][j]->ToggleSeal();
+      }
     }
   }
-  if (IsKeyReleased(KEY_SPACE) && gameState == GAME_OVER)
+  else if (IsKeyReleased(KEY_SPACE) && gameState == GAME_OVER)
   {
     gameState = INITIAL;
   }
@@ -202,7 +215,7 @@ void Game::SetAdjacentCellsAround(Cell* cell)
     if(adjCell->GetCellType() != MINE)
     {
       // If not a mine cell, set adjacent cell type and increment the number of mines around it
-      adjCell->SetCellType(ADJACENT);
+      adjCell->SetCellType(ADJACENT_UNEXPOSE);
       adjCell->IncrementNumOfMines();
     }
   }
@@ -252,15 +265,13 @@ void Game::Expose(Cell *cell)
   {
     gameState = GAME_OVER;
   }
-  else if (cell->GetCellType() == ADJACENT)
+  else if (cell->GetCellType() == ADJACENT_UNEXPOSE)
   {
-    cell->SetShowNumOfMines(true);
-    cell->SetColor(BLUE);
+    cell->SetCellType(ADJACENT);
   }
   else if (cell->GetCellType() == UNEXPOSE)
   {
     cell->SetCellType(EXPOSE);
-    cell->SetColor(BLUE);
     // Get adjacent cells and recursively call expose
     std::vector<Cell*> adjacentCells;
     GetAdjacentCellsFor(cell, adjacentCells);

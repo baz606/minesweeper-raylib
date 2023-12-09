@@ -2,7 +2,12 @@
 This is my attempt to building a full minesweeper game using raylib: https://www.raylib.com/ </br>
 I am not following any particular game object model so this code is going to be messy.</br>
 
-## <u>How to build (for Windows 10):</u>
+If you want to try out this game, please follow the instructions below.</br>
+Make sure you have Visual Studio 2022 installed along with Windows 10 SDK.</br>
+Alternatively, you can also compile and run this with CLion.</br>
+The CMakeList.txt file should have all the necessary dependencies.
+
+### <u>How to build (for Windows 10):</u>
 1. Install cmake for windows: https://cmake.org/download/
 2. Run <code>mkdir build && cd build && cmake.exe ..</code></br>
    This will generate the visual studio files needed to build the final executable

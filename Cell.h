@@ -44,6 +44,8 @@ public:
 
   void SetShowNumOfMines(bool show);
 
+  void ResetVals();
+
 private:
   // Screen position, i.e. coordinates for this Cell
   Vector2Int screenPosition;

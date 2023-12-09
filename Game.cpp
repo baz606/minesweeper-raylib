@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include "Game.h"
+#include "Cell.h"
 
 Game::Game(int screenWidth, int screenHeight, const char* title)
 :SCREEN_WIDTH(screenWidth)
@@ -34,7 +35,7 @@ void Game::Initialize()
     grid[i].resize(columns);
     for (int j = 0; j < columns; j++)
     {
-      Cell* cell = new Cell();
+      Cell* cell = new Cell(this);
       cell->SetPosition(i, j);
       cell->SetRectangle(j * (Cell::LENGTH + padding), i * (Cell::LENGTH + padding), Cell::LENGTH, Cell::LENGTH);
       cell->SetScreenPosition((j * (Cell::LENGTH + padding)) + (Cell::LENGTH / 2), (i * (Cell::LENGTH + padding)) + (Cell::LENGTH / 2));
@@ -95,7 +96,7 @@ void Game::ProcessInputs()
       }
     }
   }
-  else if (IsKeyReleased(KEY_SPACE) && gameState == GAME_OVER)
+  else if (IsKeyReleased(KEY_SPACE) && (gameState == GAME_OVER || gameState == WIN))
   {
     gameState = INITIAL;
   }
@@ -111,6 +112,7 @@ void Game::UpdateGame()
   {
     HandleGameOver();
   }
+  CheckForWin();
 }
 
 void Game::GenerateOutput()
@@ -119,6 +121,7 @@ void Game::GenerateOutput()
   ClearBackground(LIGHTGRAY);
   DrawFPS(SCREEN_WIDTH - 100, 20);
   DrawLogo();
+  DrawText(std::string("MINES: " + std::to_string(totalSeals)).c_str(), SCREEN_WIDTH - 300, 100, 50, BLUE);
   // Draw a big/invisible rectangle where cells will reside
   DrawRectangleRec(plane, RAYWHITE);
   // Draw the grid cells
@@ -136,6 +139,14 @@ void Game::GenerateOutput()
     DrawRectangle((SCREEN_WIDTH / 2) - (width / 2), (SCREEN_HEIGHT / 2) - (height / 2), width, height, {0, 0, 0, 220});
     DrawText("YOU CLICKED A MINE CELL! GAME OVER!", (SCREEN_WIDTH / 2) - 500, (SCREEN_HEIGHT / 2) - 40, fontSize, RED);
     DrawText("PRESS SPACE BAR TO TRY AGAIN!", (SCREEN_WIDTH / 2) - 500, (SCREEN_HEIGHT / 2) + 20, fontSize, RED);
+  }
+  else if (gameState == WIN)
+  {
+    int width = 1200, height = 500;
+    int fontSize = 50;
+    DrawRectangle((SCREEN_WIDTH / 2) - (width / 2), (SCREEN_HEIGHT / 2) - (height / 2), width, height, {0, 0, 0, 220});
+    DrawText("CONGRATULATIONS, YOU HAVE WON!", (SCREEN_WIDTH / 2) - 500, (SCREEN_HEIGHT / 2) - 40, fontSize, GREEN);
+    DrawText("PRESS SPACE BAR TO PLAY AGAIN!", (SCREEN_WIDTH / 2) - 500, (SCREEN_HEIGHT / 2) + 20, fontSize, GREEN);
   }
   EndDrawing();
 }
@@ -177,6 +188,7 @@ void Game::DrawLogo()
 void Game::SetMineCells()
 {
   totalMines = 9;
+  totalSeals = totalMines;
   int i = 0, j = 0, k = 0;
   SetRandomSeed(time(nullptr));
   mineCells.clear();
@@ -296,4 +308,32 @@ void Game::ShowAllMines()
 void Game::HandleGameOver()
 {
   ShowAllMines();
+}
+
+void Game::CheckForWin()
+{
+  for (auto mine : mineCells)
+  {
+    if (mine->GetCellType() == MINE)
+    {
+      // There is at least one mine cell not sealed
+      return;
+    }
+  }
+  gameState = WIN;
+}
+
+bool Game::CanSeal()
+{
+  return totalSeals > 0;
+}
+
+void Game::Seal()
+{
+  totalSeals--;
+}
+
+void Game::UnSeal()
+{
+  totalSeals++;
 }

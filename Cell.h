@@ -19,6 +19,7 @@ enum CellType
   ADJACENT,
   ADJACENT_UNEXPOSE,
   MINE,
+  MINE_CROSS,
   SEALED,
   SEALED_MINE
 };
@@ -65,4 +66,6 @@ private:
   int numOfMines;
   // Handle to the game manager
   class Game* game;
+
+  void DrawCross() const;
 };

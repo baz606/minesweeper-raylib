@@ -4,12 +4,17 @@
 
 #include <string>
 #include "Cell.h"
+#include "Game.h"
 
-Cell::Cell()
-: color(DARKGRAY)
-, numOfMines(0)
-, cellType(UNEXPOSE)
+Cell::Cell(Game* game)
+:color(DARKGRAY)
+,numOfMines(0)
+,cellType(UNEXPOSE)
+,screenPosition(0, 0)
+,position(0, 0)
+,rectangle(0, 0, 0, 0)
 {
+  this->game = game;
 }
 
 Cell::~Cell()
@@ -78,21 +83,21 @@ void Cell::ResetVals()
   cellType = UNEXPOSE;
   color = DARKGRAY;
   numOfMines = 0;
-  showAdjacent = false;
 }
 
 void Cell::ToggleSeal()
 {
   // If sealing
-  if (cellType == MINE)
+  if (cellType == MINE && game->CanSeal())
   {
     cellType = SEALED_MINE;
+    game->Seal();
     return;
   }
-  else if (cellType == UNEXPOSE || cellType == ADJACENT_UNEXPOSE)
+  else if ((cellType == UNEXPOSE || cellType == ADJACENT_UNEXPOSE) && game->CanSeal())
   {
-    printf("SEALING UNEXPOSE OR ADJ UNEXPOSE");
     cellType = SEALED;
+    game->Seal();
     return;
   }
 
@@ -107,12 +112,13 @@ void Cell::ToggleSeal()
     {
       cellType = UNEXPOSE;
     }
+    color = DARKGRAY;
+    game->UnSeal();
   }
   else if (cellType == SEALED_MINE)
   {
     cellType = MINE;
-
+    color = DARKGRAY;
+    game->UnSeal();
   }
-  // Set cell color to DARKGRAY to show cell is unsealed
-  color = DARKGRAY;
 }

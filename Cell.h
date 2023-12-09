@@ -26,7 +26,7 @@ enum CellType
 class Cell
 {
 public:
-  Cell();
+  Cell(class Game* game);
   ~Cell();
 
   void SetPosition(int x, int y);
@@ -63,4 +63,6 @@ private:
   CellType cellType;
   // Number of mines around this cell
   int numOfMines;
+  // Handle to the game manager
+  class Game* game;
 };

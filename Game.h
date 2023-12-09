@@ -9,14 +9,17 @@
 #include <memory>
 
 #include "raylib.h"
-#include "Cell.h"
 
 enum GameState
 {
   INITIAL,
   PLAYING,
+  WIN,
   GAME_OVER
 };
+
+// Forward declare Cell class
+class Cell;
 
 /**
  * This Game class will be used to manage our game
@@ -34,6 +37,12 @@ public:
   bool ExitGame();
   void CloseGame();
 
+  bool CanSeal();
+
+  void Seal();
+
+  void UnSeal();
+
 private:
   const int SCREEN_WIDTH, SCREEN_HEIGHT;
   const char* title;
@@ -45,6 +54,7 @@ private:
   int rows;
   int columns;
   int totalMines;
+  int totalSeals;
   GameState gameState;
 
   void ProcessInputs();
@@ -70,4 +80,6 @@ private:
   void HandleGameOver();
 
   void ResetGame();
+
+  void CheckForWin();
 };

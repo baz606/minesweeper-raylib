@@ -37,12 +37,14 @@ void Cell::Draw()
   switch (cellType)
   {
     case SEALED:
-      color = GREEN;
-      DrawRectangleRec(rectangle, color);
-      break;
     case SEALED_MINE:
       color = PURPLE;
       DrawRectangleRec(rectangle, color);
+      DrawCross();
+      break;
+    case MINE_CROSS:
+      DrawRectangleRec(rectangle, color);
+      DrawCross();
       break;
     case EXPOSE:
       color = BLUE;
@@ -61,6 +63,12 @@ void Cell::Draw()
       DrawRectangleRec(rectangle, color);
   }
   DrawRectangleLinesEx(rectangle, 3.0f, BLACK);
+}
+
+void Cell::DrawCross() const
+{
+  DrawLineEx({rectangle.x, rectangle.y }, {rectangle.x + LENGTH, rectangle.y + LENGTH }, 5, BLACK);
+  DrawLineEx({rectangle.x + LENGTH, rectangle.y }, {rectangle.x, rectangle.y + LENGTH }, 5, BLACK);
 }
 
 void Cell::SetScreenPosition(int x, int y)

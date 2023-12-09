@@ -301,6 +301,14 @@ void Game::ShowAllMines()
 {
   for (auto cell : mineCells)
   {
+    if (cell->GetCellType() == SEALED_MINE)
+    {
+      cell->SetCellType(MINE_CROSS);
+    }
+    else if (cell->GetCellType() != MINE_CROSS)
+    {
+      cell->SetCellType(MINE);
+    }
     cell->SetColor(RED);
   }
 }

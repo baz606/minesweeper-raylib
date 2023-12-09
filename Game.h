@@ -31,16 +31,15 @@ public:
   ~Game();
 
   void Initialize();
-
   void RunGame();
+
+  GameState GetGetState() { return gameState; }
 
   bool ExitGame();
   void CloseGame();
 
   bool CanSeal();
-
   void Seal();
-
   void UnSeal();
 
 private:

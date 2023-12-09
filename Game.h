@@ -29,11 +29,11 @@ public:
 private:
   const int SCREEN_WIDTH, SCREEN_HEIGHT;
   const char* title;
-  // This plane is where cells will reside and drawn
-  // This will help us with detecting collisions
+  // This rectangular plane is where cells will reside and drawn
   Rectangle plane;
 
   std::vector<std::vector<Cell*>> grid;
+  std::vector<Cell*> mineCells;
   int rows;
   int columns;
   int totalMines;
@@ -53,4 +53,8 @@ private:
   void SetAdjacentCellsAround(Cell* cell);
 
   void GetAdjacentCellsFor(Cell* cell, std::vector<Cell*>& adjacentCells);
+
+  void Expose(Cell* cell);
+
+  void ShowAllMines();
 };

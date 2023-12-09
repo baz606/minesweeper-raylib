@@ -61,27 +61,25 @@ void Game::RunGame()
 void Game::ProcessInputs()
 {
   // Get player input
+  if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+  {
+    // Check which cell the user selected
+    int i = std::lround(GetMouseY() / Cell::LENGTH);
+    int j = std::lround(GetMouseX() / Cell::LENGTH);
+    if (i >= 0 && i < rows && j >= 0 && j < columns)
+    {
+      Expose(grid[i][j]);
+    }
+  }
 }
 
 void Game::UpdateGame()
 {
-  // Update game world
-//  if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
-//  {
-//    printf("(%d, %d)\n", GetMouseX(), GetMouseY());
-//    printf("Index = (%d, %d)\n", GetMouseY() / Cell::LENGTH, GetMouseX() / Cell::LENGTH);
-//    int i = std::lround(GetMouseY() / Cell::LENGTH);
-//    int j = std::lround(GetMouseX() / Cell::LENGTH);
-//    if (i >= 0 && i < rows && j >= 0 && j < columns)
-//    {
-//      grid[i][j]->SetColor(BLACK);
-//    }
-//  }
+  // Update game
 }
 
 void Game::GenerateOutput()
 {
-  // Render/Draw graphics
   BeginDrawing();
   ClearBackground(LIGHTGRAY);
   DrawFPS(SCREEN_WIDTH - 100, 20);
@@ -95,14 +93,6 @@ void Game::GenerateOutput()
       cell->Draw();
     }
   }
-  //DrawText("Test Window", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 50, BLACK);
-//  Rectangle rectangle = { 0, 0, 100, 100 };
-//  DrawRectangleRec(rectangle, BLACK);
-//  if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && CheckCollisionRecs(grid, Rectangle(GetMouseX(), GetMouseY(), 0, 0)))
-//  {
-//    Rectangle rectangle1 = GetCollisionRec(grid, Rectangle(GetMouseX(), GetMouseY()));
-//    printf("(%f, %f, %f, %f)\n", rectangle1.x, rectangle1.y, rectangle1.width, rectangle1.height);
-//  }
   DrawLogo();
   EndDrawing();
 }
@@ -145,7 +135,6 @@ void Game::SetMineCells()
   totalMines = 9;
   int i = 0, j = 0, k = 0;
   SetRandomSeed(time(nullptr));
-  std::vector<Cell*> mineCells;
   while (k < totalMines)
   {
     i = GetRandomValue(0, rows - 1);
@@ -206,7 +195,6 @@ void Game::GetAdjacentCellsFor(Cell* cell, std::vector<Cell*>& adjacentCells)
         // Valid adjacent cell
         adjacentCells.push_back(grid[z][j]);
       }
-
     }
     else
     {
@@ -223,5 +211,43 @@ void Game::GetAdjacentCellsFor(Cell* cell, std::vector<Cell*>& adjacentCells)
   if ((y + 1) < columns)
   {
     adjacentCells.push_back(grid[x][y + 1]);
+  }
+}
+
+void Game::Expose(Cell *cell)
+{
+  if (cell->GetCellType() == MINE)
+  {
+    // Game over - change game state
+    ShowAllMines();
+    printf("YOU HAVE CLICKED A MINE!! GAME OVER!!\n");
+  }
+  else if (cell->GetCellType() == ADJACENT)
+  {
+    cell->SetShowNumOfMines(true);
+    cell->SetColor(BLUE);
+  }
+  else if (cell->GetCellType() == UNEXPOSE)
+  {
+    cell->SetCellType(EXPOSE);
+    cell->SetColor(BLUE);
+    // Get adjacent cells and recursively call expose
+    std::vector<Cell*> adjacentCells;
+    GetAdjacentCellsFor(cell, adjacentCells);
+    for (auto adjCell : adjacentCells)
+    {
+      if (adjCell->GetCellType() != MINE)
+      {
+        this->Expose(adjCell);
+      }
+    }
+  }
+}
+
+void Game::ShowAllMines()
+{
+  for (auto cell : mineCells)
+  {
+    cell->SetColor(RED);
   }
 }

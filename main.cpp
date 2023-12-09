@@ -12,5 +12,6 @@ int main()
   }
   // Clean up - close window and deallocate memory
   game.CloseGame();
+
   return 0;
 }

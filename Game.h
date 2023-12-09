@@ -6,9 +6,17 @@
 
 #include <vector>
 #include <iostream>
+#include <memory>
 
 #include "raylib.h"
 #include "Cell.h"
+
+enum GameState
+{
+  INITIAL,
+  PLAYING,
+  GAME_OVER
+};
 
 /**
  * This Game class will be used to manage our game
@@ -37,6 +45,7 @@ private:
   int rows;
   int columns;
   int totalMines;
+  GameState gameState;
 
   void ProcessInputs();
   void UpdateGame();
@@ -57,4 +66,8 @@ private:
   void Expose(Cell* cell);
 
   void ShowAllMines();
+
+  void HandleGameOver();
+
+  void ResetGame();
 };

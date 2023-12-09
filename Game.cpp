@@ -8,10 +8,12 @@
 Game::Game(int screenWidth, int screenHeight, const char* title)
 :SCREEN_WIDTH(screenWidth)
 ,SCREEN_HEIGHT(screenHeight)
-,title(title)
 {
+  isEnd = false;
   rows = 0;
-  columns = 0;
+  columns = 0;  // Game initialization
+  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, title);
+  SetTargetFPS(60);
 }
 
 Game::~Game()
@@ -20,11 +22,6 @@ Game::~Game()
 
 void Game::Initialize()
 {
-  // Game initialization
-  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, title);
-  SetTargetFPS(60);
-  isEnd = false;
-
   // Set up grid so it can be draw
   plane = { 0, 0, 910, 910 };
   rows = 9;
@@ -49,6 +46,21 @@ void Game::Initialize()
   }
 
   SetMineCells();
+  gameState = PLAYING;
+}
+
+void Game::ResetGame()
+{
+  mineCells.clear();
+  for (auto& row : grid)
+  {
+    for (auto cell : row)
+    {
+      cell->ResetVals();
+    }
+  }
+  SetMineCells();
+  gameState = PLAYING;
 }
 
 void Game::RunGame()
@@ -61,7 +73,7 @@ void Game::RunGame()
 void Game::ProcessInputs()
 {
   // Get player input
-  if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+  if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT) && gameState == PLAYING)
   {
     // Check which cell the user selected
     int i = std::lround(GetMouseY() / Cell::LENGTH);
@@ -71,11 +83,22 @@ void Game::ProcessInputs()
       Expose(grid[i][j]);
     }
   }
+  if (IsKeyReleased(KEY_SPACE) && gameState == GAME_OVER)
+  {
+    ResetGame();
+  }
 }
 
 void Game::UpdateGame()
 {
-  // Update game
+  if (gameState == INITIAL)
+  {
+    ResetGame();
+  }
+  else if (gameState == GAME_OVER)
+  {
+    HandleGameOver();
+  }
 }
 
 void Game::GenerateOutput()
@@ -83,6 +106,7 @@ void Game::GenerateOutput()
   BeginDrawing();
   ClearBackground(LIGHTGRAY);
   DrawFPS(SCREEN_WIDTH - 100, 20);
+  DrawLogo();
   // Draw a big/invisible rectangle where cells will reside
   DrawRectangleRec(plane, RAYWHITE);
   // Draw the grid cells
@@ -93,7 +117,14 @@ void Game::GenerateOutput()
       cell->Draw();
     }
   }
-  DrawLogo();
+  if (gameState == GAME_OVER)
+  {
+    int width = 1200, height = 500;
+    int fontSize = 50;
+    DrawRectangle((SCREEN_WIDTH / 2) - (width / 2), (SCREEN_HEIGHT / 2) - (height / 2), width, height, {0, 0, 0, 220});
+    DrawText("YOU CLICKED A MINE CELL! GAME OVER!", (SCREEN_WIDTH / 2) - 500, (SCREEN_HEIGHT / 2) - 40, fontSize, RED);
+    DrawText("PRESS SPACE BAR TO TRY AGAIN!", (SCREEN_WIDTH / 2) - 500, (SCREEN_HEIGHT / 2) + 20, fontSize, RED);
+  }
   EndDrawing();
 }
 
@@ -114,7 +145,7 @@ void Game::CloseGame()
 void Game::UnLoadData()
 {
   // Deallocate memory of grid
-  for (auto row : grid)
+  for (auto& row : grid)
   {
     for (auto cell : row)
     {
@@ -123,6 +154,7 @@ void Game::UnLoadData()
     row.clear();
   }
   grid.clear();
+  mineCells.clear();
 }
 
 void Game::DrawLogo()
@@ -218,9 +250,7 @@ void Game::Expose(Cell *cell)
 {
   if (cell->GetCellType() == MINE)
   {
-    // Game over - change game state
-    ShowAllMines();
-    printf("YOU HAVE CLICKED A MINE!! GAME OVER!!\n");
+    gameState = GAME_OVER;
   }
   else if (cell->GetCellType() == ADJACENT)
   {
@@ -250,4 +280,9 @@ void Game::ShowAllMines()
   {
     cell->SetColor(RED);
   }
+}
+
+void Game::HandleGameOver()
+{
+  ShowAllMines();
 }

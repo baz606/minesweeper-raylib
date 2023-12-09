@@ -9,10 +9,13 @@ Cell::Cell()
 :color(DARKGRAY)
 ,numOfMines(0)
 ,showNumOfMines(false)
+,cellType(UNEXPOSE)
 {
 }
 
-Cell::~Cell() = default;
+Cell::~Cell()
+{
+}
 
 void Cell::SetPosition(int x, int y)
 {
@@ -63,4 +66,12 @@ void Cell::SetColor(Color color)
 void Cell::SetShowNumOfMines(bool show)
 {
   showNumOfMines = show;
+}
+
+void Cell::ResetVals()
+{
+  cellType = UNEXPOSE;
+  color = DARKGRAY;
+  numOfMines = 0;
+  showNumOfMines = false;
 }

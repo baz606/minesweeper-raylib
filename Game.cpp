@@ -84,7 +84,7 @@ void Game::ProcessInputs()
   }
   if (IsKeyReleased(KEY_SPACE) && gameState == GAME_OVER)
   {
-    ResetGame();
+    gameState = INITIAL;
   }
 }
 

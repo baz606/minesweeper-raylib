@@ -8,6 +8,7 @@
 Cell::Cell()
 :color(DARKGRAY)
 ,numOfMines(0)
+,showNumOfMines(false)
 {
 }
 
@@ -26,20 +27,22 @@ void Cell::SetRectangle(float x, float y, float width, float height)
 void Cell::Draw()
 {
   // This whole method will need to be re-written when I add the expose method
-  if (cellType == MINE)
+  switch (cellType)
   {
-    color = RED;
+    case MINE:
+      DrawRectangleRec(rectangle, color);
+      break;
+    case ADJACENT:
+      DrawRectangleRec(rectangle, color);
+      if (showNumOfMines)
+      {
+        DrawText(std::to_string(numOfMines).c_str(), screenPosition.x - 10, screenPosition.y - 15, 40, WHITE);
+      }
+      break;
+    default:
+      DrawRectangleRec(rectangle, color);
   }
-  if (cellType == ADJACENT)
-  {
-    color = BLUE;
-    DrawRectangleRec(rectangle, color);
-    DrawRectangleLinesEx(rectangle, 2, BLACK);
-    DrawText(std::to_string(numOfMines).c_str(), screenPosition.x - 10, screenPosition.y - 15, 40, WHITE);
-    return;
-  }
-  DrawRectangleRec(rectangle, color);
-  DrawRectangleLinesEx(rectangle, 2, BLACK);
+  DrawRectangleLinesEx(rectangle, 3.0f, BLACK);
 }
 
 void Cell::SetScreenPosition(int x, int y)
@@ -55,4 +58,9 @@ void Cell::IncrementNumOfMines()
 void Cell::SetColor(Color color)
 {
   this->color = color;
+}
+
+void Cell::SetShowNumOfMines(bool show)
+{
+  showNumOfMines = show;
 }

@@ -42,6 +42,8 @@ public:
   // Length of this squared cell. Each cell will be the same length
   static const int LENGTH = 100;
 
+  void SetShowNumOfMines(bool show);
+
 private:
   // Screen position, i.e. coordinates for this Cell
   Vector2Int screenPosition;
@@ -56,4 +58,6 @@ private:
   CellType cellType;
   // Number of mines around this cell
   int numOfMines;
+  // Whether to show number of mines on a cell
+  bool showNumOfMines;
 };

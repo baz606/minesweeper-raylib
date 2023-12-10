@@ -162,7 +162,20 @@ void Game::GenerateOutput()
 
 void Game::DrawLogo()
 {
-  DrawTextEx(font, "@baz606", { (float)SCREEN_WIDTH - 320, (float)SCREEN_HEIGHT / 2 }, 100, 0, VIOLET);
+  if (!IsMouseButtonDown(MOUSE_MIDDLE_BUTTON))
+  {
+    //rotation = 50;
+    speed = 50;
+  }
+  else
+  {
+    speed = 0;
+  }
+  rotation += speed * GetFrameTime();
+  Vector2 pixelLength = MeasureTextEx(font, "@baz606", 100, 0);
+//  DrawTextEx(font, "@baz606", { (float)SCREEN_WIDTH - 320, (float)SCREEN_HEIGHT / 2 }, 100, 0, VIOLET);
+  DrawTextPro(font, "@baz606", { (float)SCREEN_WIDTH - 320 + (pixelLength.x / 2), ((float)SCREEN_HEIGHT / 2 ) + (pixelLength.y / 2)},
+              { pixelLength.x / 2, pixelLength.y / 2 }, rotation, 100, 0, VIOLET);
 }
 
 void Game::SetMineCells()

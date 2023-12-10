@@ -48,6 +48,8 @@ private:
   // This rectangular plane is where cells will reside and drawn
   Rectangle plane;
   Font font;
+  float rotation = 0;
+  float speed = 50;
 
   std::vector<std::vector<Cell*>> grid;
   std::vector<Cell*> mineCells;

@@ -103,6 +103,11 @@ void Game::ProcessInputs()
   {
     gameState = INITIAL;
   }
+  // Pressing R at anytime resets the grid
+  if (IsKeyReleased(KEY_R))
+  {
+    gameState = INITIAL;
+  }
 }
 
 void Game::UpdateGame()

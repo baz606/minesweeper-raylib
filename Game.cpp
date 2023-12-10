@@ -3,6 +3,7 @@
 //
 
 #include <cmath>
+#include <string>
 #include "Game.h"
 #include "Cell.h"
 
@@ -12,9 +13,7 @@ Game::Game(int screenWidth, int screenHeight, const char* title)
 {
   isEnd = false;
   rows = 0;
-  columns = 0;  // Game initialization
-  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, title);
-  SetTargetFPS(60);
+  columns = 0;
 }
 
 Game::~Game()
@@ -23,6 +22,9 @@ Game::~Game()
 
 void Game::Initialize()
 {
+  // Game initialization
+  InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, title);
+  SetTargetFPS(60);
   // Set up grid so it can be draw
   plane = { 0, 0, 910, 910 };
   rows = 9;
@@ -45,8 +47,9 @@ void Game::Initialize()
     }
     printf("\n");
   }
-
   SetMineCells();
+  // Load logo font
+  font = LoadFontEx("../resources/lets-eat.ttf", 200, nullptr, 0);
   gameState = PLAYING;
 }
 
@@ -121,7 +124,7 @@ void Game::GenerateOutput()
   ClearBackground(LIGHTGRAY);
   DrawFPS(SCREEN_WIDTH - 100, 20);
   DrawLogo();
-  DrawText(std::string("MINES: " + std::to_string(totalSeals)).c_str(), SCREEN_WIDTH - 300, 100, 50, BLUE);
+  DrawTextEx(font, std::string("MINES: " + std::to_string(totalSeals)).c_str(), { (float)SCREEN_WIDTH - 300, 100 }, 90, 0, RED);
   // Draw a big/invisible rectangle where cells will reside
   DrawRectangleRec(plane, RAYWHITE);
   // Draw the grid cells
@@ -151,38 +154,9 @@ void Game::GenerateOutput()
   EndDrawing();
 }
 
-bool Game::ExitGame()
-{
-  // Right now the only way to end the game is closing the window or pressing escape key
-  // Later, we can add other ways to exit out of the game
-  isEnd = WindowShouldClose();
-  return isEnd;
-}
-
-void Game::CloseGame()
-{
-  UnLoadData();
-  CloseWindow();
-}
-
-void Game::UnLoadData()
-{
-  // Deallocate memory of grid
-  for (auto& row : grid)
-  {
-    for (auto cell : row)
-    {
-      delete cell;
-    }
-    row.clear();
-  }
-  grid.clear();
-  mineCells.clear();
-}
-
 void Game::DrawLogo()
 {
-  DrawText("@baz606", SCREEN_WIDTH - 300, SCREEN_HEIGHT / 2, 50, BLUE);
+  DrawTextEx(font, "@baz606", { (float)SCREEN_WIDTH - 320, (float)SCREEN_HEIGHT / 2 }, 100, 0, VIOLET);
 }
 
 void Game::SetMineCells()
@@ -344,4 +318,34 @@ void Game::Seal()
 void Game::UnSeal()
 {
   totalSeals++;
+}
+
+bool Game::ExitGame()
+{
+  // Right now the only way to end the game is closing the window or pressing escape key
+  // Later, we can add other ways to exit out of the game
+  isEnd = WindowShouldClose();
+  return isEnd;
+}
+
+void Game::CloseGame()
+{
+  UnLoadData();
+  CloseWindow();
+}
+
+void Game::UnLoadData()
+{
+  // Deallocate memory of grid
+  for (auto& row : grid)
+  {
+    for (auto cell : row)
+    {
+      delete cell;
+    }
+    row.clear();
+  }
+  grid.clear();
+  mineCells.clear();
+  UnloadFont(font);
 }

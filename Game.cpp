@@ -51,11 +51,28 @@ void Game::Initialize()
   SetMineCells();
   // Load logo font
   font = LoadFontEx("./resources/lets-eat.ttf", 200, nullptr, 0);
+  // Logo
+  pixelLength = MeasureTextEx(font, "@baz606", 100, 0);
+//  DrawTextPro(font, "@baz606", { (float)SCREEN_WIDTH - 320 + (pixelLength.x / 2), ((float)SCREEN_HEIGHT / 2 ) + (pixelLength.y / 2)},
+//              { pixelLength.x / 2, pixelLength.y / 2 }, rotation, 100, 0, VIOLET);
+  initial = { (float)SCREEN_WIDTH - 320 + (pixelLength.x / 2), pixelLength.y };
+  final = { (float)SCREEN_WIDTH - 320 + (pixelLength.x / 2), ((float)SCREEN_HEIGHT / 2 ) + (pixelLength.y / 2) };
+  textAnimation = TextAnimation(-20.f, false, 200);
+  textAnimation1 = TextAnimation(20, true, 50);
+  textAnimation2 = TextAnimation(0, false, 20);
+
   gameState = PLAYING;
 }
 
 void Game::ResetGame()
 {
+  // Reset position and animation of logo
+  initial = { (float)SCREEN_WIDTH - 320 + (pixelLength.x / 2), pixelLength.y };
+  final = { (float)SCREEN_WIDTH - 320 + (pixelLength.x / 2), ((float)SCREEN_HEIGHT / 2 ) + (pixelLength.y / 2) };
+  textAnimation.Reset();
+  textAnimation1.Reset();
+  textAnimation2.Reset();
+
   for (auto& row : grid)
   {
     for (auto cell : row)
@@ -171,11 +188,31 @@ void Game::DrawLogo()
   {
     speed = 0;
   }
-  rotation += speed * GetFrameTime();
-  Vector2 pixelLength = MeasureTextEx(font, "@baz606", 100, 0);
-//  DrawTextEx(font, "@baz606", { (float)SCREEN_WIDTH - 320, (float)SCREEN_HEIGHT / 2 }, 100, 0, VIOLET);
-  DrawTextPro(font, "@baz606", { (float)SCREEN_WIDTH - 320 + (pixelLength.x / 2), ((float)SCREEN_HEIGHT / 2 ) + (pixelLength.y / 2)},
-              { pixelLength.x / 2, pixelLength.y / 2 }, rotation, 100, 0, VIOLET);
+  speed = 2000;
+//  rotation += speed * GetFrameTime();
+  //  Vector2 pixelLength = MeasureTextEx(font, "@baz606", 100, 0);
+  //  DrawTextEx(font, "@baz606", { (float)SCREEN_WIDTH - 320, (float)SCREEN_HEIGHT / 2 }, 100, 0, VIOLET);
+
+  if (initial.y < final.y)
+  {
+    rotation = 20;
+    DrawTextPro(font, "@baz606", initial,
+                { pixelLength.x / 2, pixelLength.y / 2 }, rotation, 100, 0, VIOLET);
+    initial.y += speed * GetFrameTime();
+    // initial and final are not equal
+  }
+  else
+  {
+    if (textAnimation.Animate(&rotation))
+    {
+      if (textAnimation1.Animate(&rotation))
+      {
+        textAnimation2.Animate(&rotation);
+      }
+    }
+    DrawTextPro(font, "@baz606", final, { pixelLength.x / 2, pixelLength.y / 2 }, rotation, 100, 0, VIOLET);
+  }
+
 }
 
 void Game::SetMineCells()
@@ -367,4 +404,61 @@ void Game::UnLoadData()
   grid.clear();
   mineCells.clear();
   UnloadFont(font);
+}
+
+Game::TextAnimation::TextAnimation(float targetRotation, bool isClockwise, float speed)
+{
+  this->targetRotation = targetRotation;
+  this->isClockwise = isClockwise;
+  isFinished = false;
+  this->speed = speed;
+}
+
+bool Game::TextAnimation::Animate(float *currentRotation)
+{
+  if (!isFinished)
+  {
+    if (isClockwise)
+    {
+      if ((*currentRotation) < targetRotation)
+      {
+        // Animate to targetRotation
+        (*currentRotation) += speed * GetFrameTime();
+        // Check if rotation goes over targetRotation
+        if((*currentRotation) > targetRotation)
+        {
+          (*currentRotation) = targetRotation;
+        }
+      }
+      else
+      {
+        isFinished = true;
+        return isFinished;
+      }
+    }
+    else
+    {
+      if ((*currentRotation) > targetRotation)
+      {
+        // Animate to targetRotation
+        (*currentRotation) -= speed * GetFrameTime();
+        // Check if rotation goes under targetRotation
+        if((*currentRotation) < targetRotation)
+        {
+          (*currentRotation) = targetRotation;
+        }
+      }
+      else
+      {
+        isFinished = true;
+        return isFinished;
+      }
+    }
+  }
+  return isFinished;
+}
+
+void Game::TextAnimation::Reset()
+{
+  isFinished = false;
 }

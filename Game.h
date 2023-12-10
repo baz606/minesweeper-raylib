@@ -47,9 +47,30 @@ private:
   const char* title;
   // This rectangular plane is where cells will reside and drawn
   Rectangle plane;
+
+  class TextAnimation
+  {
+  public:
+    TextAnimation() = default;
+    TextAnimation(float targetRotation, bool isClockwise, float speed);
+    bool Animate(float* currentRotation);
+    void Reset();
+
+  private:
+    bool isFinished;
+    bool isStarted;
+    bool isClockwise;
+    float targetRotation;
+    float speed;
+  };
+
+  // Logo
   Font font;
   float rotation = 0;
   float speed = 50;
+  Vector2 initial, final;
+  Vector2 pixelLength;
+  TextAnimation textAnimation, textAnimation1, textAnimation2;
 
   std::vector<std::vector<Cell*>> grid;
   std::vector<Cell*> mineCells;

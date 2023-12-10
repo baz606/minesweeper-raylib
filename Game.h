@@ -47,6 +47,7 @@ private:
   const char* title;
   // This rectangular plane is where cells will reside and drawn
   Rectangle plane;
+  Font font;
 
   std::vector<std::vector<Cell*>> grid;
   std::vector<Cell*> mineCells;

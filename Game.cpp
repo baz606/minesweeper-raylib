@@ -49,7 +49,7 @@ void Game::Initialize()
   }
   SetMineCells();
   // Load logo font
-  font = LoadFontEx("../resources/lets-eat.ttf", 200, nullptr, 0);
+  font = LoadFontEx("./resources/lets-eat.ttf", 200, nullptr, 0);
   gameState = PLAYING;
 }
 

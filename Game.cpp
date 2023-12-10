@@ -11,6 +11,7 @@ Game::Game(int screenWidth, int screenHeight, const char* title)
 :SCREEN_WIDTH(screenWidth)
 ,SCREEN_HEIGHT(screenHeight)
 {
+  this->title = title;
   isEnd = false;
   rows = 0;
   columns = 0;

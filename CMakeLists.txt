@@ -33,7 +33,9 @@ add_executable(${PROJECT_NAME} main.cpp
         Cell.cpp
         Cell.h
         Actor.cpp
-        Actor.h)
+        Actor.h
+        Component.cpp
+        Component.h)
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib)
 

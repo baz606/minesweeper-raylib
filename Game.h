@@ -10,7 +10,6 @@ class Game
 {
 public:
   Game(int screenWidth, int screenHeight, const char *title);
-
   ~Game();
 
   enum GameState
@@ -21,18 +20,20 @@ public:
     GAME_OVER
   };
 
+  // Methods to run our game loop
   void Initialize();
-
   void RunGame();
-
   void Shutdown();
 
-  bool IsRunning();
+  // Add/Remove actors from the game
+  void AddActor(class Actor* actor);
+  void RemoveActor(class Actor* actor);
 
-  // Move this section to the cell class?
-//  bool CanSeal();
-//  void Seal();
-//  void UnSeal();
+  void AddFont(class Font* font);
+  void RemoveFont(class Font* font);
+
+  // Check if the game window is running
+  bool IsRunning();
 
 private:
   // Game window specific
@@ -41,27 +42,24 @@ private:
 
   // Main game loop
   void ProcessInput();
-
   void UpdateGame();
-
   void GenerateOutput();
+
+  // Deallocate any memory on the heap
+  void LoadData();
+  void UnLoadData();
 
   // Handle game conditions
   void HandleGameOver();
-
   void ResetGame();
-
   void CheckForWin();
 
-  // Deallocate any memory on the heap
-  void UnLoadData();
-
   // Current game state and end conditions
-  GameState gameState;
+  GameState mGameState;
   bool mIsRunning;
 
   // All the actors in the game
-  std::vector<class Actor *> mActors;
+  std::vector<class Actor*> mActors;
 
   // Game Specific
   // This mGrid contains all cells

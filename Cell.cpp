@@ -11,6 +11,7 @@ Cell::Cell(Game *game, Grid *grid)
         : Actor(game)
         ,mGrid(grid)
 {
+  mCellType = UNEXPOSE;
 }
 
 void Cell::UpdateActor(float deltaTime)

@@ -25,10 +25,12 @@ void Game::Initialize()
   SetTargetFPS(60);
 
   // Test drawing one cell
-  Cell* cell = new Cell(this, nullptr);
-  auto meshComponent = new MeshComponent(cell);
-  meshComponent->SetRectangle(0, 0, 100, 100);
-  meshComponent->SetColor(BLACK);
+  Grid* grid = new Grid(this, 9, 9, 9);
+  grid->Initialize();
+//  Cell* cell = new Cell(this, nullptr);
+//  auto meshComponent = new MeshComponent(cell);
+//  meshComponent->SetRectangle(0, 0, 100, 100);
+//  meshComponent->SetColor(BLACK);
 
 //  mGrid = new Grid(this, 9, 9, 9);
 //  mGrid->Initialize();
@@ -57,7 +59,7 @@ void Game::GenerateOutput()
 {
   BeginDrawing();
   ClearBackground(LIGHTGRAY);
-  for (auto& mesh : mMeshes)
+  for (auto mesh : mMeshes)
   {
     mesh->Draw();
   }

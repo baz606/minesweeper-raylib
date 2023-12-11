@@ -11,19 +11,20 @@ class MeshComponent : public Component
 {
 public:
   MeshComponent(Actor* owner, int drawOrder = 100);
-  ~MeshComponent();
+  ~MeshComponent() override;
 
-  void Draw();
+  virtual void Draw();
 
   void SetRectangle(float x, float y, float width, float height);
   [[nodiscard]] const Rectangle& GetRectangle() const { return mRectangle; }
   void SetColor(Color color) { mColor = color; }
+  void SetBorderColor(Color borderColor) { mBorderColor = borderColor; }
   [[nodiscard]] const Color& GetColor() const { return mColor; }
   int GetDrawOrder() const { return mDrawOrder;}
 
 private:
   // Rectangle and color used to draw the actor
   Rectangle mRectangle;
-  Color mColor;
+  Color mColor, mBorderColor;
   int mDrawOrder;
 };

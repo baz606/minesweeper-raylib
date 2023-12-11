@@ -28,6 +28,9 @@ public:
   void SetCellType(CellType cellType) { mCellType = cellType; }
   [[nodiscard]] CellType GetCellType() const { return mCellType;}
 
+  // Static cell length
+  static const int LENGTH = 100;
+
 private:
   CellType mCellType;
   class Grid* mGrid;

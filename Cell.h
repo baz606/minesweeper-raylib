@@ -4,6 +4,36 @@
 
 #pragma once
 
+#include "Actor.h"
+
+class Cell : public Actor
+{
+public:
+  enum CellType
+  {
+    UNEXPOSE,
+    EXPOSE,
+    ADJACENT,
+    ADJACENT_UNEXPOSE,
+    MINE,
+    SEALED,
+    SEALED_MINE
+  };
+
+  Cell(class Game* game);
+
+  void UpdateActor(float deltaTime) override;
+  void ProcessMouse(float mouseX, float mouseY);
+
+  // Getters/Setters
+  void SetCellType(CellType cellType) { mCellType = cellType; }
+  [[nodiscard]] CellType GetCellType() const { return mCellType;}
+
+private:
+  CellType mCellType;
+};
+
+
 //#include "raylib.h"
 //
 //struct Vector2Int

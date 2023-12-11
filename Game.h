@@ -5,13 +5,11 @@
 #pragma once
 
 #include <vector>
+#include "raylib.h"
 
 class Game
 {
 public:
-  Game(int screenWidth, int screenHeight, const char *title);
-  ~Game();
-
   enum GameState
   {
     INITIAL,
@@ -19,6 +17,9 @@ public:
     WIN,
     GAME_OVER
   };
+
+  Game(int screenWidth, int screenHeight, const char *title);
+  ~Game() = default;
 
   // Methods to run our game loop
   void Initialize();
@@ -29,16 +30,20 @@ public:
   void AddActor(class Actor* actor);
   void RemoveActor(class Actor* actor);
 
-  void AddFont(class Font* font);
-  void RemoveFont(class Font* font);
+  // Add/Remove Mesh components
+  void AddMesh(class MeshComponent* mesh);
+  void RemoveMesh(class MeshComponent* mesh);
+
+//  void AddFont(class Font* font);
+//  void RemoveFont(class Font* font);
 
   // Check if the game window is running
   bool IsRunning();
 
 private:
   // Game window specific
-  int SCREEN_WIDTH, SCREEN_HEIGHT;
-  const char *title;
+  int mScreenWidth, mScreenHeight;
+  const char* mTitle;
 
   // Main game loop
   void ProcessInput();
@@ -46,13 +51,12 @@ private:
   void GenerateOutput();
 
   // Deallocate any memory on the heap
-  void LoadData();
-  void UnLoadData();
+  void UnloadData();
 
   // Handle game conditions
-  void HandleGameOver();
-  void ResetGame();
-  void CheckForWin();
+//  void HandleGameOver();
+//  void ResetGame();
+//  void CheckForWin();
 
   // Current game state and end conditions
   GameState mGameState;
@@ -60,10 +64,12 @@ private:
 
   // All the actors in the game
   std::vector<class Actor*> mActors;
+  // All Cell meshes in the game
+  std::vector<class MeshComponent*> mMeshes;
 
   // Game Specific
   // This mGrid contains all cells
-  class Grid *mGrid;
+  class Grid* mGrid;
 };
 
 //#include <vector>

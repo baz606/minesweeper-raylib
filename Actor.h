@@ -6,6 +6,7 @@
 
 #include <vector>
 
+#include "Game.h"
 #include "raylib.h"
 
 class Actor

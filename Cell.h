@@ -6,24 +6,23 @@
 
 #include "Actor.h"
 
+enum CellType
+{
+  UNEXPOSE,
+  EXPOSE,
+  ADJACENT,
+  ADJACENT_UNEXPOSE,
+  MINE,
+  SEALED,
+  SEALED_MINE
+};
+
 class Cell : public Actor
 {
 public:
-  enum CellType
-  {
-    UNEXPOSE,
-    EXPOSE,
-    ADJACENT,
-    ADJACENT_UNEXPOSE,
-    MINE,
-    SEALED,
-    SEALED_MINE
-  };
-
-  Cell(class Game* game);
+  Cell(class Game* game, class Grid* grid);
 
   void UpdateActor(float deltaTime) override;
-  void ProcessMouse(float mouseX, float mouseY);
 
   // Getters/Setters
   void SetCellType(CellType cellType) { mCellType = cellType; }
@@ -31,6 +30,9 @@ public:
 
 private:
   CellType mCellType;
+  class Grid* mGrid;
+  Color mColor;
+  Rectangle mRectangle;
 };
 
 

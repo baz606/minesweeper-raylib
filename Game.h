@@ -5,104 +5,181 @@
 #pragma once
 
 #include <vector>
-#include <iostream>
-#include <memory>
 
-#include "raylib.h"
-
-enum GameState
-{
-  INITIAL,
-  PLAYING,
-  WIN,
-  GAME_OVER
-};
-
-// Forward declare Cell class
-class Cell;
-
-/**
- * This Game class will be used to manage our game
- */
 class Game
 {
 public:
-  Game(int screenWidth, int screenHeight, const char* title);
+  Game(int screenWidth, int screenHeight, const char *title);
+
   ~Game();
 
-  void Initialize();
-  void RunGame();
-
-  GameState GetGetState() { return gameState; }
-
-  bool ExitGame();
-  void CloseGame();
-
-  bool CanSeal();
-  void Seal();
-  void UnSeal();
-
-private:
-  const int SCREEN_WIDTH, SCREEN_HEIGHT;
-  const char* title;
-  // This rectangular plane is where cells will reside and drawn
-  Rectangle plane;
-
-  class TextAnimation
+  enum GameState
   {
-  public:
-    TextAnimation() = default;
-    TextAnimation(float targetRotation, bool isClockwise, float speed);
-    bool Animate(float* currentRotation);
-    void Reset();
-
-  private:
-    bool isFinished;
-    bool isStarted;
-    bool isClockwise;
-    float targetRotation;
-    float speed;
+    INITIAL,
+    PLAYING,
+    WIN,
+    GAME_OVER
   };
 
-  // Logo
-  Font font;
-  float rotation = 0;
-  float speed = 50;
-  Vector2 initial, final;
-  Vector2 pixelLength;
-  TextAnimation textAnimation, textAnimation1, textAnimation2;
+  void Initialize();
 
-  std::vector<std::vector<Cell*>> grid;
-  std::vector<Cell*> mineCells;
-  int rows;
-  int columns;
-  int totalMines;
-  int totalSeals;
-  GameState gameState;
+  void RunGame();
 
-  void ProcessInputs();
+  void Shutdown();
+
+  bool IsRunning();
+
+  // Move this section to the cell class?
+//  bool CanSeal();
+//  void Seal();
+//  void UnSeal();
+
+private:
+  // Game window specific
+  int SCREEN_WIDTH, SCREEN_HEIGHT;
+  const char *title;
+
+  // Main game loop
+  void ProcessInput();
+
   void UpdateGame();
+
   void GenerateOutput();
 
-  void DrawLogo();
-
-  bool isEnd;
-
-  void UnLoadData();
-
-  void SetMineCells();
-
-  void SetAdjacentCellsAround(Cell* cell);
-
-  void GetAdjacentCellsFor(Cell* cell, std::vector<Cell*>& adjacentCells);
-
-  void Expose(Cell* cell);
-
-  void ShowAllMines();
-
+  // Handle game conditions
   void HandleGameOver();
 
   void ResetGame();
 
   void CheckForWin();
+
+  // Deallocate any memory on the heap
+  void UnLoadData();
+
+  // Current game state and end conditions
+  GameState gameState;
+  bool mIsRunning;
+
+  // All the actors in the game
+  std::vector<class Actor *> mActors;
+
+  // Game Specific
+  // This mGrid contains all cells
+  class Grid *mGrid;
 };
+
+//#include <vector>
+//#include <iostream>
+//#include <memory>
+//
+//#include "raylib.h"
+//
+//// Forward declare Cell class
+//class Cell;
+//
+///**
+// * This Game class will be used to manage our game
+// */
+//class Game
+//{
+//public:
+//  Game(int screenWidth, int screenHeight, const char* title);
+//  ~Game();
+//
+//  enum GameState
+//  {
+//    INITIAL,
+//    PLAYING,
+//    WIN,
+//    GAME_OVER
+//  };
+//
+//  void Initialize();
+//  void RunGame();
+//  void Shutdown();
+//  bool IsRunning();
+//
+//  // Move this section to the cell class?
+////  bool CanSeal();
+////  void Seal();
+////  void UnSeal();
+//
+//private:
+//  // Game window specific
+//  int SCREEN_WIDTH, SCREEN_HEIGHT;
+//  const char* title;
+//
+//  // Main game loop
+//  void ProcessInput();
+//  void UpdateGame();
+//  void GenerateOutput();
+//
+//  // Handle game conditions
+//  void HandleGameOver();
+//  void ResetGame();
+//  void CheckForWin();
+//
+//  // Deallocate any memory on the heap
+//  void UnLoadData();
+//
+//  // Current game state and end conditions
+//  GameState gameState;
+//  bool mIsRunning;
+//
+//  // All the actors in the game
+//  std::vector<class Actor*> mActors;
+//
+//  // Game Specific
+//  // This mGrid contains all cells
+//  class Grid* mGrid;
+//
+//  // Move this section somewhere else
+//  // This rectangular plane is where cells will reside and drawn
+////  Rectangle plane;
+//
+//// Create animation in a different way
+////  class TextAnimation
+////  {
+////  public:
+////    TextAnimation() = default;
+////    TextAnimation(float targetRotation, bool isClockwise, float speed);
+////    bool Animate(float* currentRotation);
+////    void Reset();
+////
+////  private:
+////    bool isFinished;
+////    bool isStarted;
+////    bool isClockwise;
+////    float targetRotation;
+////    float speed;
+////  };
+//
+////  TextAnimation textAnimation, textAnimation1, textAnimation2;
+//
+//  // Logo
+////  Font font;
+////  float rotation = 0;
+////  float speed = 50;
+////  Vector2 initial, final;
+////  void DrawLogo();
+//
+//
+////  Vector2 pixelLength;
+//
+//// Move to a grid specific class
+////  std::vector<std::vector<Cell*>> grid;
+////  std::vector<Cell*> mineCells;
+////  int rows;
+////  int columns;
+////  int totalMines;
+////  int totalSeals;
+////  void SetMineCells();
+////
+////  void SetAdjacentCellsAround(Cell* cell);
+////
+////  void GetAdjacentCellsFor(Cell* cell, std::vector<Cell*>& adjacentCells);
+////
+////  void Expose(Cell* cell);
+////
+////  void ShowAllMines();
+//};

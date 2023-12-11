@@ -4,10 +4,124 @@
 
 
 
-//#include <cmath>
-//#include <string>
-//#include "Game.h"
-//#include "Cell.h"
+#include <algorithm>
+
+#include "Game.h"
+#include "Grid.h"
+#include "Cell.h"
+#include "MeshComponent.h"
+
+Game::Game(int screenWidth, int screenHeight, const char *title)
+:mScreenWidth(screenWidth)
+,mScreenHeight(screenHeight)
+,mTitle(title)
+,mIsRunning(true)
+{
+}
+
+void Game::Initialize()
+{
+  InitWindow(mScreenWidth, mScreenHeight, mTitle);
+  SetTargetFPS(60);
+
+  // Test drawing one cell
+  Cell* cell = new Cell(this, nullptr);
+  auto meshComponent = new MeshComponent(cell);
+  meshComponent->SetRectangle(0, 0, 100, 100);
+  meshComponent->SetColor(BLACK);
+
+//  mGrid = new Grid(this, 9, 9, 9);
+//  mGrid->Initialize();
+}
+
+void Game::RunGame()
+{
+  ProcessInput();
+  UpdateGame();
+  GenerateOutput();
+}
+
+void Game::ProcessInput()
+{
+}
+
+void Game::UpdateGame()
+{
+  for (auto actor : mActors)
+  {
+    actor->Update(GetFrameTime());
+  }
+}
+
+void Game::GenerateOutput()
+{
+  BeginDrawing();
+  ClearBackground(LIGHTGRAY);
+  for (auto& mesh : mMeshes)
+  {
+    mesh->Draw();
+  }
+  EndDrawing();
+}
+
+void Game::AddActor(Actor *actor)
+{
+  mActors.emplace_back(actor);
+}
+
+void Game::RemoveActor(Actor *actor)
+{
+  auto iter = std::find(mActors.begin(), mActors.end(), actor);
+  if (iter != mActors.end())
+  {
+    mActors.erase(iter);
+  }
+}
+
+void Game::AddMesh(MeshComponent *mesh)
+{
+  int myDrawOrder = mesh->GetDrawOrder();
+  auto iter = mMeshes.begin();
+  for (; iter != mMeshes.end(); ++iter)
+  {
+    if (myDrawOrder < (*iter)->GetDrawOrder())
+    {
+      break;
+    }
+  }
+  mMeshes.insert(iter, mesh);
+}
+
+void Game::RemoveMesh(MeshComponent *mesh)
+{
+  auto iter = std::find(mMeshes.begin(), mMeshes.end(), mesh);
+  if (iter != mMeshes.end())
+  {
+    mMeshes.erase(iter);
+  }
+}
+
+bool Game::IsRunning()
+{
+  // We can use this method to close the game window with additional conditions
+  mIsRunning = !WindowShouldClose();
+  return mIsRunning;
+}
+
+void Game::Shutdown()
+{
+  UnloadData();
+  CloseWindow();
+}
+
+void Game::UnloadData()
+{
+  while (!mActors.empty())
+  {
+    delete mActors.back();
+  }
+}
+
 //
 //Game::Game(int screenWidth, int screenHeight, const char* title)
 //:SCREEN_WIDTH(screenWidth)

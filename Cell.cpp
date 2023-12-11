@@ -3,8 +3,21 @@
 //
 
 //#include <string>
-//#include "Cell.h"
-//#include "Game.h"
+#include "Cell.h"
+#include "Game.h"
+#include "Grid.h"
+
+Cell::Cell(Game *game, Grid *grid)
+        : Actor(game)
+        ,mGrid(grid)
+{
+}
+
+void Cell::UpdateActor(float deltaTime)
+{
+}
+
+
 //
 //Cell::Cell(Game* game)
 //:color(DARKGRAY)

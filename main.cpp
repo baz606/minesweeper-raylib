@@ -5,13 +5,13 @@ int main()
   Game game(1280, 960, "Minesweeper");
   game.Initialize();
 
-  while (!game.ExitGame())
+  while (game.IsRunning())
   {
     // Run main game loop
     game.RunGame();
   }
   // Clean up - close window and deallocate memory
-  game.CloseGame();
+  game.Shutdown();
 
   return 0;
 }

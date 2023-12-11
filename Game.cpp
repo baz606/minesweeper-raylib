@@ -12,7 +12,7 @@ Game::Game(int screenWidth, int screenHeight, const char* title)
 ,SCREEN_HEIGHT(screenHeight)
 {
   this->title = title;
-  isEnd = false;
+  mIsRunning = true;
   rows = 0;
   columns = 0;
 }
@@ -86,12 +86,12 @@ void Game::ResetGame()
 
 void Game::RunGame()
 {
-  ProcessInputs();
+  ProcessInput();
   UpdateGame();
   GenerateOutput();
 }
 
-void Game::ProcessInputs()
+void Game::ProcessInput()
 {
   // Get player input
   if (gameState == PLAYING)
@@ -376,15 +376,15 @@ void Game::UnSeal()
   totalSeals++;
 }
 
-bool Game::ExitGame()
+bool Game::IsRunning()
 {
   // Right now the only way to end the game is closing the window or pressing escape key
   // Later, we can add other ways to exit out of the game
-  isEnd = WindowShouldClose();
-  return isEnd;
+  mIsRunning = !WindowShouldClose();
+  return mIsRunning;
 }
 
-void Game::CloseGame()
+void Game::Shutdown()
 {
   UnLoadData();
   CloseWindow();

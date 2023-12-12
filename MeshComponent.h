@@ -10,7 +10,7 @@
 class MeshComponent : public Component
 {
 public:
-  MeshComponent(Actor* owner, Color color, Color borderColor, float thickness, int drawOrder = 100);
+  MeshComponent(const std::string& name, Actor* owner, Color color, Color borderColor, float thickness, int drawOrder = 100);
   ~MeshComponent() override;
 
   virtual void Draw();

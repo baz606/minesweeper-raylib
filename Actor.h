@@ -5,6 +5,8 @@
 #pragma once
 
 #include <vector>
+#include <string>
+#include <unordered_map>
 
 #include "Game.h"
 #include "raylib.h"
@@ -43,6 +45,13 @@ public:
   void AddComponent(class Component* component);
   void RemoveComponent(class Component* component);
 
+  // Add/Remove from components hash map
+  void AddComponentToMap(std::string& name, class Component* component);
+  void RemoveComponentFromMap(std::string& name);
+
+  // Get component using the mComponentsMap
+  Component* GetComponent(const std::string& name);
+
 private:
   State mState;
 
@@ -52,5 +61,6 @@ private:
   float mRotation;
 
   std::vector<class Component*> mComponents;
+  std::unordered_map<std::string, class Component*> mComponentsMap;
   class Game* mGame;
 };

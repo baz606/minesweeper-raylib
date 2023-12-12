@@ -18,7 +18,7 @@ Grid::Grid(Game* game, int rows, int columns, int mines)
 
 void Grid::Initialize()
 {
-  auto mesh = new MeshComponent(this, RAYWHITE, RAYWHITE, 0, 0);
+  auto mesh = new MeshComponent("MeshComponent", this, RAYWHITE, RAYWHITE, 0, 0);
   float padding = 10.f;
   mesh->SetRectangle(0.f, 0.f, (float)(mRows * Cell::LENGTH) + padding, (float)(mColumns * Cell::LENGTH) + padding);
 
@@ -29,7 +29,7 @@ void Grid::Initialize()
     for (int j = 0; j < mColumns; ++j)
     {
       auto cell = new Cell(GetGame(), this);
-      auto meshComponent = new MeshComponent(cell, DARKGRAY, BLACK, 3.f, 1);
+      auto meshComponent = new MeshComponent("MeshComponent", cell, DARKGRAY, BLACK, 3.f, 1);
       meshComponent->SetRectangle(j * Cell::LENGTH, i * Cell::LENGTH, Cell::LENGTH, Cell::LENGTH);
       mCellList[i][j] = cell;
     }

@@ -26,7 +26,7 @@ public:
   void UpdateActor(float deltaTime) override;
 
   // Getters/Setters
-  void SetCellType(CellType cellType) { mCellType = cellType; }
+  void SetCellType(CellType cellType);
   [[nodiscard]] CellType GetCellType() const { return mCellType;}
 
   // Static cell length
@@ -35,6 +35,8 @@ public:
 private:
   CellType mCellType;
   class Grid* mGrid;
+  // Number of mines around this cell, if adjacent to a mine
+  int mNumOfMines;
 };
 
 

@@ -19,9 +19,14 @@ Grid::Grid(Game* game, int rows, int columns, int mines)
 
 void Grid::Initialize()
 {
-  auto mesh = new MeshComponent("MeshComponent", this, RAYWHITE, RAYWHITE, 0, 0);
-  float padding = 10.f;
-  mesh->SetRectangle(0.f, 0.f, (float)(mRows * Cell::LENGTH) + padding, (float)(mColumns * Cell::LENGTH) + padding);
+  int padding = 10;
+  this->SetPosition(((float)(Cell::LENGTH * mRows) + (float)padding) / 2,
+                    ((float)(Cell::LENGTH * mColumns) + (float)padding) / 2);
+
+  auto gridMesh = new MeshComponent("MeshComponent", this, 0);
+  gridMesh->SetColor(RAYWHITE);
+  gridMesh->SetWidth((Cell::LENGTH * mRows) + padding);
+  gridMesh->SetHeight((Cell::LENGTH * mColumns) + padding);
 
   mCellList.resize(mRows);
   for (int i = 0; i < mRows; ++i)
@@ -30,12 +35,39 @@ void Grid::Initialize()
     for (int j = 0; j < mColumns; ++j)
     {
       auto cell = new Cell(GetGame(), this);
-      auto meshComponent = new MeshComponent("MeshComponent", cell, DARKGRAY, BLACK, 3.f, 1);
-      meshComponent->SetRectangle(j * Cell::LENGTH, i * Cell::LENGTH, Cell::LENGTH, Cell::LENGTH);
+      cell->SetPosition(((float)(j * Cell::LENGTH) + ((float)Cell::LENGTH / 2)), (float)(i * Cell::LENGTH) + ((float)Cell::LENGTH / 2));
+
+      auto mesh = new MeshComponent("MeshComponent", cell, 1);
+      mesh->SetColor(DARKGRAY);
+      mesh->SetBorderColor(BLACK);
+      mesh->SetBorderThickness(3.f);
+      mesh->SetWidth(Cell::LENGTH);
+      mesh->SetHeight(Cell::LENGTH);
+
       mCellList[i][j] = cell;
     }
   }
   SetMines();
+}
+
+void Grid::UpdateActor(float deltaTime)
+{
+  Actor::UpdateActor(deltaTime);
+
+  if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+  {
+    ProcessMouse(GetMouseX(), GetMouseY());
+  }
+}
+void Grid::ProcessMouse(int mouseX, int mouseY)
+{
+  int i = std::lround(mouseY / Cell::LENGTH);
+  int j = std::lround(mouseX / Cell::LENGTH);
+  if (i >= 0 && i < mRows && j >= 0 && j < mColumns)
+  {
+    printf("Selected on cell at: (%d, %d)\n", i, j);
+//    Expose(grid[i][j]);
+  }
 }
 
 void Grid::SetMines()
@@ -60,30 +92,62 @@ void Grid::SetMines()
     }
     k++;
   }
-//  for (auto cell : mineCells)
+//  for (auto cell : mMineList)
 //  {
 //    // Set adjacent cells around this mine cell
 //    SetAdjacentCellsAround(cell);
 //  }
 }
 
-void Grid::ProcessMouse(int mouseX, int mouseY)
-{
-  int i = std::lround(mouseY / Cell::LENGTH);
-  int j = std::lround(mouseX / Cell::LENGTH);
-  if (i >= 0 && i < mRows && j >= 0 && j < mColumns)
-  {
-    printf("Selected on cell at: (%d, %d)\n", i, j);
-//    Expose(grid[i][j]);
-  }
-}
-
-void Grid::UpdateActor(float deltaTime)
-{
-  Actor::UpdateActor(deltaTime);
-
-  if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
-  {
-    ProcessMouse(GetMouseX(), GetMouseY());
-  }
-}
+//void Grid::SetAdjacentCellsAround(Cell* cell)
+//{
+//  std::vector<Cell*> adjacentCells;
+//  GetAdjacentCellsFor(cell, adjacentCells);
+//
+//  for (auto adjCell : adjacentCells)
+//  {
+//    if(adjCell->GetCellType() != MINE)
+//    {
+//      // If not a mine cell, set adjacent cell type and increment the number of mines around it
+//      adjCell->SetCellType(ADJACENT_UNEXPOSE);
+//    }
+//  }
+//}
+//
+//void Grid::GetAdjacentCellsFor(Cell* cell, std::vector<Cell*> &adjacentCells)
+//{
+//  const int x = (int)cell->GetPosition().x;
+//  const int y = (int)cell->GetPosition().y;
+//  // Check top and bottom row
+//  for (int i = x - 1, z = x + 1, j = y - 1; j < y + 2; j++)
+//  {
+//    if (i >= 0 || z < mRows)
+//    {
+//      if (i >= 0 && j >= 0 && j < mColumns)
+//      {
+//        // Valid adjacent cell
+//        adjacentCells.push_back(mCellList[i][j]);
+//      }
+//      if (z < mRows && j >= 0 && j < mColumns)
+//      {
+//        // Valid adjacent cell
+//        adjacentCells.push_back(mCellList[z][j]);
+//      }
+//    }
+//    else
+//    {
+//      // No top or bottom row
+//      break;
+//    }
+//  }
+//  // Check left of the cell
+//  if ((y - 1) >= 0)
+//  {
+//    adjacentCells.push_back(mCellList[x][y - 1]);
+//  }
+//  // Check right of the cell
+//  if ((y + 1) < mColumns)
+//  {
+//    adjacentCells.push_back(mCellList[x][y + 1]);
+//  }
+//}

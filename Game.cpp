@@ -80,7 +80,7 @@ void Game::RemoveActor(Actor *actor)
   }
 }
 
-void Game::AddMesh(MeshComponent *mesh)
+void Game::AddMesh(MeshComponent* mesh)
 {
   int myDrawOrder = mesh->GetDrawOrder();
   auto iter = mMeshes.begin();

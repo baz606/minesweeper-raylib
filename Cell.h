@@ -34,8 +34,6 @@ public:
 private:
   CellType mCellType;
   class Grid* mGrid;
-  Color mColor;
-  Rectangle mRectangle;
 };
 
 

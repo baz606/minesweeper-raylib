@@ -19,7 +19,10 @@ public:
 
 private:
   std::vector<std::vector<class Cell*>> mCellList;
+  std::vector<class Cell*> mMineList;
   int mRows;
   int mColumns;
   int mMines;
+
+  void SetMines();
 };

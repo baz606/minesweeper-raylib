@@ -5,11 +5,16 @@
 #include "MeshComponent.h"
 #include "Cell.h"
 
-MeshComponent::MeshComponent(Actor *owner, int drawOrder)
-:Component(owner, drawOrder)
+MeshComponent::MeshComponent(Actor *owner, Color color, Color borderColor, float thickness, int drawOrder)
+:Component(owner)
+,mColor(color)
+,mBorderColor(borderColor)
+,mThickness(thickness)
+,mDrawOrder(drawOrder)
 {
   mOwner->GetGame()->AddMesh(this);
 }
+
 
 MeshComponent::~MeshComponent()
 {
@@ -18,18 +23,8 @@ MeshComponent::~MeshComponent()
 
 void MeshComponent::Draw()
 {
-  CellType cellType = reinterpret_cast<Cell*>(mOwner)->GetCellType();
-  switch (cellType)
-  {
-    case UNEXPOSE:
-      DrawRectangleRec(mRectangle, mColor);
-      DrawRectangleLinesEx(mRectangle, 3.0f, mBorderColor);
-      break;
-
-    default:
-      DrawRectangleRec(mRectangle, mColor);
-      DrawRectangleLinesEx(mRectangle, 3.0f, mBorderColor);
-  }
+  DrawRectangleRec(mRectangle, mColor);
+  DrawRectangleLinesEx(mRectangle, mThickness, mBorderColor);
 }
 
 void MeshComponent::SetRectangle(float x, float y, float width, float height)

@@ -78,3 +78,18 @@ void Actor::RemoveComponent(Component *component)
     mComponents.erase(iter);
   }
 }
+
+void Actor::AddComponentToMap(std::string &name, Component* component)
+{
+  mComponentsMap.insert(std::make_pair(name, component));
+}
+
+void Actor::RemoveComponentFromMap(std::string &name)
+{
+  mComponentsMap.erase(name);
+}
+
+Component* Actor::GetComponent(const std::string& name)
+{
+  return mComponentsMap.find(name)->second;
+}

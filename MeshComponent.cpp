@@ -5,8 +5,8 @@
 #include "MeshComponent.h"
 #include "Cell.h"
 
-MeshComponent::MeshComponent(Actor *owner, Color color, Color borderColor, float thickness, int drawOrder)
-:Component(owner)
+MeshComponent::MeshComponent(const std::string& name, Actor *owner, Color color, Color borderColor, float thickness, int drawOrder)
+:Component(owner, name)
 ,mColor(color)
 ,mBorderColor(borderColor)
 ,mThickness(thickness)

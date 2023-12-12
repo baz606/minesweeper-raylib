@@ -6,6 +6,7 @@
 #include "Cell.h"
 #include "Game.h"
 #include "Grid.h"
+#include "MeshComponent.h"
 
 Cell::Cell(Game *game, Grid *grid)
         : Actor(game)
@@ -16,6 +17,18 @@ Cell::Cell(Game *game, Grid *grid)
 
 void Cell::UpdateActor(float deltaTime)
 {
+  auto mesh = (MeshComponent*)(GetComponent("MeshComponent"));
+  switch (mCellType)
+  {
+    case UNEXPOSE:
+      mesh->SetColor(DARKGRAY);
+      break;
+    case MINE:
+      mesh->SetColor(RED);
+      break;
+    default:
+      mesh->SetColor(DARKGRAY);
+  }
 }
 
 

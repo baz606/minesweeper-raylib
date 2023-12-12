@@ -3,6 +3,7 @@
 //
 
 #include <ctime>
+#include <cmath>
 #include "Grid.h"
 #include "Game.h"
 #include "Cell.h"
@@ -64,4 +65,25 @@ void Grid::SetMines()
 //    // Set adjacent cells around this mine cell
 //    SetAdjacentCellsAround(cell);
 //  }
+}
+
+void Grid::ProcessMouse(int mouseX, int mouseY)
+{
+  int i = std::lround(mouseY / Cell::LENGTH);
+  int j = std::lround(mouseX / Cell::LENGTH);
+  if (i >= 0 && i < mRows && j >= 0 && j < mColumns)
+  {
+    printf("Selected on cell at: (%d, %d)\n", i, j);
+//    Expose(grid[i][j]);
+  }
+}
+
+void Grid::UpdateActor(float deltaTime)
+{
+  Actor::UpdateActor(deltaTime);
+
+  if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+  {
+    ProcessMouse(GetMouseX(), GetMouseY());
+  }
 }

@@ -14,8 +14,8 @@ public:
   ~Grid() = default;
 
   void Initialize();
-//  void UpdateActor(float deltaTime) override;
-//  void ProcessMouse(float mouseX, float mouseY);
+  void UpdateActor(float deltaTime) override;
+  void ProcessMouse(int mouseX, int mouseY);
 
 private:
   std::vector<std::vector<class Cell*>> mCellList;

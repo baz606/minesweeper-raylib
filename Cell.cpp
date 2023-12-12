@@ -13,6 +13,7 @@ Cell::Cell(Game *game, Grid *grid)
         ,mGrid(grid)
 {
   mCellType = UNEXPOSE;
+  mNumOfMines = 0;
 }
 
 void Cell::UpdateActor(float deltaTime)
@@ -23,12 +24,25 @@ void Cell::UpdateActor(float deltaTime)
     case UNEXPOSE:
       mesh->SetColor(DARKGRAY);
       break;
+    case ADJACENT_UNEXPOSE:
+      mesh->SetColor(BLUE);
+      break;
     case MINE:
       mesh->SetColor(RED);
       break;
     default:
       mesh->SetColor(DARKGRAY);
   }
+}
+
+void Cell::SetCellType(CellType cellType)
+{
+  if (cellType == ADJACENT_UNEXPOSE)
+  {
+    // Increment mines only if we set this cell to be ADJACENT_UNEXPOSE
+    mNumOfMines++;
+  }
+  mCellType = cellType;
 }
 
 

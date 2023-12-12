@@ -5,14 +5,12 @@
 #include "MeshComponent.h"
 #include "Cell.h"
 
-MeshComponent::MeshComponent(const std::string& name, Actor *owner, Color color, Color borderColor, float thickness, int drawOrder)
+MeshComponent::MeshComponent(const std::string& name, Actor *owner, int drawOrder)
 :Component(owner, name)
-,mColor(color)
-,mBorderColor(borderColor)
-,mThickness(thickness)
 ,mDrawOrder(drawOrder)
 {
   mOwner->GetGame()->AddMesh(this);
+  mThickness = 0.0f;
 }
 
 
@@ -23,11 +21,11 @@ MeshComponent::~MeshComponent()
 
 void MeshComponent::Draw()
 {
+  mRectangle = { mOwner->GetPosition().x - ((float)mWidth / 2),
+                 mOwner->GetPosition().y - ((float)mHeight / 2),
+                 (float)mWidth * mOwner->GetScale(),
+                 (float)mHeight * mOwner->GetScale()};
+
   DrawRectangleRec(mRectangle, mColor);
   DrawRectangleLinesEx(mRectangle, mThickness, mBorderColor);
-}
-
-void MeshComponent::SetRectangle(float x, float y, float width, float height)
-{
-  mRectangle = { x, y, width, height };
 }

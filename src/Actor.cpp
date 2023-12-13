@@ -91,5 +91,10 @@ void Actor::RemoveComponentFromMap(std::string &name)
 
 Component* Actor::GetComponent(const std::string& name)
 {
-  return mComponentsMap.find(name)->second;
+  auto comp = mComponentsMap.find(name);
+  if (comp != mComponentsMap.end())
+  {
+    return comp->second;
+  }
+  return nullptr;
 }

@@ -8,6 +8,7 @@
 #include "Game.h"
 #include "Cell.h"
 #include "MeshComponent.h"
+#include "TextComponent.h"
 
 Grid::Grid(Game* game, int rows, int columns, int mines)
 :Actor(game)
@@ -109,8 +110,25 @@ void Grid::SetAdjacentCellsAround(Cell* cell)
   {
     if(adjCell->GetCellType() != MINE)
     {
-      // If not a mine cell, set adjacent cell type and increment the number of mines around it
+      // If not a mine cell, set adjacent cell type to ADJACENT_UNEXPOSE
       adjCell->SetCellType(ADJACENT_UNEXPOSE);
+      // Check if this adjacent cell already has a TextComponent
+      auto textComp = (TextComponent*)(adjCell->GetComponent("TextComponent"));
+      if (textComp)
+      {
+        // If it has a text component, update the number of mines value
+        textComp->SetText(std::to_string(adjCell->GetNumOfMines()));
+      }
+      else
+      {
+        // If not, create a new TextComponent
+        textComp = new TextComponent("TextComponent", adjCell, 2);
+        textComp->SetColor(RAYWHITE);
+        textComp->SetFont(GetFontDefault());
+        textComp->SetFontSize(40.f);
+        textComp->SetSpacing(0.f);
+        textComp->SetText(std::to_string(adjCell->GetNumOfMines()));
+      }
     }
   }
 }

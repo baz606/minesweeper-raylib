@@ -28,6 +28,7 @@ public:
   // Getters/Setters
   void SetCellType(CellType cellType);
   [[nodiscard]] CellType GetCellType() const { return mCellType;}
+  [[nodiscard]] int GetNumOfMines() const { return mNumOfMines; }
 
   // Static cell length
   static const int LENGTH = 100;

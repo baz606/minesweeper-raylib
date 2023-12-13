@@ -17,8 +17,11 @@ public:
   void SetDrawOrder(int drawOrder) { mDrawOrder = drawOrder; }
   [[nodiscard]] int GetDrawOrder() const { return mDrawOrder; }
   void SetPosition(int posX, int posY);
+  void SetIsShow(bool isShow) { mIsShow = isShow; }
+  bool GetIsShow() const { return mIsShow; }
 
 protected:
   int mDrawOrder;
   int mPosX, mPosY;
+  bool mIsShow;
 };

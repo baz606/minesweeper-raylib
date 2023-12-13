@@ -22,13 +22,13 @@ void Cell::UpdateActor(float deltaTime)
   switch (mCellType)
   {
     case UNEXPOSE:
+    case ADJACENT_UNEXPOSE:
+    case MINE:
       mesh->SetColor(DARKGRAY);
       break;
-    case ADJACENT_UNEXPOSE:
+    case EXPOSE:
+    case ADJACENT_EXPOSE:
       mesh->SetColor(BLUE);
-      break;
-    case MINE:
-      mesh->SetColor(RED);
       break;
     default:
       mesh->SetColor(DARKGRAY);

@@ -56,6 +56,7 @@ void Grid::UpdateActor(float deltaTime)
 {
   Actor::UpdateActor(deltaTime);
 }
+
 void Grid::ProcessInput(int mouseX, int mouseY)
 {
   if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
@@ -64,9 +65,9 @@ void Grid::ProcessInput(int mouseX, int mouseY)
     int j = std::lround(mouseX / Cell::LENGTH);
     if (i >= 0 && i < mRows && j >= 0 && j < mColumns)
     {
-      printf("Selected on cell at: (%d, %d)\n", i, j);
-      printf("Number of mines: %d\n", mCellList[i][j]->GetNumOfMines());
-//    Expose(grid[i][j]);
+//      printf("Selected on cell at: (%d, %d)\n", i, j);
+//      printf("Number of mines: %d\n", mCellList[i][j]->GetNumOfMines());
+      Expose(mCellList[i][j]);
     }
   }
 }
@@ -125,6 +126,7 @@ void Grid::SetAdjacentCellsAround(Cell* cell)
         textComp->SetFont(GetFontDefault());
         textComp->SetFontSize(40.f);
         textComp->SetSpacing(0.f);
+        textComp->SetIsShow(false);
         textComp->SetText(std::to_string(adjCell->GetNumOfMines()));
       }
     }
@@ -166,5 +168,32 @@ void Grid::GetAdjacentCellsFor(Cell* cell, std::vector<Cell*> &adjacentCells)
   if ((y + 1) < mColumns)
   {
     adjacentCells.push_back(mCellList[x][y + 1]);
+  }
+}
+
+void Grid::Expose(Cell *cell)
+{
+  if (cell->GetCellType() == MINE)
+  {
+//    gameState = GAME_OVER;
+  }
+  else if (cell->GetCellType() == ADJACENT_UNEXPOSE)
+  {
+    cell->SetCellType(ADJACENT_EXPOSE);
+    ((TextComponent*)(cell->GetComponent("TextComponent")))->SetIsShow(true);
+  }
+  else if (cell->GetCellType() == UNEXPOSE)
+  {
+    cell->SetCellType(EXPOSE);
+    // Get adjacent cells and recursively call expose
+    std::vector<Cell*> adjacentCells;
+    GetAdjacentCellsFor(cell, adjacentCells);
+    for (auto adjCell : adjacentCells)
+    {
+      if (adjCell->GetCellType() != MINE)
+      {
+        this->Expose(adjCell);
+      }
+    }
   }
 }

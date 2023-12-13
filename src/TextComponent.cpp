@@ -11,12 +11,15 @@ TextComponent::TextComponent(const std::string &name, Actor *owner, int drawOrde
 
 void TextComponent::Draw()
 {
-  DrawTextEx(mFont,
-             mText.c_str(),
-             { (float)mPosX, (float)mPosY },
-             mFontSize,
-             mSpacing,
-             mColor);
+  if (mIsShow)
+  {
+    DrawTextEx(mFont,
+               mText.c_str(),
+               { (float)mPosX, (float)mPosY },
+               mFontSize,
+               mSpacing,
+               mColor);
+  }
 }
 
 void TextComponent::CalculatePosition()

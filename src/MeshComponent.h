@@ -6,14 +6,14 @@
 
 #include "Component.h"
 #include "Actor.h"
+#include "DrawComponent.h"
 
-class MeshComponent : public Component
+class MeshComponent : public DrawComponent
 {
 public:
   MeshComponent(const std::string& name, Actor* owner, int drawOrder = 100);
-  ~MeshComponent() override;
 
-  virtual void Draw();
+  void Draw() override;
 
   // Setters/Getters
   void SetColor(Color color) { mColor = color; }
@@ -32,5 +32,4 @@ private:
   int mWidth, mHeight;
   Color mColor, mBorderColor;
   float mThickness;
-  int mDrawOrder;
 };

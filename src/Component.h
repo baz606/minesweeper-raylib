@@ -10,7 +10,7 @@ class Component
 {
 public:
   // Constructor - lower the update order, the earlier the component updates
-  Component(class Actor* owner, const std::string& name, int updateOrder = 100);
+  Component(const std::string &name, class Actor *owner, int updateOrder = 100);
   // Destructor
   virtual ~Component();
   // Update component using delta time

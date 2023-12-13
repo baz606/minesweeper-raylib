@@ -31,8 +31,8 @@ public:
   void RemoveActor(class Actor* actor);
 
   // Add/Remove Mesh components
-  void AddMesh(class MeshComponent* mesh);
-  void RemoveMesh(class MeshComponent* mesh);
+  void AddDraw(class DrawComponent *mesh);
+  void RemoveDraw(class DrawComponent *mesh);
 
 //  void AddFont(class Font* font);
 //  void RemoveFont(class Font* font);
@@ -65,7 +65,7 @@ private:
   // All the actors in the game
   std::vector<class Actor*> mActors;
   // All Cell meshes in the game
-  std::vector<class MeshComponent*> mMeshes;
+  std::vector<class DrawComponent*> mDraws;
 
   // Game Specific
   // This mGrid contains all cells

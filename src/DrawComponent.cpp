@@ -14,7 +14,6 @@ DrawComponent::DrawComponent(const std::string &name, Actor *owner, int drawOrde
 
 DrawComponent::~DrawComponent()
 {
-  printf("DrawComponent destructor called...\n");
   mOwner->GetGame()->RemoveDraw(this);
 }
 

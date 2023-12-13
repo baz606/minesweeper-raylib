@@ -9,7 +9,7 @@
 #include "Game.h"
 #include "Grid.h"
 #include "Cell.h"
-#include "MeshComponent.h"
+#include "DrawComponent.h"
 
 Game::Game(int screenWidth, int screenHeight, const char *title)
 :mScreenWidth(screenWidth)
@@ -59,9 +59,9 @@ void Game::GenerateOutput()
 {
   BeginDrawing();
   ClearBackground(LIGHTGRAY);
-  for (auto mesh : mMeshes)
+  for (auto drawCom : mDraws)
   {
-    mesh->Draw();
+    drawCom->Draw();
   }
   EndDrawing();
 }
@@ -80,26 +80,26 @@ void Game::RemoveActor(Actor *actor)
   }
 }
 
-void Game::AddMesh(MeshComponent* mesh)
+void Game::AddDraw(class DrawComponent *mesh)
 {
   int myDrawOrder = mesh->GetDrawOrder();
-  auto iter = mMeshes.begin();
-  for (; iter != mMeshes.end(); ++iter)
+  auto iter = mDraws.begin();
+  for (; iter != mDraws.end(); ++iter)
   {
     if (myDrawOrder < (*iter)->GetDrawOrder())
     {
       break;
     }
   }
-  mMeshes.insert(iter, mesh);
+  mDraws.insert(iter, mesh);
 }
 
-void Game::RemoveMesh(MeshComponent *mesh)
+void Game::RemoveDraw(class DrawComponent *mesh)
 {
-  auto iter = std::find(mMeshes.begin(), mMeshes.end(), mesh);
-  if (iter != mMeshes.end())
+  auto iter = std::find(mDraws.begin(), mDraws.end(), mesh);
+  if (iter != mDraws.end())
   {
-    mMeshes.erase(iter);
+    mDraws.erase(iter);
   }
 }
 

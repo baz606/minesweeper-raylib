@@ -6,23 +6,18 @@
 #include "Cell.h"
 
 MeshComponent::MeshComponent(const std::string& name, Actor *owner, int drawOrder)
-:Component(owner, name)
-,mDrawOrder(drawOrder)
+: DrawComponent(name, owner, drawOrder)
 {
-  mOwner->GetGame()->AddMesh(this);
   mThickness = 0.0f;
-}
-
-
-MeshComponent::~MeshComponent()
-{
-  mOwner->GetGame()->RemoveMesh(this);
 }
 
 void MeshComponent::Draw()
 {
-  mRectangle = { mOwner->GetPosition().x - ((float)mWidth / 2),
-                 mOwner->GetPosition().y - ((float)mHeight / 2),
+  mPosX = mOwner->GetPosition().x - ((float)mWidth / 2);
+  mPosY = mOwner->GetPosition().y - ((float)mHeight / 2);
+
+  mRectangle = { (float)mPosX,
+                 (float)mPosY,
                  (float)mWidth * mOwner->GetScale(),
                  (float)mHeight * mOwner->GetScale()};
 

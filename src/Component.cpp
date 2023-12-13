@@ -5,7 +5,7 @@
 #include "Component.h"
 #include "Actor.h"
 
-Component::Component(Actor *owner, const std::string& name, int updateOrder)
+Component::Component(const std::string &name, class Actor *owner, int updateOrder)
 :mOwner(owner)
 ,mUpdateOrder(updateOrder)
 ,mName(name)
@@ -17,6 +17,7 @@ Component::Component(Actor *owner, const std::string& name, int updateOrder)
 
 Component::~Component()
 {
+  printf("Component destructor called...\n");
   mOwner->RemoveComponent(this);
   mOwner->RemoveComponentFromMap(mName);
 }

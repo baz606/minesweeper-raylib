@@ -10,6 +10,7 @@ DrawComponent::DrawComponent(const std::string &name, Actor *owner, int drawOrde
 ,mDrawOrder(drawOrder)
 {
   mOwner->GetGame()->AddDraw(this);
+  mIsShow = true;
 }
 
 DrawComponent::~DrawComponent()

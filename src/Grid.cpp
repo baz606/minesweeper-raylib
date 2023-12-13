@@ -35,7 +35,10 @@ void Grid::Initialize()
     for (int j = 0; j < mColumns; ++j)
     {
       auto cell = new Cell(GetGame(), this);
-      cell->SetPosition(((float)(j * Cell::LENGTH) + ((float)Cell::LENGTH / 2)), (float)(i * Cell::LENGTH) + ((float)Cell::LENGTH / 2));
+      cell->SetPosition(((float)(j * Cell::LENGTH) + ((float)Cell::LENGTH / 2)),
+                        (float)(i * Cell::LENGTH) + ((float)Cell::LENGTH / 2));
+      cell->SetIndex(i, j);
+      mCellList[i][j] = cell;
 
       auto mesh = new MeshComponent("MeshComponent", cell, 1);
       mesh->SetColor(DARKGRAY);
@@ -43,8 +46,6 @@ void Grid::Initialize()
       mesh->SetBorderThickness(3.f);
       mesh->SetWidth(Cell::LENGTH);
       mesh->SetHeight(Cell::LENGTH);
-
-      mCellList[i][j] = cell;
     }
   }
   SetMines();
@@ -84,7 +85,6 @@ void Grid::SetMines()
     if (mCellList[i][j]->GetCellType() != MINE)
     {
       mCellList[i][j]->SetCellType(MINE);
-      SetAdjacentCellsAround(i, j);
       mMineList.push_back(mCellList[i][j]);
     }
     else
@@ -94,12 +94,16 @@ void Grid::SetMines()
     }
     k++;
   }
+  for (auto mine : mMineList)
+  {
+    SetAdjacentCellsAround(mine);
+  }
 }
 
-void Grid::SetAdjacentCellsAround(int i, int j)
+void Grid::SetAdjacentCellsAround(Cell* cell)
 {
   std::vector<Cell*> adjacentCells;
-  GetAdjacentCellsFor(i, j, adjacentCells);
+  GetAdjacentCellsFor(cell, adjacentCells);
 
   for (auto adjCell : adjacentCells)
   {
@@ -111,10 +115,10 @@ void Grid::SetAdjacentCellsAround(int i, int j)
   }
 }
 
-void Grid::GetAdjacentCellsFor(int i, int j, std::vector<Cell*> &adjacentCells)
+void Grid::GetAdjacentCellsFor(Cell* cell, std::vector<Cell*> &adjacentCells)
 {
-  const int x = i;
-  const int y = j;
+  const int x = cell->GetIndex().x;
+  const int y = cell->GetIndex().y;
   // Check top and bottom row
   for (int i = x - 1, z = x + 1, j = y - 1; j < y + 2; j++)
   {

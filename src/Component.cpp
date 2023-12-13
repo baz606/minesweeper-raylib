@@ -17,7 +17,6 @@ Component::Component(const std::string &name, class Actor *owner, int updateOrde
 
 Component::~Component()
 {
-  printf("Component destructor called...\n");
   mOwner->RemoveComponent(this);
   mOwner->RemoveComponentFromMap(mName);
 }

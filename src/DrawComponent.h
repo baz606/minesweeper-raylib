@@ -16,12 +16,12 @@ public:
 
   void SetDrawOrder(int drawOrder) { mDrawOrder = drawOrder; }
   [[nodiscard]] int GetDrawOrder() const { return mDrawOrder; }
-  void SetPosition(int posX, int posY);
+  void SetPosition(float posX, float posY);
   void SetIsShow(bool isShow) { mIsShow = isShow; }
-  bool GetIsShow() const { return mIsShow; }
+  [[nodiscard]] bool GetIsShow() const { return mIsShow; }
 
 protected:
   int mDrawOrder;
-  int mPosX, mPosY;
+  float mPosX, mPosY;
   bool mIsShow;
 };

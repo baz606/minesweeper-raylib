@@ -10,6 +10,8 @@ DrawComponent::DrawComponent(const std::string &name, Actor *owner, int drawOrde
 ,mDrawOrder(drawOrder)
 {
   mOwner->GetGame()->AddDraw(this);
+  mPosX = mOwner->GetPosition().x;
+  mPosY = mOwner->GetPosition().y;
   mIsShow = true;
 }
 
@@ -18,7 +20,7 @@ DrawComponent::~DrawComponent()
   mOwner->GetGame()->RemoveDraw(this);
 }
 
-void DrawComponent::SetPosition(int posX, int posY)
+void DrawComponent::SetPosition(float posX, float posY)
 {
   mPosX = posX;
   mPosY = posY;

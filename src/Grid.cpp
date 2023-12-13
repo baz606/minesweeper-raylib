@@ -7,7 +7,7 @@
 #include "Grid.h"
 #include "Game.h"
 #include "Cell.h"
-#include "MeshComponent.h"
+#include "RectangleMeshComponent.h"
 #include "TextComponent.h"
 
 Grid::Grid(Game* game, int rows, int columns, int mines)
@@ -24,7 +24,7 @@ void Grid::Initialize()
   this->SetPosition(((float)(Cell::LENGTH * mRows) + (float)padding) / 2,
                     ((float)(Cell::LENGTH * mColumns) + (float)padding) / 2);
 
-  auto gridMesh = new MeshComponent("MeshComponent", this, 0);
+  auto gridMesh = new RectangleMeshComponent("RectangleMeshComponent", this, 0);
   gridMesh->SetColor(RAYWHITE);
   gridMesh->SetWidth((Cell::LENGTH * mRows) + padding);
   gridMesh->SetHeight((Cell::LENGTH * mColumns) + padding);
@@ -41,7 +41,7 @@ void Grid::Initialize()
       cell->SetIndex(i, j);
       mCellList[i][j] = cell;
 
-      auto mesh = new MeshComponent("MeshComponent", cell, 1);
+      auto mesh = new RectangleMeshComponent("RectangleMeshComponent", cell, 1);
       mesh->SetColor(DARKGRAY);
       mesh->SetBorderColor(BLACK);
       mesh->SetBorderThickness(3.f);
@@ -69,6 +69,49 @@ void Grid::ProcessInput(int mouseX, int mouseY)
 //      printf("Number of mines: %d\n", mCellList[i][j]->GetNumOfMines());
       Expose(mCellList[i][j]);
     }
+  }
+  else if(IsMouseButtonReleased(MOUSE_BUTTON_RIGHT))
+  {
+    int i = std::lround(mouseY / Cell::LENGTH);
+    int j = std::lround(mouseX / Cell::LENGTH);
+    if (i >= 0 && i < mRows && j >= 0 && j < mColumns)
+    {
+      ToggleSeal(mCellList[i][j]);
+    }
+  }
+}
+
+void Grid::ToggleSeal(Cell* cell)
+{
+  // If sealing
+  if (cell->GetCellType() == MINE)
+  {
+    cell->SetCellType(MINE_SEALED);
+    return;
+  }
+  else if (cell->GetCellType() == ADJACENT_UNEXPOSE)
+  {
+    cell->SetCellType(ADJACENT_SEALED);
+    return;
+  }
+  else if(cell->GetCellType() == UNEXPOSE)
+  {
+    cell->SetCellType(SEALED);
+    return;
+  }
+
+  // If unsealing
+  if (cell->GetCellType() == MINE_SEALED)
+  {
+    cell->SetCellType(MINE);
+  }
+  else if(cell->GetCellType() == ADJACENT_SEALED)
+  {
+    cell->SetCellType(ADJACENT_UNEXPOSE);
+  }
+  else if(cell->GetCellType() == SEALED)
+  {
+    cell->SetCellType(UNEXPOSE);
   }
 }
 

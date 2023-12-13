@@ -55,21 +55,19 @@ void Grid::Initialize()
 void Grid::UpdateActor(float deltaTime)
 {
   Actor::UpdateActor(deltaTime);
-
+}
+void Grid::ProcessInput(int mouseX, int mouseY)
+{
   if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
   {
-    ProcessMouse(GetMouseX(), GetMouseY());
-  }
-}
-void Grid::ProcessMouse(int mouseX, int mouseY)
-{
-  int i = std::lround(mouseY / Cell::LENGTH);
-  int j = std::lround(mouseX / Cell::LENGTH);
-  if (i >= 0 && i < mRows && j >= 0 && j < mColumns)
-  {
-    printf("Selected on cell at: (%d, %d)\n", i, j);
-    printf("Number of mines: %d\n", mCellList[i][j]->GetNumOfMines());
+    int i = std::lround(mouseY / Cell::LENGTH);
+    int j = std::lround(mouseX / Cell::LENGTH);
+    if (i >= 0 && i < mRows && j >= 0 && j < mColumns)
+    {
+      printf("Selected on cell at: (%d, %d)\n", i, j);
+      printf("Number of mines: %d\n", mCellList[i][j]->GetNumOfMines());
 //    Expose(grid[i][j]);
+    }
   }
 }
 

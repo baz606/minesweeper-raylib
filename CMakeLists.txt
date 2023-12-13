@@ -27,19 +27,19 @@ endif()
 
 # Our Project
 
-add_executable(${PROJECT_NAME} main.cpp
-        Game.h
-        Game.cpp
-        MeshComponent.h
-        MeshComponent.cpp
-        Actor.h
-        Actor.cpp
-        Cell.h
-        Cell.cpp
-        Component.h
-        Component.cpp
-        Grid.h
-        Grid.cpp
+add_executable(${PROJECT_NAME} src/main.cpp
+        src/Game.h
+        src/Game.cpp
+        src/MeshComponent.h
+        src/MeshComponent.cpp
+        src/Actor.h
+        src/Actor.cpp
+        src/Cell.h
+        src/Cell.cpp
+        src/Component.h
+        src/Component.cpp
+        src/Grid.h
+        src/Grid.cpp
 )
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib)

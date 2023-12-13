@@ -30,8 +30,8 @@ endif()
 add_executable(${PROJECT_NAME} src/main.cpp
         src/Game.h
         src/Game.cpp
-        src/MeshComponent.h
-        src/MeshComponent.cpp
+        src/RectangleMeshComponent.h
+        src/RectangleMeshComponent.cpp
         src/Actor.h
         src/Actor.cpp
         src/Cell.h

@@ -8,10 +8,10 @@
 #include "Actor.h"
 #include "DrawComponent.h"
 
-class MeshComponent : public DrawComponent
+class RectangleMeshComponent : public DrawComponent
 {
 public:
-  MeshComponent(const std::string& name, Actor* owner, int drawOrder = 100);
+  RectangleMeshComponent(const std::string& name, Actor* owner, int drawOrder = 100);
 
   void Draw() override;
 

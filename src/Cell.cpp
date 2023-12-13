@@ -6,7 +6,7 @@
 #include "Cell.h"
 #include "Game.h"
 #include "Grid.h"
-#include "MeshComponent.h"
+#include "RectangleMeshComponent.h"
 
 Cell::Cell(Game *game, Grid *grid)
 :Actor(game)
@@ -18,7 +18,7 @@ Cell::Cell(Game *game, Grid *grid)
 
 void Cell::UpdateActor(float deltaTime)
 {
-  auto mesh = (MeshComponent*)(GetComponent("MeshComponent"));
+  auto mesh = (RectangleMeshComponent*)(GetComponent("RectangleMeshComponent"));
   switch (mCellType)
   {
     case UNEXPOSE:
@@ -29,6 +29,11 @@ void Cell::UpdateActor(float deltaTime)
     case EXPOSE:
     case ADJACENT_EXPOSE:
       mesh->SetColor(BLUE);
+      break;
+    case SEALED:
+    case ADJACENT_SEALED:
+    case MINE_SEALED:
+      mesh->SetColor(PURPLE);
       break;
     default:
       mesh->SetColor(DARKGRAY);

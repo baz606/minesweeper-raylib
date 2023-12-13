@@ -42,6 +42,11 @@ void Cell::SetCellType(CellType cellType)
     // Increment mines only if we set this cell to be ADJACENT_UNEXPOSE
     mNumOfMines++;
   }
+  else if(cellType == MINE)
+  {
+    // Reset number of adjacent mines to zero for mine cells
+    mNumOfMines = 0;
+  }
   mCellType = cellType;
 }
 

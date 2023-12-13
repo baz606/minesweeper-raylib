@@ -66,6 +66,7 @@ void Grid::ProcessMouse(int mouseX, int mouseY)
   if (i >= 0 && i < mRows && j >= 0 && j < mColumns)
   {
     printf("Selected on cell at: (%d, %d)\n", i, j);
+    printf("Number of mines: %d\n", mCellList[i][j]->GetNumOfMines());
 //    Expose(grid[i][j]);
   }
 }
@@ -80,9 +81,10 @@ void Grid::SetMines()
     i = GetRandomValue(0, mRows - 1);
     j = GetRandomValue(0, mColumns - 1);
     // Set Mine cell
-    if (mCellList[i][j]->GetCellType() == UNEXPOSE)
+    if (mCellList[i][j]->GetCellType() != MINE)
     {
       mCellList[i][j]->SetCellType(MINE);
+      SetAdjacentCellsAround(i, j);
       mMineList.push_back(mCellList[i][j]);
     }
     else
@@ -92,62 +94,57 @@ void Grid::SetMines()
     }
     k++;
   }
-//  for (auto cell : mMineList)
-//  {
-//    // Set adjacent cells around this mine cell
-//    SetAdjacentCellsAround(cell);
-//  }
 }
 
-//void Grid::SetAdjacentCellsAround(Cell* cell)
-//{
-//  std::vector<Cell*> adjacentCells;
-//  GetAdjacentCellsFor(cell, adjacentCells);
-//
-//  for (auto adjCell : adjacentCells)
-//  {
-//    if(adjCell->GetCellType() != MINE)
-//    {
-//      // If not a mine cell, set adjacent cell type and increment the number of mines around it
-//      adjCell->SetCellType(ADJACENT_UNEXPOSE);
-//    }
-//  }
-//}
-//
-//void Grid::GetAdjacentCellsFor(Cell* cell, std::vector<Cell*> &adjacentCells)
-//{
-//  const int x = (int)cell->GetPosition().x;
-//  const int y = (int)cell->GetPosition().y;
-//  // Check top and bottom row
-//  for (int i = x - 1, z = x + 1, j = y - 1; j < y + 2; j++)
-//  {
-//    if (i >= 0 || z < mRows)
-//    {
-//      if (i >= 0 && j >= 0 && j < mColumns)
-//      {
-//        // Valid adjacent cell
-//        adjacentCells.push_back(mCellList[i][j]);
-//      }
-//      if (z < mRows && j >= 0 && j < mColumns)
-//      {
-//        // Valid adjacent cell
-//        adjacentCells.push_back(mCellList[z][j]);
-//      }
-//    }
-//    else
-//    {
-//      // No top or bottom row
-//      break;
-//    }
-//  }
-//  // Check left of the cell
-//  if ((y - 1) >= 0)
-//  {
-//    adjacentCells.push_back(mCellList[x][y - 1]);
-//  }
-//  // Check right of the cell
-//  if ((y + 1) < mColumns)
-//  {
-//    adjacentCells.push_back(mCellList[x][y + 1]);
-//  }
-//}
+void Grid::SetAdjacentCellsAround(int i, int j)
+{
+  std::vector<Cell*> adjacentCells;
+  GetAdjacentCellsFor(i, j, adjacentCells);
+
+  for (auto adjCell : adjacentCells)
+  {
+    if(adjCell->GetCellType() != MINE)
+    {
+      // If not a mine cell, set adjacent cell type and increment the number of mines around it
+      adjCell->SetCellType(ADJACENT_UNEXPOSE);
+    }
+  }
+}
+
+void Grid::GetAdjacentCellsFor(int i, int j, std::vector<Cell*> &adjacentCells)
+{
+  const int x = i;
+  const int y = j;
+  // Check top and bottom row
+  for (int i = x - 1, z = x + 1, j = y - 1; j < y + 2; j++)
+  {
+    if (i >= 0 || z < mRows)
+    {
+      if (i >= 0 && j >= 0 && j < mColumns)
+      {
+        // Valid adjacent cell
+        adjacentCells.push_back(mCellList[i][j]);
+      }
+      if (z < mRows && j >= 0 && j < mColumns)
+      {
+        // Valid adjacent cell
+        adjacentCells.push_back(mCellList[z][j]);
+      }
+    }
+    else
+    {
+      // No top or bottom row
+      break;
+    }
+  }
+  // Check left of the cell
+  if ((y - 1) >= 0)
+  {
+    adjacentCells.push_back(mCellList[x][y - 1]);
+  }
+  // Check right of the cell
+  if ((y + 1) < mColumns)
+  {
+    adjacentCells.push_back(mCellList[x][y + 1]);
+  }
+}

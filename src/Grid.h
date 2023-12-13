@@ -15,7 +15,7 @@ public:
 
   void Initialize();
   void UpdateActor(float deltaTime) override;
-  void ProcessMouse(int mouseX, int mouseY);
+  void ProcessInput(int mouseX, int mouseY);
 
 private:
   std::vector<std::vector<class Cell*>> mCellList;

@@ -24,16 +24,9 @@ void Game::Initialize()
   InitWindow(mScreenWidth, mScreenHeight, mTitle);
   SetTargetFPS(60);
 
-  // Test drawing one cell
-  Grid* grid = new Grid(this, 9, 9, 9);
-  grid->Initialize();
-//  Cell* cell = new Cell(this, nullptr);
-//  auto meshComponent = new MeshComponent(cell);
-//  meshComponent->SetRectangle(0, 0, 100, 100);
-//  meshComponent->SetColor(BLACK);
-
-//  mGrid = new Grid(this, 9, 9, 9);
-//  mGrid->Initialize();
+  // Initialize the grid with rows x columns cells
+  mGrid = new Grid(this, 9, 9, 9);
+  mGrid->Initialize();
 }
 
 void Game::RunGame()
@@ -45,6 +38,7 @@ void Game::RunGame()
 
 void Game::ProcessInput()
 {
+  mGrid->ProcessInput(GetMouseX(), GetMouseY());
 }
 
 void Game::UpdateGame()

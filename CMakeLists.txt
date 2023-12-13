@@ -42,6 +42,8 @@ add_executable(${PROJECT_NAME} src/main.cpp
         src/Grid.cpp
         src/DrawComponent.cpp
         src/DrawComponent.h
+        src/TextComponent.cpp
+        src/TextComponent.h
 )
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib)

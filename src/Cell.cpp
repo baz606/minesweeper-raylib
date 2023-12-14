@@ -7,6 +7,7 @@
 #include "Game.h"
 #include "Grid.h"
 #include "RectangleMeshComponent.h"
+#include "LineMeshComponent.h"
 
 Cell::Cell(Game *game, Grid *grid)
 :Actor(game)
@@ -19,19 +20,23 @@ Cell::Cell(Game *game, Grid *grid)
 void Cell::UpdateActor(float deltaTime)
 {
   auto mesh = (RectangleMeshComponent*)(GetComponent("RectangleMeshComponent"));
+  auto lineMesh = (LineMeshComponent*)(GetComponent("LineMeshComponent"));
   switch (mCellType)
   {
     case MINE:
     case UNEXPOSE:
       mesh->SetColor(DARKGRAY);
+      lineMesh->SetIsShow(false);
       break;
     case EXPOSE:
     case ADJACENT:
       mesh->SetColor(BLUE);
+      lineMesh->SetIsShow(false);
       break;
     case SEALED:
     case MINE_SEALED:
       mesh->SetColor(PURPLE);
+      lineMesh->SetIsShow(true);
       break;
     default:
       mesh->SetColor(DARKGRAY);

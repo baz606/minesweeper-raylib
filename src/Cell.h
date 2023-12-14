@@ -16,11 +16,8 @@ enum CellType
 {
   UNEXPOSE,
   EXPOSE,
-  ADJACENT_EXPOSE,
-  ADJACENT_UNEXPOSE,
-  ADJACENT_SEALED,
+  ADJACENT,
   MINE,
-  MINE_EXPOSE,
   MINE_SEALED,
   SEALED
 };
@@ -37,6 +34,7 @@ public:
   void SetIndex(int x, int y);
   [[nodiscard]] CellType GetCellType() const { return mCellType;}
   [[nodiscard]] int GetNumOfMines() const { return mNumOfMines; }
+  void SetNumOfMines(int numOfMines) { mNumOfMines = numOfMines; }
   [[nodiscard]] const Vector2Int& GetIndex() const { return mIndex; }
 
   // Static cell length

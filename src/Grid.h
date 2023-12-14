@@ -25,8 +25,9 @@ private:
   int mMines;
 
   void SetMines();
-  void SetAdjacentCellsAround(Cell* cell);
-  void GetAdjacentCellsFor(Cell* cell, std::vector<class Cell*>& adjacentCells);
+//  void SetAdjacentCellsAround(Cell* cell);
+//  void GetAdjacentCellsFor(Cell* cell, std::vector<class Cell*>& adjacentCells);
   void Expose(Cell* cell);
+  int GetAdjacentCellsInfo(Cell* cell, std::vector<Cell*>& adjacentCells);
   void ToggleSeal(Cell *cell);
 };

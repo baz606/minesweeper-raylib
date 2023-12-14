@@ -21,17 +21,15 @@ void Cell::UpdateActor(float deltaTime)
   auto mesh = (RectangleMeshComponent*)(GetComponent("RectangleMeshComponent"));
   switch (mCellType)
   {
-    case UNEXPOSE:
-    case ADJACENT_UNEXPOSE:
     case MINE:
+    case UNEXPOSE:
       mesh->SetColor(DARKGRAY);
       break;
     case EXPOSE:
-    case ADJACENT_EXPOSE:
+    case ADJACENT:
       mesh->SetColor(BLUE);
       break;
     case SEALED:
-    case ADJACENT_SEALED:
     case MINE_SEALED:
       mesh->SetColor(PURPLE);
       break;
@@ -42,11 +40,6 @@ void Cell::UpdateActor(float deltaTime)
 
 void Cell::SetCellType(CellType cellType)
 {
-  if (cellType == ADJACENT_UNEXPOSE)
-  {
-    // Increment mines only if we set this cell to be ADJACENT_UNEXPOSE
-    mNumOfMines++;
-  }
   mCellType = cellType;
 }
 

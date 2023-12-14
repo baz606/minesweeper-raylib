@@ -39,6 +39,7 @@ void Grid::Initialize()
       cell->SetPosition(((float)(j * Cell::LENGTH) + ((float)Cell::LENGTH / 2)),
                         (float)(i * Cell::LENGTH) + ((float)Cell::LENGTH / 2));
       cell->SetIndex(i, j);
+      cell->SetCellType(UNEXPOSE);
       mCellList[i][j] = cell;
 
       auto mesh = new RectangleMeshComponent("RectangleMeshComponent", cell, 1);
@@ -65,8 +66,6 @@ void Grid::ProcessInput(int mouseX, int mouseY)
     int j = std::lround(mouseX / Cell::LENGTH);
     if (i >= 0 && i < mRows && j >= 0 && j < mColumns)
     {
-//      printf("Selected on cell at: (%d, %d)\n", i, j);
-//      printf("Number of mines: %d\n", mCellList[i][j]->GetNumOfMines());
       Expose(mCellList[i][j]);
     }
   }
@@ -83,35 +82,24 @@ void Grid::ProcessInput(int mouseX, int mouseY)
 
 void Grid::ToggleSeal(Cell* cell)
 {
-  // If sealing
-  if (cell->GetCellType() == MINE)
-  {
-    cell->SetCellType(MINE_SEALED);
-    return;
-  }
-  else if (cell->GetCellType() == ADJACENT_UNEXPOSE)
-  {
-    cell->SetCellType(ADJACENT_SEALED);
-    return;
-  }
-  else if(cell->GetCellType() == UNEXPOSE)
+  if (cell->GetCellType() == UNEXPOSE)
   {
     cell->SetCellType(SEALED);
     return;
   }
+  else if (cell->GetCellType() == MINE)
+  {
+    cell->SetCellType(MINE_SEALED);
+    return;
+  }
 
-  // If unsealing
-  if (cell->GetCellType() == MINE_SEALED)
-  {
-    cell->SetCellType(MINE);
-  }
-  else if(cell->GetCellType() == ADJACENT_SEALED)
-  {
-    cell->SetCellType(ADJACENT_UNEXPOSE);
-  }
-  else if(cell->GetCellType() == SEALED)
+  if (cell->GetCellType() == SEALED)
   {
     cell->SetCellType(UNEXPOSE);
+  }
+  else if (cell->GetCellType() == MINE_SEALED)
+  {
+    cell->SetCellType(MINE);
   }
 }
 
@@ -137,47 +125,12 @@ void Grid::SetMines()
     }
     k++;
   }
-  for (auto mine : mMineList)
-  {
-    SetAdjacentCellsAround(mine);
-  }
 }
 
-void Grid::SetAdjacentCellsAround(Cell* cell)
+int Grid::GetAdjacentCellsInfo(Cell *cell, std::vector<Cell *>& adjacentCells)
 {
-  std::vector<Cell*> adjacentCells;
-  GetAdjacentCellsFor(cell, adjacentCells);
+  int numOfMines = 0;
 
-  for (auto adjCell : adjacentCells)
-  {
-    if(adjCell->GetCellType() != MINE)
-    {
-      // If not a mine cell, set adjacent cell type to ADJACENT_UNEXPOSE
-      adjCell->SetCellType(ADJACENT_UNEXPOSE);
-      // Check if this adjacent cell already has a TextComponent
-      auto textComp = (TextComponent*)(adjCell->GetComponent("TextComponent"));
-      if (textComp)
-      {
-        // If it has a text component, update the number of mines value
-        textComp->SetText(std::to_string(adjCell->GetNumOfMines()));
-      }
-      else
-      {
-        // If not, create a new TextComponent
-        textComp = new TextComponent("TextComponent", adjCell, 2);
-        textComp->SetColor(RAYWHITE);
-        textComp->SetFont(GetFontDefault());
-        textComp->SetFontSize(40.f);
-        textComp->SetSpacing(0.f);
-        textComp->SetIsShow(false);
-        textComp->SetText(std::to_string(adjCell->GetNumOfMines()));
-      }
-    }
-  }
-}
-
-void Grid::GetAdjacentCellsFor(Cell* cell, std::vector<Cell*> &adjacentCells)
-{
   const int x = cell->GetIndex().x;
   const int y = cell->GetIndex().y;
   // Check top and bottom row
@@ -189,11 +142,19 @@ void Grid::GetAdjacentCellsFor(Cell* cell, std::vector<Cell*> &adjacentCells)
       {
         // Valid adjacent cell
         adjacentCells.push_back(mCellList[i][j]);
+        if (mCellList[i][j]->GetCellType() == MINE)
+        {
+          numOfMines++;
+        }
       }
       if (z < mRows && j >= 0 && j < mColumns)
       {
         // Valid adjacent cell
         adjacentCells.push_back(mCellList[z][j]);
+        if (mCellList[z][j]->GetCellType() == MINE)
+        {
+          numOfMines++;
+        }
       }
     }
     else
@@ -206,36 +167,59 @@ void Grid::GetAdjacentCellsFor(Cell* cell, std::vector<Cell*> &adjacentCells)
   if ((y - 1) >= 0)
   {
     adjacentCells.push_back(mCellList[x][y - 1]);
+    if (mCellList[x][y - 1]->GetCellType() == MINE)
+    {
+      numOfMines++;
+    }
   }
   // Check right of the cell
   if ((y + 1) < mColumns)
   {
     adjacentCells.push_back(mCellList[x][y + 1]);
+    if (mCellList[x][y + 1]->GetCellType() == MINE)
+    {
+      numOfMines++;
+    }
   }
+  return numOfMines;
 }
 
 void Grid::Expose(Cell *cell)
 {
   if (cell->GetCellType() == MINE)
   {
-//    gameState = GAME_OVER;
-  }
-  else if (cell->GetCellType() == ADJACENT_UNEXPOSE)
-  {
-    cell->SetCellType(ADJACENT_EXPOSE);
-    ((TextComponent*)(cell->GetComponent("TextComponent")))->SetIsShow(true);
+    // End game
+    printf("YOU CLICKED A MINE! GAME OVER!\n");
   }
   else if (cell->GetCellType() == UNEXPOSE)
   {
-    cell->SetCellType(EXPOSE);
-    // Get adjacent cells and recursively call expose
+    // Check if its a normal cell
     std::vector<Cell*> adjacentCells;
-    GetAdjacentCellsFor(cell, adjacentCells);
-    for (auto adjCell : adjacentCells)
+    int numOfMines = GetAdjacentCellsInfo(cell, adjacentCells);
+    if (numOfMines > 0)
     {
-      if (adjCell->GetCellType() != MINE)
+      // This is an adjacent cell (Base case)
+      // We change its cell type and add a text component
+      cell->SetCellType(ADJACENT);
+      cell->SetNumOfMines(numOfMines);
+      auto textComp = new TextComponent("TextComponent", cell, 2);
+      textComp->SetColor(RAYWHITE);
+      textComp->SetFont(GetFontDefault());
+      textComp->SetFontSize(40.f);
+      textComp->SetSpacing(0.f);
+      textComp->SetText(std::to_string(cell->GetNumOfMines()));
+    }
+    else
+    {
+      // We have a normal cell
+      // We change its state and loop over adjacentCells and recursively expose them
+      cell->SetCellType(EXPOSE);
+      for (auto adjCell : adjacentCells)
       {
-        this->Expose(adjCell);
+        if (adjCell->GetCellType() == UNEXPOSE)
+        {
+          Expose(adjCell);
+        }
       }
     }
   }

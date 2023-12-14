@@ -29,7 +29,6 @@ void RectangleMeshComponent::Draw()
   if (cell)
   {
     if (cell->GetCellType() == SEALED
-        || cell->GetCellType() == ADJACENT_SEALED
         || cell->GetCellType() == MINE_SEALED)
     {
       // Draw the cross line

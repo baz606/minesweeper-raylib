@@ -9,6 +9,7 @@
 #include "Cell.h"
 #include "RectangleMeshComponent.h"
 #include "TextComponent.h"
+#include "LineMeshComponent.h"
 
 Grid::Grid(Game* game, int rows, int columns, int mines)
 :Actor(game)
@@ -42,12 +43,22 @@ void Grid::Initialize()
       cell->SetCellType(UNEXPOSE);
       mCellList[i][j] = cell;
 
+      // Add rectangle mesh component for the color of the cells
       auto mesh = new RectangleMeshComponent("RectangleMeshComponent", cell, 1);
       mesh->SetColor(DARKGRAY);
       mesh->SetBorderColor(BLACK);
       mesh->SetBorderThickness(3.f);
       mesh->SetWidth(Cell::LENGTH);
       mesh->SetHeight(Cell::LENGTH);
+
+      // Add line mesh component for the sealed state of cells
+      auto lineMesh = new LineMeshComponent("LineMeshComponent", cell, 2);
+      lineMesh->SetThickness(3.f);
+      lineMesh->SetColor(BLACK);
+      lineMesh->SetLinePair({ cell->GetPosition().x - (Cell::LENGTH / 2), cell->GetPosition().y - (Cell::LENGTH / 2) },
+                            { cell->GetPosition().x + (Cell::LENGTH / 2), cell->GetPosition().y + (Cell::LENGTH / 2) });
+      lineMesh->SetLinePair({ cell->GetPosition().x + (Cell::LENGTH / 2), cell->GetPosition().y - (Cell::LENGTH / 2) },
+                            { cell->GetPosition().x - (Cell::LENGTH / 2), cell->GetPosition().y + (Cell::LENGTH / 2) });
     }
   }
   SetMines();

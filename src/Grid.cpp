@@ -16,6 +16,7 @@ Grid::Grid(Game* game, int rows, int columns, int mines)
 ,mRows(rows)
 ,mColumns(columns)
 ,mMines(mines)
+,mTotalSeals(mines)
 {
 }
 
@@ -116,14 +117,16 @@ void Grid::ProcessInput(int mouseX, int mouseY)
 
 void Grid::ToggleSeal(Cell* cell)
 {
-  if (cell->GetCellType() == UNEXPOSE)
+  if (cell->GetCellType() == UNEXPOSE && mTotalSeals > 0)
   {
     cell->SetCellType(SEALED);
+    mTotalSeals--;
     return;
   }
-  else if (cell->GetCellType() == MINE)
+  else if (cell->GetCellType() == MINE && mTotalSeals > 0)
   {
     cell->SetCellType(MINE_SEALED);
+    mTotalSeals--;
     CheckForWin();
     return;
   }
@@ -131,10 +134,12 @@ void Grid::ToggleSeal(Cell* cell)
   if (cell->GetCellType() == SEALED)
   {
     cell->SetCellType(UNEXPOSE);
+    mTotalSeals++;
   }
   else if (cell->GetCellType() == MINE_SEALED)
   {
     cell->SetCellType(MINE);
+    mTotalSeals++;
   }
 }
 
@@ -143,6 +148,7 @@ void Grid::SetMines()
   int i = 0, j = 0, k = 0;
   SetRandomSeed(time(nullptr));
   mMineList.clear();
+  mTotalSeals = mMines;
   while (k < mMines)
   {
     i = GetRandomValue(0, mRows - 1);

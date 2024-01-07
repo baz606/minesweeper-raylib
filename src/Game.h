@@ -74,6 +74,7 @@ private:
   // Game Specific
   // This mGrid contains all cells
   class Grid* mGrid;
+  Font mFont;
 };
 
 //#include <vector>

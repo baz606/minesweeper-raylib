@@ -30,6 +30,9 @@ void Game::Initialize()
   // Initialize the grid with rows x columns cells
   mGrid = new Grid(this, 9, 9, 9);
   mGrid->Initialize();
+
+  // Load font
+  mFont = LoadFontEx("../resources/lets-eat.ttf", 200, nullptr, 0);
 }
 
 void Game::RunGame()
@@ -101,6 +104,10 @@ void Game::GenerateOutput()
       // This is our default PLAYING rendering output
       // This way we can render our GAME_OVER rectangular box correctly
       ClearBackground(LIGHTGRAY);
+      DrawTextEx(mFont,
+                 std::string("MINES: " + std::to_string(mGrid->GetTotalSeals())).c_str(),
+                 { (float)mScreenWidth - 300, 100 },
+                 90, 0, RED);
       for (auto drawCom: mDraws)
       {
         drawCom->Draw();
@@ -172,6 +179,7 @@ bool Game::IsRunning() const
 void Game::Shutdown()
 {
   UnloadData();
+  UnloadFont(mFont);
   CloseWindow();
 }
 

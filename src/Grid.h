@@ -14,6 +14,8 @@ public:
   ~Grid() = default;
 
   void Initialize();
+  void Reset();
+
   void UpdateActor(float deltaTime) override;
   void ProcessInput(int mouseX, int mouseY);
 

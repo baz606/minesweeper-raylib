@@ -2,8 +2,6 @@
 // Created by shehbaz on 12/6/2023.
 //
 
-
-
 #include <algorithm>
 
 #include "Game.h"
@@ -11,11 +9,16 @@
 #include "Cell.h"
 #include "DrawComponent.h"
 
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
+
 Game::Game(int screenWidth, int screenHeight, const char *title)
 :mScreenWidth(screenWidth)
 ,mScreenHeight(screenHeight)
 ,mTitle(title)
 ,mIsRunning(true)
+,mGameState(INITIAL)
+,mGrid(nullptr)
 {
 }
 
@@ -38,7 +41,10 @@ void Game::RunGame()
 
 void Game::ProcessInput()
 {
-  mGrid->ProcessInput(GetMouseX(), GetMouseY());
+  if (mGameState == PLAYING)
+  {
+    mGrid->ProcessInput(GetMouseX(), GetMouseY());
+  }
 }
 
 void Game::UpdateGame()
@@ -52,10 +58,43 @@ void Game::UpdateGame()
 void Game::GenerateOutput()
 {
   BeginDrawing();
-  ClearBackground(LIGHTGRAY);
-  for (auto drawCom : mDraws)
+  // Display menu screen according to game state
+  switch (mGameState)
   {
-    drawCom->Draw();
+    case INITIAL:
+    {
+      float buttonWidth = 300.f, buttonHeight = 100.f;
+      float padding = 75.f;
+      ClearBackground(DARKGRAY);
+      GuiSetStyle(DEFAULT, TEXT_SIZE, 40);
+      GuiSetStyle(DEFAULT, TEXT_SPACING, 10);
+      GuiSetStyle(BUTTON, BASE_COLOR_NORMAL, 0x000000FF);
+      if (GuiButton({ (mScreenWidth / 2.f) - (buttonWidth / 2.f),
+                      (mScreenHeight / 2.f) - (buttonHeight / 2.f) - padding,
+                      buttonWidth,
+                      buttonHeight },
+                    "START"))
+      {
+        printf("START GAME!\n");
+        mGameState = PLAYING;
+      }
+      if (GuiButton({ (mScreenWidth / 2.f) - (buttonWidth / 2.f),
+                      (mScreenHeight / 2.f) - (buttonHeight / 2.f) + buttonHeight,
+                      buttonWidth,
+                      buttonHeight },
+                    "EXIT"))
+      {
+        printf("EXIT GAME!\n");
+        mIsRunning = false;
+      }
+    }
+    break;
+    case PLAYING:
+      ClearBackground(LIGHTGRAY);
+      for (auto drawCom : mDraws)
+      {
+        drawCom->Draw();
+      }
   }
   EndDrawing();
 }
@@ -97,10 +136,8 @@ void Game::RemoveDraw(class DrawComponent *mesh)
   }
 }
 
-bool Game::IsRunning()
+bool Game::IsRunning() const
 {
-  // We can use this method to close the game window with additional conditions
-  mIsRunning = !WindowShouldClose();
   return mIsRunning;
 }
 

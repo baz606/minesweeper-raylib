@@ -41,6 +41,8 @@ public:
   // Static cell length
   static const int LENGTH = 100;
 
+  void Reset();
+
 private:
   CellType mCellType;
   class Grid* mGrid;

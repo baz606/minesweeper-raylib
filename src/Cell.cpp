@@ -8,6 +8,7 @@
 #include "Grid.h"
 #include "RectangleMeshComponent.h"
 #include "LineMeshComponent.h"
+#include "TextComponent.h"
 
 Cell::Cell(Game *game, Grid *grid)
 :Actor(game)
@@ -56,6 +57,21 @@ void Cell::SetIndex(int x, int y)
 {
   mIndex.x = x;
   mIndex.y = y;
+}
+
+void Cell::Reset()
+{
+  mCellType = UNEXPOSE;
+  auto textComp = (TextComponent*)(GetComponent("TextComponent"));
+  if (textComp)
+  {
+    textComp->SetIsShow(false);
+  }
+  else
+  {
+    printf("TextComponent is null!!!\n");
+  }
+  mNumOfMines = 0;
 }
 
 

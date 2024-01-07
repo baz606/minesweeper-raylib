@@ -28,6 +28,8 @@ private:
 //  void SetAdjacentCellsAround(Cell* cell);
 //  void GetAdjacentCellsFor(Cell* cell, std::vector<class Cell*>& adjacentCells);
   void Expose(Cell* cell);
-  int GetAdjacentCellsInfo(Cell* cell, std::vector<Cell*>& adjacentCells);
+  int GetAdjacentCells(Cell* cell, std::vector<Cell*>& adjacentCells);
   void ToggleSeal(Cell *cell);
+
+  void CheckForWin();
 };

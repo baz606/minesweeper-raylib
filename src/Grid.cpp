@@ -101,6 +101,7 @@ void Grid::ToggleSeal(Cell* cell)
   else if (cell->GetCellType() == MINE)
   {
     cell->SetCellType(MINE_SEALED);
+    CheckForWin();
     return;
   }
 
@@ -138,7 +139,7 @@ void Grid::SetMines()
   }
 }
 
-int Grid::GetAdjacentCellsInfo(Cell *cell, std::vector<Cell *>& adjacentCells)
+int Grid::GetAdjacentCells(Cell *cell, std::vector<Cell*>& adjacentCells)
 {
   int numOfMines = 0;
 
@@ -201,12 +202,13 @@ void Grid::Expose(Cell *cell)
   {
     // End game
     printf("YOU CLICKED A MINE! GAME OVER!\n");
+//    GetGame()->SetGameState(Game::GAME_OVER);
   }
   else if (cell->GetCellType() == UNEXPOSE)
   {
     // Check if its a normal cell
     std::vector<Cell*> adjacentCells;
-    int numOfMines = GetAdjacentCellsInfo(cell, adjacentCells);
+    int numOfMines = GetAdjacentCells(cell, adjacentCells);
     if (numOfMines > 0)
     {
       // This is an adjacent cell (Base case)
@@ -234,4 +236,19 @@ void Grid::Expose(Cell *cell)
       }
     }
   }
+}
+
+void Grid::CheckForWin()
+{
+  for (auto mine : mMineList)
+  {
+    if (mine->GetCellType() == MINE)
+    {
+      // There is at least one mine cell that is not sealed
+      return;
+    }
+  }
+  // Once we get to this point, we know all mines are set to MINE_SEALED state.
+  // Hence, set game condition to WIN
+//  GetGame()->SetGameState(Game::WIN);
 }

@@ -34,11 +34,15 @@ public:
   void AddDraw(class DrawComponent *mesh);
   void RemoveDraw(class DrawComponent *mesh);
 
+  // Set/Get Game state
+  void SetGameState(GameState gameState) { mGameState = gameState; }
+  [[nodiscard]] GameState GetGameState() const { return mGameState; }
+
 //  void AddFont(class Font* font);
 //  void RemoveFont(class Font* font);
 
   // Check if the game window is running
-  bool IsRunning();
+  [[nodiscard]] bool IsRunning() const;
 
 private:
   // Game window specific

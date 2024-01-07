@@ -228,10 +228,7 @@ void Grid::Expose(Cell *cell)
     GetGame()->SetGameState(Game::GAME_OVER);
     for (auto mine : mMineList)
     {
-      if (mine->GetCellType() != MINE_SEALED)
-      {
-        mine->SetCellType(MINE_EXPOSE);
-      }
+      mine->SetCellType(MINE_EXPOSE);
     }
   }
   else if (cell->GetCellType() == UNEXPOSE)

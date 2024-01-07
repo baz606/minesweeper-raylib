@@ -41,7 +41,6 @@ void Cell::UpdateActor(float deltaTime)
       break;
     case MINE_EXPOSE:
       mesh->SetColor(RED);
-      lineMesh->SetIsShow(true);
       break;
     default:
       mesh->SetColor(DARKGRAY);

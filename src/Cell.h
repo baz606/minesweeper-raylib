@@ -19,6 +19,7 @@ enum CellType
   ADJACENT,
   MINE,
   MINE_SEALED,
+  MINE_EXPOSE,
   SEALED
 };
 

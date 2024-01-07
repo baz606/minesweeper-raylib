@@ -45,6 +45,13 @@ void Game::ProcessInput()
   {
     mGrid->ProcessInput(GetMouseX(), GetMouseY());
   }
+  else if (mGameState == WIN || mGameState == GAME_OVER)
+  {
+    if (IsKeyReleased(KEY_SPACE))
+    {
+      mGrid->Reset();
+    }
+  }
 }
 
 void Game::UpdateGame()
@@ -69,19 +76,19 @@ void Game::GenerateOutput()
       GuiSetStyle(DEFAULT, TEXT_SIZE, 40);
       GuiSetStyle(DEFAULT, TEXT_SPACING, 10);
       GuiSetStyle(BUTTON, BASE_COLOR_NORMAL, 0x000000FF);
-      if (GuiButton({ (mScreenWidth / 2.f) - (buttonWidth / 2.f),
-                      (mScreenHeight / 2.f) - (buttonHeight / 2.f) - padding,
-                      buttonWidth,
-                      buttonHeight },
+      if (GuiButton({(mScreenWidth / 2.f) - (buttonWidth / 2.f),
+                     (mScreenHeight / 2.f) - (buttonHeight / 2.f) - padding,
+                     buttonWidth,
+                     buttonHeight},
                     "START"))
       {
         printf("START GAME!\n");
         mGameState = PLAYING;
       }
-      if (GuiButton({ (mScreenWidth / 2.f) - (buttonWidth / 2.f),
-                      (mScreenHeight / 2.f) - (buttonHeight / 2.f) + buttonHeight,
-                      buttonWidth,
-                      buttonHeight },
+      if (GuiButton({(mScreenWidth / 2.f) - (buttonWidth / 2.f),
+                     (mScreenHeight / 2.f) - (buttonHeight / 2.f) + buttonHeight,
+                     buttonWidth,
+                     buttonHeight},
                     "EXIT"))
       {
         printf("EXIT GAME!\n");
@@ -89,12 +96,33 @@ void Game::GenerateOutput()
       }
     }
     break;
-    case PLAYING:
+    default:
+    {
+      // This is our default PLAYING rendering output
+      // This way we can render our GAME_OVER rectangular box correctly
       ClearBackground(LIGHTGRAY);
-      for (auto drawCom : mDraws)
+      for (auto drawCom: mDraws)
       {
         drawCom->Draw();
       }
+      if (mGameState == GAME_OVER)
+      {
+        int fontSize = 50;
+        int width = 1200, height = 500;
+        DrawRectangle((mScreenWidth / 2) - (width / 2), (mScreenHeight / 2) - (height / 2), width, height, {0, 0, 0, 220});
+        DrawText("YOU CLICKED A MINE CELL! GAME OVER!", (mScreenWidth / 2) - 500, (mScreenHeight / 2) - 40, fontSize, RED);
+        DrawText("PRESS SPACE BAR TO TRY AGAIN!", (mScreenWidth / 2) - 500, (mScreenHeight / 2) + 20, fontSize, RED);
+      }
+      else if (mGameState == WIN)
+      {
+        int width = 1200, height = 500;
+        int fontSize = 50;
+        DrawRectangle((mScreenWidth / 2) - (width / 2), (mScreenHeight / 2) - (height / 2), width, height, {0, 0, 0, 220});
+        DrawText("CONGRATULATIONS, YOU HAVE WON!", (mScreenWidth / 2) - 500, (mScreenHeight / 2) - 40, fontSize, GREEN);
+        DrawText("PRESS SPACE BAR TO PLAY AGAIN!", (mScreenWidth / 2) - 500, (mScreenHeight / 2) + 20, fontSize, GREEN);
+      }
+    }
+    break;
   }
   EndDrawing();
 }

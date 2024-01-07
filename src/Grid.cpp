@@ -64,6 +64,25 @@ void Grid::Initialize()
   SetMines();
 }
 
+void Grid::Reset()
+{
+  for (auto& row : mCellList)
+  {
+    for (auto cell : row)
+    {
+      cell->SetCellType(UNEXPOSE);
+      // Reset TextComponent
+      auto textComp = reinterpret_cast<TextComponent*>(cell->GetComponent("TextComponent"));
+      if (textComp)
+      {
+        textComp->SetIsShow(false);
+      }
+    }
+  }
+  SetMines();
+  GetGame()->SetGameState(Game::PLAYING);
+}
+
 void Grid::UpdateActor(float deltaTime)
 {
   Actor::UpdateActor(deltaTime);
@@ -202,7 +221,14 @@ void Grid::Expose(Cell *cell)
   {
     // End game
     printf("YOU CLICKED A MINE! GAME OVER!\n");
-//    GetGame()->SetGameState(Game::GAME_OVER);
+    GetGame()->SetGameState(Game::GAME_OVER);
+    for (auto mine : mMineList)
+    {
+      if (mine->GetCellType() != MINE_SEALED)
+      {
+        mine->SetCellType(MINE_EXPOSE);
+      }
+    }
   }
   else if (cell->GetCellType() == UNEXPOSE)
   {
@@ -215,12 +241,18 @@ void Grid::Expose(Cell *cell)
       // We change its cell type and add a text component
       cell->SetCellType(ADJACENT);
       cell->SetNumOfMines(numOfMines);
-      auto textComp = new TextComponent("TextComponent", cell, 2);
+      // Check if this cell already has a TextComponent
+      auto textComp = reinterpret_cast<TextComponent*>(cell->GetComponent("TextComponent"));
+      if (!textComp)
+      {
+        textComp = new TextComponent("TextComponent", cell, 2);
+      }
       textComp->SetColor(RAYWHITE);
       textComp->SetFont(GetFontDefault());
       textComp->SetFontSize(40.f);
       textComp->SetSpacing(0.f);
       textComp->SetText(std::to_string(cell->GetNumOfMines()));
+      textComp->SetIsShow(true);
     }
     else
     {
@@ -250,5 +282,5 @@ void Grid::CheckForWin()
   }
   // Once we get to this point, we know all mines are set to MINE_SEALED state.
   // Hence, set game condition to WIN
-//  GetGame()->SetGameState(Game::WIN);
+  GetGame()->SetGameState(Game::WIN);
 }

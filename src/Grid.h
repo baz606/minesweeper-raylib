@@ -19,14 +19,17 @@ public:
   void UpdateActor(float deltaTime) override;
   void ProcessInput(int mouseX, int mouseY);
 
+  void SetMines();
+  int GetMines() const { return mMines; }
+  int GetTotalSeals() const { return mTotalSeals; }
+
 private:
   std::vector<std::vector<class Cell*>> mCellList;
   std::vector<class Cell*> mMineList;
   int mRows;
   int mColumns;
   int mMines;
-
-  void SetMines();
+  int mTotalSeals;
 //  void SetAdjacentCellsAround(Cell* cell);
 //  void GetAdjacentCellsFor(Cell* cell, std::vector<class Cell*>& adjacentCells);
   void Expose(Cell* cell);

@@ -1,6 +1,8 @@
 # minesweeper-raylib
 This is my attempt to building a full minesweeper game using raylib: https://www.raylib.com/ </br>
-I am not following any particular game object model so this code is going to be messy.</br>
+I am updated the game object model to use game objects with hierarchy model.</br>
+This is game object model is taken from Sanjay Madhav's book on Game Programming with C++.</br>
+The code might need some more cleaning/refactoring, but I think this is a good start.</br>
 
 If you want to try out this game, please follow the instructions below.</br>
 Make sure you have Visual Studio 2022 installed along with Windows 10 SDK.</br>

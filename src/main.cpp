@@ -5,7 +5,7 @@ int main()
   Game game(1280, 960, "Minesweeper");
   game.Initialize();
 
-  while (!WindowShouldClose() && game.IsRunning())
+  while (game.IsRunning())
   {
     // Run main game loop
     game.RunGame();

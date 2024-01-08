@@ -17,7 +17,7 @@ Game::Game(int screenWidth, int screenHeight, const char *title)
 ,mScreenHeight(screenHeight)
 ,mTitle(title)
 ,mIsRunning(true)
-,mGameState(INITIAL)
+,mGameState(SPLASH_SCREEN)
 ,mGrid(nullptr)
 {
 }
@@ -26,13 +26,15 @@ void Game::Initialize()
 {
   InitWindow(mScreenWidth, mScreenHeight, mTitle);
   SetTargetFPS(60);
+  SetExitKey(KEY_NULL);
+
+  // Load font
+  mFont = LoadFontEx("./resources/lets-eat.ttf", 200, nullptr, 0);
 
   // Initialize the grid with rows x columns cells
   mGrid = new Grid(this, 9, 9, 9);
   mGrid->Initialize();
 
-  // Load font
-  mFont = LoadFontEx("../resources/lets-eat.ttf", 200, nullptr, 0);
 }
 
 void Game::RunGame()
@@ -44,9 +46,21 @@ void Game::RunGame()
 
 void Game::ProcessInput()
 {
-  if (mGameState == PLAYING)
+  if (mGameState == SPLASH_SCREEN)
+  {
+    if (GetKeyPressed() > 0)
+    {
+      mGameState = MENU;
+    }
+  }
+  else if (mGameState == PLAYING)
   {
     mGrid->ProcessInput(GetMouseX(), GetMouseY());
+    // Reset game at anytime in PLAYING state by pressing R key
+    if (IsKeyReleased(KEY_R))
+    {
+      mGrid->Reset();
+    }
   }
   else if (mGameState == WIN || mGameState == GAME_OVER)
   {
@@ -71,11 +85,21 @@ void Game::GenerateOutput()
   // Display menu screen according to game state
   switch (mGameState)
   {
-    case INITIAL:
+    case SPLASH_SCREEN:
     {
+      ClearBackground(LIGHTGRAY);
+      Vector2 pixelLength = MeasureTextEx(mFont, "@baz606", 200, 0);
+      Vector2 pos = { mScreenWidth / 2.f, mScreenHeight / 2.f};
+      float rotation = 0.f;
+      DrawTextPro(mFont, "@baz606", pos, { pixelLength.x / 2, pixelLength.y / 2 }, rotation, 200, 0, VIOLET);
+
+    }
+    break;
+    case MENU:
+    {
+      ClearBackground(DARKGRAY);
       float buttonWidth = 300.f, buttonHeight = 100.f;
       float padding = 75.f;
-      ClearBackground(DARKGRAY);
       GuiSetStyle(DEFAULT, TEXT_SIZE, 40);
       GuiSetStyle(DEFAULT, TEXT_SPACING, 10);
       GuiSetStyle(BUTTON, BASE_COLOR_NORMAL, 0x000000FF);
@@ -108,10 +132,16 @@ void Game::GenerateOutput()
                  std::string("MINES: " + std::to_string(mGrid->GetTotalSeals())).c_str(),
                  { (float)mScreenWidth - 300, 100 },
                  90, 0, RED);
+
+      Vector2 pixelLength = MeasureTextEx(mFont, "@baz606", 100, 0);
+      Vector2 final = { (float)mScreenWidth - 320 + (pixelLength.x / 2), ((float)mScreenHeight / 2 ) + (pixelLength.y / 2) };
+      DrawTextPro(mFont, "@baz606", final, { pixelLength.x / 2, pixelLength.y / 2 }, 0.f, 100, 0, VIOLET);
+
       for (auto drawCom: mDraws)
       {
         drawCom->Draw();
       }
+
       if (mGameState == GAME_OVER)
       {
         int fontSize = 50;
@@ -173,7 +203,7 @@ void Game::RemoveDraw(class DrawComponent *mesh)
 
 bool Game::IsRunning() const
 {
-  return mIsRunning;
+  return (!WindowShouldClose() && mIsRunning);
 }
 
 void Game::Shutdown()

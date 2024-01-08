@@ -253,8 +253,8 @@ void Grid::Expose(Cell *cell)
       if (textComp)
       {
         textComp->SetColor(RAYWHITE);
-        textComp->SetFont(GetFontDefault());
-        textComp->SetFontSize(40.f);
+        textComp->SetFont(GetGame()->GetFont());
+        textComp->SetFontSize(70.f);
         textComp->SetSpacing(0.f);
         textComp->SetText(std::to_string(cell->GetNumOfMines()));
         textComp->SetIsShow(true);

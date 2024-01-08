@@ -14,8 +14,6 @@ public:
 
   void Draw() override;
 
-  void CalculatePosition();
-
   // Setters/Getters
   void SetText(const std::string& text);
   [[nodiscard]] const std::string& GetText() const { return mText; }

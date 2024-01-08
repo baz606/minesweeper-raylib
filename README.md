@@ -1,7 +1,7 @@
 # minesweeper-raylib
 This is my attempt to building a full minesweeper game using raylib: https://www.raylib.com/ </br>
-I am updated the game object model to use game objects with hierarchy model.</br>
-This is game object model is taken from Sanjay Madhav's book on Game Programming with C++.</br>
+I have updated the game object model to use game objects with hierarchy model which is similar to what unreal engine uses.</br>
+This game object model is taken from Sanjay Madhav's book on Game Programming with C++.</br>
 The code might need some more cleaning/refactoring, but I think this is a good start.</br>
 
 If you want to try out this game, please follow the instructions below.</br>

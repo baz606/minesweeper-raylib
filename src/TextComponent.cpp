@@ -19,7 +19,7 @@ void TextComponent::Draw()
                                        mSpacing);
     DrawTextPro(mFont,
                 mText.c_str(),
-                { (float)mPosX, (float)mPosY },
+                { mOwner->GetPosition().x, mOwner->GetPosition().y },
                 { textLength.x / 2, textLength.y / 2 },
                 mOwner->GetRotation(),
                 mFontSize * mOwner->GetScale(),

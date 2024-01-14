@@ -15,12 +15,19 @@ void RectangleMeshComponent::Draw()
 {
   if (mIsShow)
   {
-    mRectangle = { (float)mPosX - ((float)mWidth / 2),
-                   (float)mPosY - ((float)mHeight / 2),
+    mRectangle = { (float)mOwner->GetPosition().x,
+                   (float)mOwner->GetPosition().y,
                    (float)mWidth * mOwner->GetScale(),
                    (float)mHeight * mOwner->GetScale()};
 
-    DrawRectangleRec(mRectangle, mColor);
-    DrawRectangleLinesEx(mRectangle, mThickness, mBorderColor);
+    DrawRectanglePro(mRectangle,
+                     { mWidth / 2.f, mHeight / 2.f },
+                     mOwner->GetRotation(),
+                     mColor);
+    DrawRectangleLinesEx(
+            { mRectangle.x - (mWidth / 2.f), mRectangle.y - (mHeight / 2.f),
+              mRectangle.width, mRectangle.height },
+              mThickness, mBorderColor
+            );
   }
 }

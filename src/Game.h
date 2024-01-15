@@ -5,6 +5,7 @@
 #pragma once
 
 #include <vector>
+#include <unordered_map>
 #include "raylib.h"
 
 class Game
@@ -20,7 +21,7 @@ public:
   };
 
   Game(int screenWidth, int screenHeight, const char *title);
-  ~Game() = default;
+  ~Game();
 
   // Methods to run our game loop
   void Initialize();
@@ -68,10 +69,10 @@ private:
   GameState mGameState;
   bool mIsRunning;
 
-  // All the actors in the game
-  std::vector<class Actor*> mActors;
-  // All Cell meshes in the game
-  std::vector<class DrawComponent*> mDraws;
+  // Actor HashMap -> Update actors based on game state
+  std::unordered_map<GameState, std::vector<class Actor*>*> mActorsMap;
+  // DrawComponent HashMap -> Render actor draw components based on game state
+  std::unordered_map<GameState, std::vector<class DrawComponent*>*> mDrawsMap;
 
   // Game Specific
   // This mGrid contains all cells

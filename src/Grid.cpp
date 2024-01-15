@@ -11,8 +11,8 @@
 #include "TextComponent.h"
 #include "LineMeshComponent.h"
 
-Grid::Grid(Game* game, int rows, int columns, int mines)
-:Actor(game)
+Grid::Grid(Game* game, Game::GameState gameState, int rows, int columns, int mines)
+:Actor(game, gameState)
 ,mRows(rows)
 ,mColumns(columns)
 ,mMines(mines)
@@ -37,7 +37,7 @@ void Grid::Initialize()
     mCellList[i].resize(mColumns);
     for (int j = 0; j < mColumns; ++j)
     {
-      auto cell = new Cell(GetGame(), this);
+      auto cell = new Cell(GetGame(), Game::PLAYING, this);
       cell->SetPosition(((float)(j * Cell::LENGTH) + ((float)Cell::LENGTH / 2)),
                         (float)(i * Cell::LENGTH) + ((float)Cell::LENGTH / 2));
       cell->SetIndex(i, j);

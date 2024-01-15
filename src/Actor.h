@@ -21,7 +21,7 @@ public:
     EDead
   };
 
-  Actor(class Game* game);
+  Actor(class Game* game, Game::GameState gameState);
   virtual ~Actor();
 
   void Update(float deltaTime);
@@ -38,6 +38,8 @@ public:
 
   [[nodiscard]] State GetState() const { return mState; }
   void SetState(State state) { mState = state; }
+  Game::GameState GetGameState() const { return mGameState; }
+  void SetGameState(Game::GameState gameState) { mGameState = gameState; }
 
   class Game* GetGame() { return mGame; }
 
@@ -62,5 +64,8 @@ private:
 
   std::vector<class Component*> mComponents;
   std::unordered_map<std::string, class Component*> mComponentsMap;
+
+  // The game and the game state this actor belongs to
   class Game* mGame;
+  Game::GameState mGameState;
 };

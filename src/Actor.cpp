@@ -7,12 +7,13 @@
 #include "Actor.h"
 #include "Component.h"
 
-Actor::Actor(Game *game)
+Actor::Actor(Game *game, Game::GameState gameState)
 :mState(EActive)
 ,mPosition({ 0, 0 })
 ,mScale(1.0f)
 ,mRotation(0.0f)
 ,mGame(game)
+,mGameState(gameState)
 {
   mGame->AddActor(this);
 }

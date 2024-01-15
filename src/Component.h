@@ -16,7 +16,9 @@ public:
   // Update component using delta time
   virtual void Update(float deltaTime);
 
-  int GetUpdateOrder() const { return mUpdateOrder; }
+  // Setters/Getters
+  [[nodiscard]] Actor* GetOwner() const { return mOwner; }
+  [[nodiscard]] int GetUpdateOrder() const { return mUpdateOrder; }
 
 protected:
   // The actor that owns this component

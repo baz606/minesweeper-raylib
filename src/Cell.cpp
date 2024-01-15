@@ -10,8 +10,8 @@
 #include "LineMeshComponent.h"
 #include "TextComponent.h"
 
-Cell::Cell(Game *game, Grid *grid)
-:Actor(game)
+Cell::Cell(Game *game, Game::GameState gameState, Grid *grid)
+:Actor(game, gameState)
 ,mGrid(grid)
 {
   mCellType = UNEXPOSE;

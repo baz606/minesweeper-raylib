@@ -10,7 +10,7 @@
 class Grid : public Actor
 {
 public:
-  Grid(class Game* game, int rows, int columns, int mines);
+  Grid(class Game* game, Game::GameState gameState, int rows, int columns, int mines);
   ~Grid() = default;
 
   void Initialize();

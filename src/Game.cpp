@@ -8,6 +8,7 @@
 #include "Grid.h"
 #include "Cell.h"
 #include "DrawComponent.h"
+#include "SplashScreen.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
@@ -20,6 +21,17 @@ Game::Game(int screenWidth, int screenHeight, const char *title)
 ,mGameState(SPLASH_SCREEN)
 ,mGrid(nullptr)
 {
+  mActorsMap[SPLASH_SCREEN] = new std::vector<Actor*>;
+  mActorsMap[PLAYING] = new std::vector<Actor*>;
+
+  mDrawsMap[SPLASH_SCREEN] = new std::vector<DrawComponent*>;
+  mDrawsMap[PLAYING] = new std::vector<DrawComponent*>;
+}
+
+Game::~Game()
+{
+  delete mActorsMap[SPLASH_SCREEN];
+  delete mActorsMap[PLAYING];
 }
 
 void Game::Initialize()
@@ -31,8 +43,12 @@ void Game::Initialize()
   // Load font
   mFont = LoadFontEx("./resources/lets-eat.ttf", 200, nullptr, 0);
 
+  // Create splash screen actor to display logo
+//  mSplashScreen = new SplashScreen(this);
+//  mSplashScreen->Init();
+
   // Initialize the grid with rows x columns cells
-  mGrid = new Grid(this, 9, 9, 9);
+  mGrid = new Grid(this, PLAYING, 9, 9, 9);
   mGrid->Initialize();
 
 }
@@ -73,9 +89,31 @@ void Game::ProcessInput()
 
 void Game::UpdateGame()
 {
-  for (auto actor : mActors)
+  switch (mGameState)
   {
-    actor->Update(GetFrameTime());
+    case SPLASH_SCREEN:
+    {
+      std::vector<Actor*>* actors = mActorsMap[SPLASH_SCREEN];
+      for (auto& actor : *actors)
+      {
+        actor->Update(GetFrameTime());
+      }
+    }
+    break;
+    case MENU:
+      // Empty MENU state
+    break;
+    case PLAYING:
+    case GAME_OVER:
+    case WIN:
+    {
+      std::vector<Actor*>* actors = mActorsMap[PLAYING];
+      for (auto& actor : *actors)
+      {
+        actor->Update(GetFrameTime());
+      }
+    }
+    break;
   }
 }
 
@@ -88,11 +126,15 @@ void Game::GenerateOutput()
     case SPLASH_SCREEN:
     {
       ClearBackground(LIGHTGRAY);
+      std::vector<DrawComponent*>* draws = mDrawsMap[SPLASH_SCREEN];
+      for (auto& drawCom: *draws)
+      {
+        drawCom->Draw();
+      }
       Vector2 pixelLength = MeasureTextEx(mFont, "@baz606", 200, 0);
       Vector2 pos = { mScreenWidth / 2.f, mScreenHeight / 2.f};
       float rotation = 0.f;
       DrawTextPro(mFont, "@baz606", pos, { pixelLength.x / 2, pixelLength.y / 2 }, rotation, 200, 0, VIOLET);
-
     }
     break;
     case MENU:
@@ -123,7 +165,9 @@ void Game::GenerateOutput()
       }
     }
     break;
-    default:
+    case PLAYING:
+    case GAME_OVER:
+    case WIN:
     {
       // This is our default PLAYING rendering output
       // This way we can render our GAME_OVER rectangular box correctly
@@ -137,7 +181,8 @@ void Game::GenerateOutput()
       Vector2 final = { (float)mScreenWidth - 320 + (pixelLength.x / 2), ((float)mScreenHeight / 2 ) + (pixelLength.y / 2) };
       DrawTextPro(mFont, "@baz606", final, { pixelLength.x / 2, pixelLength.y / 2 }, 0.f, 100, 0, VIOLET);
 
-      for (auto drawCom: mDraws)
+      std::vector<DrawComponent*>* draws = mDrawsMap[PLAYING];
+      for (auto& drawCom: *draws)
       {
         drawCom->Draw();
       }
@@ -166,38 +211,43 @@ void Game::GenerateOutput()
 
 void Game::AddActor(Actor *actor)
 {
-  mActors.emplace_back(actor);
+  mActorsMap[actor->GetGameState()]->emplace_back(actor);
+//  mActors.emplace_back(actor);
 }
 
 void Game::RemoveActor(Actor *actor)
 {
-  auto iter = std::find(mActors.begin(), mActors.end(), actor);
-  if (iter != mActors.end())
+  std::vector<Actor*>* actors = mActorsMap[actor->GetGameState()];
+  auto iter = std::find(actors->begin(), actors->end(), actor);
+  if (iter != actors->end())
   {
-    mActors.erase(iter);
+    actors->erase(iter);
   }
 }
 
-void Game::AddDraw(class DrawComponent *mesh)
+void Game::AddDraw(DrawComponent *mesh)
 {
+  std::vector<DrawComponent*>* draws = mDrawsMap[mesh->GetOwner()->GetGameState()];
   int myDrawOrder = mesh->GetDrawOrder();
-  auto iter = mDraws.begin();
-  for (; iter != mDraws.end(); ++iter)
+  auto iter = draws->begin();
+  for (; iter != draws->end(); ++iter)
   {
     if (myDrawOrder < (*iter)->GetDrawOrder())
     {
       break;
     }
   }
-  mDraws.insert(iter, mesh);
+  draws->insert(iter, mesh);
 }
 
-void Game::RemoveDraw(class DrawComponent *mesh)
+void Game::RemoveDraw(DrawComponent *mesh)
 {
-  auto iter = std::find(mDraws.begin(), mDraws.end(), mesh);
-  if (iter != mDraws.end())
+  std::vector<DrawComponent*>* draws = mDrawsMap[mesh->GetOwner()->GetGameState()];
+
+  auto iter = std::find(draws->begin(), draws->end(), mesh);
+  if (iter != draws->end())
   {
-    mDraws.erase(iter);
+    draws->erase(iter);
   }
 }
 
@@ -215,10 +265,22 @@ void Game::Shutdown()
 
 void Game::UnloadData()
 {
-  while (!mActors.empty())
+  // Delete the actors in the hash map's vector
+  for (auto pair : mActorsMap)
   {
-    delete mActors.back();
+    while (!pair.second->empty())
+    {
+      delete pair.second->back();
+    }
   }
+  // Now delete the pointer to the vector
+  delete mActorsMap[SPLASH_SCREEN];
+  delete mActorsMap[PLAYING];
+
+  // Delete pointer to vector in mDrawsMap
+  // The individual deletion of DrawComponent* is handled in their Actor's destructor
+  delete mDrawsMap[SPLASH_SCREEN];
+  delete mDrawsMap[PLAYING];
 }
 
 //

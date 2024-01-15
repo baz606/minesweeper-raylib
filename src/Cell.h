@@ -26,7 +26,7 @@ enum CellType
 class Cell : public Actor
 {
 public:
-  Cell(class Game* game, class Grid* grid);
+  Cell(class Game* game, Game::GameState gameState, class Grid* grid);
 
   void UpdateActor(float deltaTime) override;
 

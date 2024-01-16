@@ -8,7 +8,7 @@
 #include "Grid.h"
 #include "Cell.h"
 #include "DrawComponent.h"
-#include "SplashScreen.h"
+#include "Logo.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
@@ -44,8 +44,9 @@ void Game::Initialize()
   mFont = LoadFontEx("./resources/lets-eat.ttf", 200, nullptr, 0);
 
   // Create splash screen actor to display logo
-//  mSplashScreen = new SplashScreen(this);
-//  mSplashScreen->Init();
+  mLogo = new Logo(this, SPLASH_SCREEN);
+  mLogo->Init();
+  mLogo->SetPosition(mScreenWidth / 2.f, mScreenHeight / 2.f);
 
   // Initialize the grid with rows x columns cells
   mGrid = new Grid(this, PLAYING, 9, 9, 9);
@@ -131,10 +132,10 @@ void Game::GenerateOutput()
       {
         drawCom->Draw();
       }
-      Vector2 pixelLength = MeasureTextEx(mFont, "@baz606", 200, 0);
-      Vector2 pos = { mScreenWidth / 2.f, mScreenHeight / 2.f};
-      float rotation = 0.f;
-      DrawTextPro(mFont, "@baz606", pos, { pixelLength.x / 2, pixelLength.y / 2 }, rotation, 200, 0, VIOLET);
+//      Vector2 pixelLength = MeasureTextEx(mFont, "@baz606", 200, 0);
+//      Vector2 pos = { mScreenWidth / 2.f, mScreenHeight / 2.f};
+//      float rotation = 0.f;
+//      DrawTextPro(mFont, "@baz606", pos, { pixelLength.x / 2, pixelLength.y / 2 }, rotation, 200, 0, VIOLET);
     }
     break;
     case MENU:
@@ -170,7 +171,7 @@ void Game::GenerateOutput()
     case WIN:
     {
       // This is our default PLAYING rendering output
-      // This way we can render our GAME_OVER rectangular box correctly
+      // This way we can render our GAME_OVER and WIN rectangular box on top of the grid
       ClearBackground(LIGHTGRAY);
       DrawTextEx(mFont,
                  std::string("MINES: " + std::to_string(mGrid->GetTotalSeals())).c_str(),

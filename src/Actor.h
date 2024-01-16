@@ -32,6 +32,7 @@ public:
   [[nodiscard]] const Vector2& GetPosition() const { return mPosition; }
   void SetPosition(const Vector2& pos) { mPosition = pos; }
   void SetPosition(float x, float y);
+  void SetScale(float scale) { mScale = scale; }
   [[nodiscard]] float GetScale() const { return mScale; }
   [[nodiscard]] float GetRotation() const { return mRotation; }
   void SetRotation(float rotation) { mRotation = rotation; }

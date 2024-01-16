@@ -19,9 +19,12 @@ public:
 
   void AddAnimation(class Animation* animation);
   void RemoveAnimation(class Animation* animation);
+
+  void Play();
   void Reset();
 
 private:
   std::vector<class Animation*> mAnimations;
   int mCurrentAnimIndex;
+  bool isPlay;
 };

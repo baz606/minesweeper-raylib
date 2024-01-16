@@ -21,7 +21,7 @@ public:
   };
 
   Game(int screenWidth, int screenHeight, const char *title);
-  ~Game();
+  ~Game() = default;
 
   // Methods to run our game loop
   void Initialize();
@@ -40,6 +40,8 @@ public:
   void SetGameState(GameState gameState) { mGameState = gameState; }
   [[nodiscard]] GameState GetGameState() const { return mGameState; }
   [[nodiscard]] const Font& GetFont() const { return mFont; }
+  int GetScreenWidth() const { return mScreenWidth; }
+  int GetScreenHeight() const { return mScreenHeight; }
 
 //  void AddFont(class Font* font);
 //  void RemoveFont(class Font* font);
@@ -59,11 +61,6 @@ private:
 
   // Deallocate any memory on the heap
   void UnloadData();
-
-  // Handle game conditions
-//  void HandleGameOver();
-//  void ResetGame();
-//  void CheckForWin();
 
   // Current game state and end conditions
   GameState mGameState;

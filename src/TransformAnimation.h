@@ -12,19 +12,20 @@ class TransformAnimation : public Animation
 {
 public:
   TransformAnimation(Animator* animator, float speed);
+  ~TransformAnimation() override;
 
   bool Play() override;
 
   // Setters/Getters
-  void SetFinalPosition(Vector2 finalPosition) { mFinalPosition = finalPosition; }
-  void SetFinalRotation(float finalRotation) { mFinalRotation = finalRotation; }
-  void SetFinalScale(float finalScale) { mFinalScale = finalScale; }
+  void SetFinalPosition(Vector2 finalPosition);
+  void SetFinalRotation(float finalRotation);
+  void SetFinalScale(float finalScale);
 
 private:
   // Transform
-  Vector2 mFinalPosition;
-  float mFinalScale;
-  float mFinalRotation;
+  Vector2* mFinalPosition;
+  float* mFinalScale;
+  float* mFinalRotation;
 
   bool UpdateRotation();
 

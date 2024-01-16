@@ -15,23 +15,34 @@ Animator::Animator(const std::string &name, Actor *owner, int updateOrder)
 
 Animator::~Animator()
 {
-  for (auto anim : mAnimations)
+  while (mAnimations.empty())
   {
-    delete anim;
+    delete mAnimations.back();
   }
 }
+
+
 
 void Animator::Update(float deltaTime)
 {
   Component::Update(deltaTime);
-  if (mCurrentAnimIndex < mAnimations.size())
+
+  if (isPlay)
   {
-    if (mAnimations[mCurrentAnimIndex]->Play())
+    if (mCurrentAnimIndex < mAnimations.size())
     {
-      return;
+      if (mAnimations[mCurrentAnimIndex]->Play())
+      {
+        return;
+      }
+      mCurrentAnimIndex++;
     }
-    mCurrentAnimIndex++;
+    else
+    {
+      isPlay = false;
+    }
   }
+
 }
 
 void Animator::AddAnimation(Animation *animation)
@@ -52,4 +63,10 @@ void Animator::Reset()
 {
   // Reset animations
   mCurrentAnimIndex = 0;
+  isPlay = false;
+}
+
+void Animator::Play()
+{
+  isPlay = true;
 }

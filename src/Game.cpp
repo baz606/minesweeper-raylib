@@ -28,25 +28,20 @@ Game::Game(int screenWidth, int screenHeight, const char *title)
   mDrawsMap[PLAYING] = new std::vector<DrawComponent*>;
 }
 
-Game::~Game()
-{
-  delete mActorsMap[SPLASH_SCREEN];
-  delete mActorsMap[PLAYING];
-}
-
 void Game::Initialize()
 {
   InitWindow(mScreenWidth, mScreenHeight, mTitle);
   SetTargetFPS(60);
   SetExitKey(KEY_NULL);
+  SetTraceLogLevel(LOG_DEBUG);
 
   // Load font
   mFont = LoadFontEx("./resources/lets-eat.ttf", 200, nullptr, 0);
 
   // Create splash screen actor to display logo
   mLogo = new Logo(this, SPLASH_SCREEN);
+  mLogo->SetPosition(mScreenWidth / 2.f, -100.f);
   mLogo->Init();
-  mLogo->SetPosition(mScreenWidth / 2.f, mScreenHeight / 2.f);
 
   // Initialize the grid with rows x columns cells
   mGrid = new Grid(this, PLAYING, 9, 9, 9);

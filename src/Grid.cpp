@@ -230,7 +230,7 @@ void Grid::Expose(Cell *cell)
   if (cell->GetCellType() == MINE)
   {
     // End game
-    printf("YOU CLICKED A MINE! GAME OVER!\n");
+    TraceLog(LOG_DEBUG, "YOU CLICKED A MINE! GAME OVER!");
     GetGame()->SetGameState(Game::GAME_OVER);
     for (auto mine : mMineList)
     {
@@ -261,7 +261,7 @@ void Grid::Expose(Cell *cell)
       }
       else
       {
-        printf("TextComponent is null!!!\n");
+        TraceLog(LOG_ERROR, "TextComponent is null!!!");
       }
     }
     else

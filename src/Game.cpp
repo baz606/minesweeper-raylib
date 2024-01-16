@@ -33,7 +33,7 @@ void Game::Initialize()
   InitWindow(mScreenWidth, mScreenHeight, mTitle);
   SetTargetFPS(60);
   SetExitKey(KEY_NULL);
-  SetTraceLogLevel(LOG_DEBUG);
+  SetTraceLogLevel(LOG_ERROR);
 
   // Load font
   mFont = LoadFontEx("./resources/lets-eat.ttf", 200, nullptr, 0);
@@ -143,7 +143,7 @@ void Game::GenerateOutput()
                      buttonHeight},
                     "START"))
       {
-        printf("START GAME!\n");
+        TraceLog(LOG_DEBUG, "START GAME!");
         mGameState = PLAYING;
       }
       if (GuiButton({(mScreenWidth / 2.f) - (buttonWidth / 2.f),
@@ -152,7 +152,7 @@ void Game::GenerateOutput()
                      buttonHeight},
                     "EXIT"))
       {
-        printf("EXIT GAME!\n");
+        TraceLog(LOG_DEBUG, "EXIT GAME!");
         mIsRunning = false;
       }
     }

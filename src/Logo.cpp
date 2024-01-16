@@ -25,12 +25,15 @@ void Logo::Init()
   // Add Animation
   auto animator = new Animator("Animator", this);
 
-  auto transformAnimation1 = new TransformAnimation(animator, 2000.f);
-  transformAnimation1->SetFinalPosition({ GetGame()->GetScreenWidth() / 2.f, GetGame()->GetScreenHeight() / 2.f });
-  auto transformAnimation2 = new TransformAnimation(animator, 100.f);
-  transformAnimation2->SetFinalRotation(180.f);
-  auto transformAnimation3 = new TransformAnimation(animator, 100.f);
-  transformAnimation3->SetFinalRotation(0.f);
+  auto anim1 = new TransformAnimation(animator, 2000.f);
+  anim1->SetFinalPosition({ GetGame()->GetScreenWidth() / 2.f, GetGame()->GetScreenHeight() / 2.f });
+  anim1->SetFinalRotation(20.f);
+  auto anim2 = new TransformAnimation(animator, 200.f);
+  anim2->SetFinalRotation(-20.f);
+  auto anim3 = new TransformAnimation(animator, 50.f);
+  anim3->SetFinalRotation(20.f);
+  auto anim4 = new TransformAnimation(animator, 25.f);
+  anim4->SetFinalRotation(0.f);
 
   // Play all animations added above
   animator->Play();

@@ -22,25 +22,25 @@ TransformAnimation::~TransformAnimation()
   delete mFinalScale;
 }
 
-bool TransformAnimation::Play()
+bool TransformAnimation::Play(float deltaTime)
 {
   bool isPlay = false;
-  if (UpdatePosition())
+  if (UpdatePosition(deltaTime))
   {
     isPlay = true;
   }
-  if (UpdateRotation())
+  if (UpdateRotation(deltaTime))
   {
     isPlay = true;
   }
-  if (UpdateScale())
+  if (UpdateScale(deltaTime))
   {
     isPlay = true;
   }
   return isPlay;
 }
 
-bool TransformAnimation::UpdateRotation()
+bool TransformAnimation::UpdateRotation(float deltaTime)
 {
   if (mFinalRotation)
   {
@@ -50,7 +50,7 @@ bool TransformAnimation::UpdateRotation()
     {
       if (finalRotation > rotation)
       {
-        rotation += (mSpeed * GetFrameTime());
+        rotation += (mSpeed * deltaTime);
         if (rotation > finalRotation)
         {
           rotation = finalRotation;
@@ -58,7 +58,7 @@ bool TransformAnimation::UpdateRotation()
       }
       else
       {
-        rotation -= (mSpeed * GetFrameTime());
+        rotation -= (mSpeed * deltaTime);
         if (rotation < finalRotation)
         {
           rotation = finalRotation;
@@ -72,7 +72,7 @@ bool TransformAnimation::UpdateRotation()
   return false;
 }
 
-bool TransformAnimation::UpdatePosition()
+bool TransformAnimation::UpdatePosition(float deltaTime)
 {
   if (mFinalPosition)
   {
@@ -84,7 +84,7 @@ bool TransformAnimation::UpdatePosition()
       {
         if (finalPosition.x > position.x)
         {
-          position.x += (mSpeed * GetFrameTime());
+          position.x += (mSpeed * deltaTime);
           if (position.x > finalPosition.x)
           {
             position.x = finalPosition.x;
@@ -92,7 +92,7 @@ bool TransformAnimation::UpdatePosition()
         }
         else
         {
-          position.x -= (mSpeed * GetFrameTime());
+          position.x -= (mSpeed * deltaTime);
           if (position.x < finalPosition.x)
           {
             position.x = finalPosition.x;
@@ -103,7 +103,7 @@ bool TransformAnimation::UpdatePosition()
       {
         if (finalPosition.y > position.y)
         {
-          position.y += (mSpeed * GetFrameTime());
+          position.y += (mSpeed * deltaTime);
           if (position.y > finalPosition.y)
           {
             position.y = finalPosition.y;
@@ -111,7 +111,7 @@ bool TransformAnimation::UpdatePosition()
         }
         else
         {
-          position.y -= (mSpeed * GetFrameTime());
+          position.y -= (mSpeed * deltaTime);
           if (position.y < finalPosition.y)
           {
             position.y = finalPosition.y;
@@ -126,7 +126,7 @@ bool TransformAnimation::UpdatePosition()
   return false;
 }
 
-bool TransformAnimation::UpdateScale()
+bool TransformAnimation::UpdateScale(float deltaTime)
 {
   if (mFinalScale)
   {
@@ -136,7 +136,7 @@ bool TransformAnimation::UpdateScale()
     {
       if (finalScale > scale)
       {
-        scale += (mSpeed * GetFrameTime());
+        scale += (mSpeed * deltaTime);
         if (scale > finalScale)
         {
           scale = finalScale;
@@ -144,7 +144,7 @@ bool TransformAnimation::UpdateScale()
       }
       else
       {
-        scale -= (mSpeed * GetFrameTime());
+        scale -= (mSpeed * deltaTime);
         if (scale < finalScale)
         {
           scale = finalScale;

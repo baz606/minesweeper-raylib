@@ -11,7 +11,7 @@ public:
   Animation(class Animator* animator, float speed);
   virtual ~Animation();
 
-  virtual bool Play() = 0;
+  virtual bool Play(float deltaTime) = 0;
 
   // Setters/Getters
   void SetSpeed(float speed) { mSpeed = speed; }

@@ -31,7 +31,7 @@ void Animator::Update(float deltaTime)
   {
     if (mCurrentAnimIndex < mAnimations.size())
     {
-      if (mAnimations[mCurrentAnimIndex]->Play())
+      if (mAnimations[mCurrentAnimIndex]->Play(deltaTime))
       {
         return;
       }

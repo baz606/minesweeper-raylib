@@ -14,7 +14,7 @@ public:
   TransformAnimation(Animator* animator, float speed);
   ~TransformAnimation() override;
 
-  bool Play() override;
+  bool Play(float deltaTime) override;
 
   // Setters/Getters
   void SetFinalPosition(Vector2 finalPosition);
@@ -27,9 +27,7 @@ private:
   float* mFinalScale;
   float* mFinalRotation;
 
-  bool UpdateRotation();
-
-  bool UpdatePosition();
-
-  bool UpdateScale();
+  bool UpdateRotation(float deltaTime);
+  bool UpdatePosition(float deltaTime);
+  bool UpdateScale(float deltaTime);
 };

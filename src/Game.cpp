@@ -132,10 +132,6 @@ void Game::GenerateOutput()
       {
         drawCom->Draw();
       }
-//      Vector2 pixelLength = MeasureTextEx(mFont, "@baz606", 200, 0);
-//      Vector2 pos = { mScreenWidth / 2.f, mScreenHeight / 2.f};
-//      float rotation = 0.f;
-//      DrawTextPro(mFont, "@baz606", pos, { pixelLength.x / 2, pixelLength.y / 2 }, rotation, 200, 0, VIOLET);
     }
     break;
     case MENU:

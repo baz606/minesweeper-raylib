@@ -74,8 +74,10 @@ private:
   // Game Specific
   // This mGrid contains all cells
   class Grid* mGrid;
-  // Splash Screen actor to draw logo
+  // Logo actor on the Splash Screen
   class Logo* mLogo;
+  // Caption under the logo
+  class Caption* mCaption;
   Font mFont;
 };
 

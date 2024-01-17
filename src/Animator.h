@@ -22,6 +22,8 @@ public:
 
   void Play();
   void Reset();
+  // Check if all animations have been played
+  bool IsDone() const { return !isPlay; }
 
 private:
   std::vector<class Animation*> mAnimations;

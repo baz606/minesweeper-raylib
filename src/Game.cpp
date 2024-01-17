@@ -3,6 +3,7 @@
 //
 
 #include <algorithm>
+#include <iostream>
 
 #include "Game.h"
 #include "Grid.h"
@@ -12,6 +13,9 @@
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
+#include "Animator.h"
+#include "Caption.h"
+#include "TextComponent.h"
 
 Game::Game(int screenWidth, int screenHeight, const char *title)
 :mScreenWidth(screenWidth)
@@ -33,7 +37,7 @@ void Game::Initialize()
   InitWindow(mScreenWidth, mScreenHeight, mTitle);
   SetTargetFPS(60);
   SetExitKey(KEY_NULL);
-  SetTraceLogLevel(LOG_ERROR);
+  SetTraceLogLevel(LOG_DEBUG);
 
   // Load font
   mFont = LoadFontEx("./resources/lets-eat.ttf", 200, nullptr, 0);
@@ -43,10 +47,15 @@ void Game::Initialize()
   mLogo->SetPosition(mScreenWidth / 2.f, -100.f);
   mLogo->Init();
 
+  // TODO: Add textLength as a member variable to TextComponent so we can draw a text relative to another
+  mCaption = new Caption(this, SPLASH_SCREEN);
+  mCaption->SetPosition(mScreenWidth / 2.f, (mScreenHeight / 2.f) + 200.f);
+  mCaption->Init();
+
+
   // Initialize the grid with rows x columns cells
   mGrid = new Grid(this, PLAYING, 9, 9, 9);
   mGrid->Initialize();
-
 }
 
 void Game::RunGame()
@@ -60,9 +69,15 @@ void Game::ProcessInput()
 {
   if (mGameState == SPLASH_SCREEN)
   {
-    if (GetKeyPressed() > 0)
+    Animator* logoAnimator = (Animator*)(mLogo->GetComponent("Animator"));
+    if (logoAnimator->IsDone())
     {
-      mGameState = MENU;
+      Animator* captionAnimation = (Animator*)(mCaption->GetComponent("Animator"));
+      captionAnimation->Play();
+      if (GetKeyPressed() > 0)
+      {
+        mGameState = MENU;
+      }
     }
   }
   else if (mGameState == PLAYING)
@@ -76,7 +91,7 @@ void Game::ProcessInput()
   }
   else if (mGameState == WIN || mGameState == GAME_OVER)
   {
-    if (IsKeyReleased(KEY_SPACE))
+    if (IsKeyReleased(KEY_SPACE) || IsKeyReleased(KEY_R))
     {
       mGrid->Reset();
     }

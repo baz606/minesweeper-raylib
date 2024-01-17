@@ -21,8 +21,6 @@ Animator::~Animator()
   }
 }
 
-
-
 void Animator::Update(float deltaTime)
 {
   Component::Update(deltaTime);
@@ -42,7 +40,6 @@ void Animator::Update(float deltaTime)
       isPlay = false;
     }
   }
-
 }
 
 void Animator::AddAnimation(Animation *animation)
@@ -62,8 +59,9 @@ void Animator::RemoveAnimation(Animation *animation)
 void Animator::Reset()
 {
   // Reset animations
+  TraceLog(LOG_DEBUG, "Reset Animations");
   mCurrentAnimIndex = 0;
-  isPlay = false;
+  isPlay = true;
 }
 
 void Animator::Play()

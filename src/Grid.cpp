@@ -55,7 +55,7 @@ void Grid::Initialize()
       auto textComp = new TextComponent("TextComponent", cell, 2);
       textComp->SetColor(RAYWHITE);
       textComp->SetFont(GetFontDefault());
-      textComp->SetFontSize(40.f);
+      textComp->SetFontSize(50.f);
       textComp->SetSpacing(0.f);
       textComp->SetText(std::to_string(cell->GetNumOfMines()));
       textComp->SetIsShow(false);
@@ -252,10 +252,6 @@ void Grid::Expose(Cell *cell)
       auto textComp = reinterpret_cast<TextComponent*>(cell->GetComponent("TextComponent"));
       if (textComp)
       {
-        textComp->SetColor(RAYWHITE);
-        textComp->SetFont(GetGame()->GetFont());
-        textComp->SetFontSize(70.f);
-        textComp->SetSpacing(0.f);
         textComp->SetText(std::to_string(cell->GetNumOfMines()));
         textComp->SetIsShow(true);
       }

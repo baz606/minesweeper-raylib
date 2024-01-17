@@ -3,7 +3,6 @@
 //
 
 #include <algorithm>
-#include <iostream>
 
 #include "Game.h"
 #include "Grid.h"
@@ -13,9 +12,9 @@
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
+
 #include "Animator.h"
 #include "Caption.h"
-#include "TextComponent.h"
 
 Game::Game(int screenWidth, int screenHeight, const char *title)
 :mScreenWidth(screenWidth)
@@ -25,11 +24,6 @@ Game::Game(int screenWidth, int screenHeight, const char *title)
 ,mGameState(SPLASH_SCREEN)
 ,mGrid(nullptr)
 {
-  mActorsMap[SPLASH_SCREEN] = new std::vector<Actor*>;
-  mActorsMap[PLAYING] = new std::vector<Actor*>;
-
-  mDrawsMap[SPLASH_SCREEN] = new std::vector<DrawComponent*>;
-  mDrawsMap[PLAYING] = new std::vector<DrawComponent*>;
 }
 
 void Game::Initialize()
@@ -38,6 +32,12 @@ void Game::Initialize()
   SetTargetFPS(60);
   SetExitKey(KEY_NULL);
   SetTraceLogLevel(LOG_DEBUG);
+
+  // Initialize the actor and draw map
+  mActorsMap[SPLASH_SCREEN] = new std::vector<Actor*>;
+  mActorsMap[PLAYING] = new std::vector<Actor*>;
+  mDrawsMap[SPLASH_SCREEN] = new std::vector<DrawComponent*>;
+  mDrawsMap[PLAYING] = new std::vector<DrawComponent*>;
 
   // Load font
   mFont = LoadFontEx("./resources/lets-eat.ttf", 200, nullptr, 0);
@@ -49,7 +49,7 @@ void Game::Initialize()
 
   // TODO: Add textLength as a member variable to TextComponent so we can draw a text relative to another
   mCaption = new Caption(this, SPLASH_SCREEN);
-  mCaption->SetPosition(mScreenWidth / 2.f, (mScreenHeight / 2.f) + 200.f);
+  mCaption->SetPosition((mScreenWidth / 2.f) + 50.f, (mScreenHeight / 2.f) + 200.f);
   mCaption->Init();
 
 
@@ -70,14 +70,28 @@ void Game::ProcessInput()
   if (mGameState == SPLASH_SCREEN)
   {
     Animator* logoAnimator = (Animator*)(mLogo->GetComponent("Animator"));
-    if (logoAnimator->IsDone())
+    if (logoAnimator)
     {
-      Animator* captionAnimation = (Animator*)(mCaption->GetComponent("Animator"));
-      captionAnimation->Play();
-      if (GetKeyPressed() > 0)
+      if (logoAnimator->IsDone())
       {
-        mGameState = MENU;
+        Animator* captionAnimation = (Animator*)(mCaption->GetComponent("Animator"));
+        if (captionAnimation)
+        {
+          captionAnimation->Play();
+        }
+        else
+        {
+          TraceLog(LOG_ERROR, "No Animator in Caption!!!");
+        }
+        if (GetKeyPressed() > 0)
+        {
+          mGameState = MENU;
+        }
       }
+    }
+    else
+    {
+      TraceLog(LOG_ERROR, "No Animator in Logo!!!");
     }
   }
   else if (mGameState == PLAYING)
@@ -219,7 +233,6 @@ void Game::GenerateOutput()
 void Game::AddActor(Actor *actor)
 {
   mActorsMap[actor->GetGameState()]->emplace_back(actor);
-//  mActors.emplace_back(actor);
 }
 
 void Game::RemoveActor(Actor *actor)

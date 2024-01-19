@@ -45,6 +45,10 @@ void Game::Initialize()
 
   // Load font
   mFont = LoadFontEx("./resources/lets-eat.ttf", 200, nullptr, 0);
+  // Load textures to be used for back button in PLAYING state
+  Texture2D onHover, offHover;
+  onHover = LoadTexture("./resources/back-blue.png");
+  offHover = LoadTexture("./resources/back.png");
 
   // Create logo actor to display logo in SPLASH_SCREEN state
   mLogo = new Actor(this, SPLASH_SCREEN);
@@ -89,11 +93,6 @@ void Game::Initialize()
   // Initialize the grid with rows x columns cells
   mGrid = new Grid(this, PLAYING, 9, 9, 9);
   mGrid->Initialize();
-
-  // Setup Back button on PLAYING screen
-  Texture2D onHover, offHover;
-  onHover = LoadTexture("./resources/back-blue.png");
-  offHover = LoadTexture("./resources/back.png");
 
   auto backButton = new BackButton(this, PLAYING);
   backButton->SetPosition({ mScreenWidth - 100.f, mScreenHeight - 100.f });

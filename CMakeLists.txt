@@ -58,6 +58,8 @@ add_executable(${PROJECT_NAME} src/main.cpp
         src/Caption.h
         src/FlashingAnimation.cpp
         src/FlashingAnimation.h
+        src/SpriteComponent.cpp
+        src/SpriteComponent.h
 )
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib)

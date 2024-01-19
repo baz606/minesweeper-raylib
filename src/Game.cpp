@@ -15,6 +15,7 @@
 
 #include "Animator.h"
 #include "Caption.h"
+#include "SpriteComponent.h"
 
 Game::Game(int screenWidth, int screenHeight, const char *title)
 :mScreenWidth(screenWidth)
@@ -52,10 +53,14 @@ void Game::Initialize()
   mCaption->SetPosition((mScreenWidth / 2.f) + 50.f, (mScreenHeight / 2.f) + 200.f);
   mCaption->Init();
 
-
   // Initialize the grid with rows x columns cells
   mGrid = new Grid(this, PLAYING, 9, 9, 9);
   mGrid->Initialize();
+
+  auto sprite = new Actor(this, PLAYING);
+  sprite->SetPosition({ mScreenWidth - 100.f, mScreenHeight - 100.f });
+  sprite->SetScale(0.5f);
+  auto comp = new SpriteComponent("./resources/back.png", "SpriteComponent", sprite);
 }
 
 void Game::RunGame()
@@ -224,6 +229,8 @@ void Game::GenerateOutput()
         DrawText("CONGRATULATIONS, YOU HAVE WON!", (mScreenWidth / 2) - 500, (mScreenHeight / 2) - 40, fontSize, GREEN);
         DrawText("PRESS SPACE BAR TO PLAY AGAIN!", (mScreenWidth / 2) - 500, (mScreenHeight / 2) + 20, fontSize, GREEN);
       }
+      // Draw back button
+//      DrawTextureEx(texture, { mScreenWidth - 100.f, mScreenHeight - 100.f }, 0.f, 0.5f, LIGHTGRAY);
     }
     break;
   }

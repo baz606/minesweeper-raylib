@@ -10,6 +10,7 @@
 Animator::Animator(const std::string &name, Actor *owner, int updateOrder)
 :Component(name, owner, updateOrder)
 ,mCurrentAnimIndex(0)
+,isPlay(false)
 {
 }
 

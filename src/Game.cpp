@@ -16,6 +16,8 @@
 #include "Animator.h"
 #include "Caption.h"
 #include "SpriteComponent.h"
+#include "BoxCollider.h"
+#include "BackButton.h"
 
 Game::Game(int screenWidth, int screenHeight, const char *title)
 :mScreenWidth(screenWidth)
@@ -57,10 +59,21 @@ void Game::Initialize()
   mGrid = new Grid(this, PLAYING, 9, 9, 9);
   mGrid->Initialize();
 
-  auto sprite = new Actor(this, PLAYING);
-  sprite->SetPosition({ mScreenWidth - 100.f, mScreenHeight - 100.f });
-  sprite->SetScale(0.5f);
-  auto comp = new SpriteComponent("./resources/back.png", "SpriteComponent", sprite);
+  // Setup Back button on PLAYING screen
+  Texture2D onHover, offHover;
+  onHover = LoadTexture("./resources/back-blue.png");
+  offHover = LoadTexture("./resources/back.png");
+
+  auto backButton = new BackButton(this, PLAYING);
+  backButton->SetPosition({ mScreenWidth - 100.f, mScreenHeight - 100.f });
+  backButton->SetScale(0.5f);
+  backButton->SetOnHoverTexture(onHover);
+  backButton->SetOffHoverTexture(offHover);
+
+  // Setup back button's components
+  new SpriteComponent("SpriteComponent", backButton);
+  auto boxCollider = new BoxCollider("BoxCollider", backButton);
+  boxCollider->SetCollider(backButton->GetPosition().x - (offHover.width / 2.f), backButton->GetPosition().y - (offHover.height / 2.f), offHover.width, offHover.height);
 }
 
 void Game::RunGame()

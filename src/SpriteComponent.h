@@ -10,7 +10,7 @@
 class SpriteComponent : public DrawComponent
 {
 public:
-  SpriteComponent(const char *fileName, const std::string& name, class Actor* owner, int drawOrder = 100);
+  SpriteComponent(const std::string& name, class Actor* owner, int drawOrder = 100);
   ~SpriteComponent() override;
 
   void Draw() override;
@@ -20,7 +20,7 @@ public:
   [[nodiscard]] Color GetColorTint() const { return mTint; }
   void SetTexture(const Texture2D& texture);
   void SetTexture(const char* fileName);
-  [[nodiscard]] Texture2D GetTexture() const { return mTexture; }
+  [[nodiscard]] const Texture2D& GetTexture() const { return mTexture; }
 
 private:
   Texture2D mTexture;

@@ -5,11 +5,10 @@
 #include "SpriteComponent.h"
 #include "Actor.h"
 
-SpriteComponent::SpriteComponent(const char *fileName, const std::string& name, Actor *owner, int drawOrder)
+SpriteComponent::SpriteComponent(const std::string& name, Actor *owner, int drawOrder)
 :DrawComponent(name, owner, drawOrder)
 {
-  mTexture = LoadTexture(fileName);
-  mTint = WHITE;
+  mTint = LIGHTGRAY;
 }
 
 SpriteComponent::~SpriteComponent()
@@ -19,18 +18,18 @@ SpriteComponent::~SpriteComponent()
 
 void SpriteComponent::Draw()
 {
-  Rectangle source = { 0.0f, 0.0f, (float)mTexture.width, (float)mTexture.height };
-  Rectangle dest = { mOwner->GetPosition().x, mOwner->GetPosition().y, (float)mTexture.width * mOwner->GetScale(), (float)mTexture.height * mOwner->GetScale() };
-  Vector2 origin = { ((float)mTexture.width / 2.f) * mOwner->GetScale(), ((float)mTexture.height / 2.f) * mOwner->GetScale() };
+  if (mIsShow)
+  {
+    Rectangle source = { 0.0f, 0.0f, (float)mTexture.width, (float)mTexture.height };
+    Rectangle dest = { mOwner->GetPosition().x, mOwner->GetPosition().y, (float)mTexture.width * mOwner->GetScale(), (float)mTexture.height * mOwner->GetScale() };
+    Vector2 origin = { ((float)mTexture.width / 2.f) * mOwner->GetScale(), ((float)mTexture.height / 2.f) * mOwner->GetScale() };
 
-  DrawTexturePro(mTexture, source, dest, origin, mOwner->GetRotation(), mTint);
+    DrawTexturePro(mTexture, source, dest, origin, mOwner->GetRotation(), mTint);
+  }
 }
 
 void SpriteComponent::SetTexture(const Texture2D &texture)
 {
-  // Unload current texture
-  UnloadTexture(mTexture);
-  // Set texture
   mTexture = texture;
 }
 

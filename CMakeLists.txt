@@ -46,16 +46,12 @@ add_executable(${PROJECT_NAME} src/main.cpp
         src/TextComponent.h
         src/LineMeshComponent.cpp
         src/LineMeshComponent.h
-        src/Logo.cpp
-        src/Logo.h
         src/Animator.cpp
         src/Animator.h
         src/Animation.cpp
         src/Animation.h
         src/TransformAnimation.cpp
         src/TransformAnimation.h
-        src/Caption.cpp
-        src/Caption.h
         src/FlashingAnimation.cpp
         src/FlashingAnimation.h
         src/SpriteComponent.cpp

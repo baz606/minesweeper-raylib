@@ -8,16 +8,17 @@
 #include "Grid.h"
 #include "Cell.h"
 #include "DrawComponent.h"
-#include "Logo.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
 #include "Animator.h"
-#include "Caption.h"
 #include "SpriteComponent.h"
 #include "BoxCollider.h"
 #include "BackButton.h"
+#include "TextComponent.h"
+#include "TransformAnimation.h"
+#include "FlashingAnimation.h"
 
 Game::Game(int screenWidth, int screenHeight, const char *title)
 :mScreenWidth(screenWidth)
@@ -45,15 +46,45 @@ void Game::Initialize()
   // Load font
   mFont = LoadFontEx("./resources/lets-eat.ttf", 200, nullptr, 0);
 
-  // Create splash screen actor to display logo
-  mLogo = new Logo(this, SPLASH_SCREEN);
+  // Create logo actor to display logo in SPLASH_SCREEN state
+  mLogo = new Actor(this, SPLASH_SCREEN);
   mLogo->SetPosition(mScreenWidth / 2.f, -100.f);
-  mLogo->Init();
+  // Add Text component for logo
+  auto textComp = new TextComponent("TextComponent", mLogo);
+  textComp->SetText("@baz606");
+  textComp->SetColor(VIOLET);
+  textComp->SetFont(mFont);
+  textComp->SetFontSize(200);
+  textComp->SetSpacing(0);
+  // Add Animation to logo
+  auto animator = new Animator("Animator", mLogo);
+  auto anim1 = new TransformAnimation(animator, 2000.f);
+  anim1->SetFinalPosition({ mScreenWidth / 2.f, mScreenHeight / 2.f });
+  anim1->SetFinalRotation(20.f);
+  auto anim2 = new TransformAnimation(animator, 200.f);
+  anim2->SetFinalRotation(-20.f);
+  auto anim3 = new TransformAnimation(animator, 50.f);
+  anim3->SetFinalRotation(20.f);
+  auto anim4 = new TransformAnimation(animator, 25.f);
+  anim4->SetFinalRotation(0.f);
+  // Play all animations added above
+  animator->Play();
 
+  // Add Caption under the logo in SPLASH_SCREEN state
   // TODO: Add textLength as a member variable to TextComponent so we can draw a text relative to another
-  mCaption = new Caption(this, SPLASH_SCREEN);
+  mCaption = new Actor(this, SPLASH_SCREEN);
   mCaption->SetPosition((mScreenWidth / 2.f) + 50.f, (mScreenHeight / 2.f) + 200.f);
-  mCaption->Init();
+  // Add Text component for caption
+  textComp = new TextComponent("TextComponent", mCaption);
+  textComp->SetText("PRESS ANY KEY TO CONTINUE...");
+  textComp->SetColor(BLACK);
+  textComp->SetFont(mFont);
+  textComp->SetFontSize(80);
+  textComp->SetSpacing(0);
+  textComp->SetIsShow(false);
+  // Add Animation
+  animator = new Animator("Animator", mCaption);
+  new FlashingAnimation(animator, textComp, 1.f);
 
   // Initialize the grid with rows x columns cells
   mGrid = new Grid(this, PLAYING, 9, 9, 9);

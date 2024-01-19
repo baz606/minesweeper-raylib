@@ -75,9 +75,9 @@ private:
   // This mGrid contains all cells
   class Grid* mGrid;
   // Logo actor on the Splash Screen
-  class Logo* mLogo;
+  class Actor* mLogo;
   // Caption under the logo
-  class Caption* mCaption;
+  class Actor* mCaption;
   Font mFont;
 };
 

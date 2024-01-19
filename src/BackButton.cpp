@@ -27,9 +27,14 @@ void BackButton::UpdateActor(float deltaTime)
     auto spriteComponent = (SpriteComponent*)GetComponent("SpriteComponent");
     if (spriteComponent)
     {
-      if (boxCollider->OnMouseHover())
+      if (boxCollider->OnHover())
       {
         spriteComponent->SetTexture(mOnHoverTexture);
+        int value = boxCollider->OnClick();
+        if (value == MOUSE_BUTTON_LEFT)
+        {
+          GetGame()->SetGameState(Game::MENU);
+        }
       }
       else
       {

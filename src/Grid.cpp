@@ -70,7 +70,7 @@ void Grid::Initialize()
                             { cell->GetPosition().x - (Cell::LENGTH / 2), cell->GetPosition().y + (Cell::LENGTH / 2) });
     }
   }
-  SetMines();
+//  SetMines();
 }
 
 void Grid::Reset()

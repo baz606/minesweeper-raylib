@@ -221,6 +221,7 @@ void Game::GenerateOutput()
                     "START"))
       {
         TraceLog(LOG_DEBUG, "START GAME!");
+        mGrid->Reset();
         mGameState = PLAYING;
       }
       if (GuiButton({(mScreenWidth / 2.f) - (buttonWidth / 2.f),

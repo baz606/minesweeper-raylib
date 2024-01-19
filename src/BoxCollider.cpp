@@ -28,7 +28,7 @@ void BoxCollider::Update(float deltaTime)
   Component::Update(deltaTime);
 }
 
-bool BoxCollider::OnMouseHover()
+bool BoxCollider::OnHover()
 {
   if (mCollider)
   {
@@ -36,4 +36,25 @@ bool BoxCollider::OnMouseHover()
     return CheckCollisionRecs(mouseRect, *mCollider);
   }
   return false;
+}
+
+int BoxCollider::OnClick()
+{
+  if (OnHover())
+  {
+    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
+    {
+      return MOUSE_BUTTON_LEFT;
+    }
+    else if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT))
+    {
+      return MOUSE_BUTTON_RIGHT;
+    }
+    else if (IsMouseButtonReleased(MOUSE_BUTTON_MIDDLE))
+    {
+      return MOUSE_BUTTON_MIDDLE;
+    }
+  }
+  // Return -1 which is considered false in c++
+  return -1;
 }

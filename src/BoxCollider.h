@@ -18,7 +18,8 @@ public:
   [[nodiscard]] const Rectangle* GetRectangle() const { return mCollider; }
 
   void Update(float deltaTime) override;
-  bool OnMouseHover();
+  bool OnHover();
+  int OnClick();
 
 private:
   // The x,y position of this collider is top left of the box/rectangle

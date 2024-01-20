@@ -3,6 +3,7 @@
 //
 
 #include <algorithm>
+#include <filesystem>
 
 #include "Game.h"
 #include "Grid.h"
@@ -51,9 +52,15 @@ void Game::Initialize()
   onHover = LoadTexture("./resources/back-blue.png");
   offHover = LoadTexture("./resources/back.png");
 
-  // Load the sounds
-  mSoundMap["mouse-click"] = LoadSound("./resources/mouse-click.wav");
-  mSoundMap["to-menu"] = LoadSound("./resources/to-menu.wav");
+  // Load all the sounds under resources/sounds/ directory
+  const std::string directory_path = "./resources/sounds";
+  std::string name, path;
+  for (const auto& entry : std::filesystem::directory_iterator(directory_path))
+  {
+    name = entry.path().filename().string();
+    path = "./resources/sounds/" + name;
+    mSoundMap[name] = LoadSound(path.c_str());
+  }
 
   // Create logo actor to display logo in SPLASH_SCREEN state
   mLogo = new Actor(this, SPLASH_SCREEN);
@@ -138,7 +145,7 @@ void Game::ProcessInput()
         }
         if (GetKeyPressed() > 0)
         {
-          PlaySoundFromMap("to-menu");
+          PlaySoundFromMap("to-menu.wav");
           mGameState = MENU;
         }
       }
@@ -227,7 +234,7 @@ void Game::GenerateOutput()
                     "START"))
       {
         TraceLog(LOG_DEBUG, "START GAME!");
-        PlaySoundFromMap("mouse-click");
+        PlaySoundFromMap("mouse-click.wav");
         mGrid->Reset();
         mGameState = PLAYING;
       }
@@ -238,9 +245,9 @@ void Game::GenerateOutput()
                     "EXIT"))
       {
         TraceLog(LOG_DEBUG, "EXIT GAME!");
-        PlaySoundFromMap("mouse-click");
+        PlaySoundFromMap("mouse-click.wav");
         // Wait for the full click sound before exiting the game
-        while (IsSoundPlaying(mSoundMap["mouse-click"]))
+        while (IsSoundPlaying(mSoundMap["mouse-click.wav"]))
         {
         }
         mIsRunning = false;
@@ -381,6 +388,6 @@ void Game::PlaySoundFromMap(const std::string& name)
   }
   else
   {
-    TraceLog(LOG_ERROR, "mouse-click sound not found!!!");
+    TraceLog(LOG_ERROR, "%s sound not found!!!", name.c_str());
   }
 }

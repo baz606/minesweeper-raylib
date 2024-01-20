@@ -215,6 +215,7 @@ void Grid::Expose(Cell *cell)
   }
   else if (cell->GetCellType() == UNEXPOSE)
   {
+    GetGame()->PlaySoundFromMap("cell-click.wav");
     // Check if its a normal cell
     std::vector<Cell*> adjacentCells;
     int numOfMines = GetAdjacentCells(cell, adjacentCells);

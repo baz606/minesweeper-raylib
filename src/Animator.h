@@ -22,11 +22,14 @@ public:
 
   void Play();
   void Reset();
+  [[nodiscard]] bool IsIncrementAnim() const { return mIsIncrement; }
   // Check if all animations have been played
-  bool IsDone() const { return !isPlay; }
+  [[nodiscard]] bool IsDone() const { return !mIsPlay; }
 
 private:
   std::vector<class Animation*> mAnimations;
   int mCurrentAnimIndex;
-  bool isPlay;
+  bool mIsPlay;
+  // This bool lets us know when an animation in mAnimations is done playing
+  bool mIsIncrement;
 };

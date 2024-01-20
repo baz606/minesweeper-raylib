@@ -83,6 +83,8 @@ add_executable(${PROJECT_NAME} src/main.cpp
         src/BoxCollider.h
         src/BackButton.cpp
         src/BackButton.h
+        src/Logo.cpp
+        src/Logo.h
 )
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib)

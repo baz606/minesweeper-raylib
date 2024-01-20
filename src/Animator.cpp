@@ -8,9 +8,10 @@
 #include "Actor.h"
 
 Animator::Animator(const std::string &name, Actor *owner, int updateOrder)
-:Component(name, owner, updateOrder)
+: Component(name, owner, updateOrder)
 ,mCurrentAnimIndex(0)
-,isPlay(false)
+,mIsPlay(false)
+,mIsIncrement(false)
 {
 }
 
@@ -26,19 +27,22 @@ void Animator::Update(float deltaTime)
 {
   Component::Update(deltaTime);
 
-  if (isPlay)
+  if (mIsPlay)
   {
     if (mCurrentAnimIndex < mAnimations.size())
     {
       if (mAnimations[mCurrentAnimIndex]->Play(deltaTime))
       {
+        mIsIncrement = false;
         return;
       }
       mCurrentAnimIndex++;
+      mIsIncrement = true;
     }
     else
     {
-      isPlay = false;
+      mIsPlay = false;
+      mIsIncrement = false;
     }
   }
 }
@@ -62,10 +66,10 @@ void Animator::Reset()
   // Reset animations
   TraceLog(LOG_DEBUG, "Reset Animations");
   mCurrentAnimIndex = 0;
-  isPlay = true;
+  mIsPlay = true;
 }
 
 void Animator::Play()
 {
-  isPlay = true;
+  mIsPlay = true;
 }

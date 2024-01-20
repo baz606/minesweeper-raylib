@@ -45,7 +45,7 @@ public:
   int GetScreenHeight() const { return mScreenHeight; }
   std::unordered_map<std::string, Sound>& GetSoundMap() { return mSoundMap; }
 
-  void PlaySoundFromMap(const std::string& name);
+  void PlaySoundFromMap(const std::string& name, float volume = 1.0f);
 
 //  void AddFont(class Font* font);
 //  void RemoveFont(class Font* font);

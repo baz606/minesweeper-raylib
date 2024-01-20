@@ -379,12 +379,14 @@ void Game::UnloadData()
   UnloadFont(mFont);
 }
 
-void Game::PlaySoundFromMap(const std::string& name)
+void Game::PlaySoundFromMap(const std::string& name, float volume)
 {
   auto iter = mSoundMap.find(name);
   if (iter != mSoundMap.end())
   {
-    PlaySound(mSoundMap[name]);
+    Sound sound = mSoundMap[name];
+    SetSoundVolume(sound, volume);
+    PlaySound(sound);
   }
   else
   {

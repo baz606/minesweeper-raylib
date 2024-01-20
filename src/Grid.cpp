@@ -97,13 +97,17 @@ void Grid::ToggleSeal(Cell* cell)
   {
     cell->SetCellType(SEALED);
     mTotalSeals--;
+    GetGame()->PlaySoundFromMap("toggle-seal-click.wav", 0.5f);
+
     return;
   }
   else if (cell->GetCellType() == MINE && mTotalSeals > 0)
   {
     cell->SetCellType(MINE_SEALED);
     mTotalSeals--;
+    GetGame()->PlaySoundFromMap("toggle-seal-click.wav", 0.5f);
     CheckForWin();
+
     return;
   }
 
@@ -111,11 +115,13 @@ void Grid::ToggleSeal(Cell* cell)
   {
     cell->SetCellType(UNEXPOSE);
     mTotalSeals++;
+    GetGame()->PlaySoundFromMap("toggle-seal-click.wav", 0.5f);
   }
   else if (cell->GetCellType() == MINE_SEALED)
   {
     cell->SetCellType(MINE);
     mTotalSeals++;
+    GetGame()->PlaySoundFromMap("toggle-seal-click.wav", 0.5f);
   }
 }
 
@@ -212,10 +218,11 @@ void Grid::Expose(Cell *cell)
     {
       mine->SetCellType(MINE_EXPOSE);
     }
+    GetGame()->PlaySoundFromMap("mine-click.wav");
   }
   else if (cell->GetCellType() == UNEXPOSE)
   {
-    GetGame()->PlaySoundFromMap("cell-click.wav");
+    GetGame()->PlaySoundFromMap("cell-click.wav", 2.f);
     // Check if its a normal cell
     std::vector<Cell*> adjacentCells;
     int numOfMines = GetAdjacentCells(cell, adjacentCells);

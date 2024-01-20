@@ -239,6 +239,10 @@ void Game::GenerateOutput()
       {
         TraceLog(LOG_DEBUG, "EXIT GAME!");
         PlaySoundFromMap("mouse-click");
+        // Wait for the full click sound before exiting the game
+        while (IsSoundPlaying(mSoundMap["mouse-click"]))
+        {
+        }
         mIsRunning = false;
       }
     }

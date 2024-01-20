@@ -47,7 +47,6 @@ void Grid::Initialize()
       cell->SetupComponents();
     }
   }
-//  SetMines();
 }
 
 void Grid::Reset()

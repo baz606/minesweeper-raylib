@@ -35,7 +35,8 @@ void Game::Initialize()
   InitWindow(mScreenWidth, mScreenHeight, mTitle);
   SetTargetFPS(60);
   SetExitKey(KEY_NULL);
-  SetTraceLogLevel(LOG_DEBUG);
+  SetTraceLogLevel(LOG_ERROR);
+  InitAudioDevice();
 
   // Initialize the actor and draw map
   mActorsMap[SPLASH_SCREEN] = new std::vector<Actor*>;
@@ -49,6 +50,10 @@ void Game::Initialize()
   Texture2D onHover, offHover;
   onHover = LoadTexture("./resources/back-blue.png");
   offHover = LoadTexture("./resources/back.png");
+
+  // Load the sounds
+  mSoundMap["mouse-click"] = LoadSound("./resources/mouse-click.wav");
+  mSoundMap["to-menu"] = LoadSound("./resources/to-menu.wav");
 
   // Create logo actor to display logo in SPLASH_SCREEN state
   mLogo = new Actor(this, SPLASH_SCREEN);
@@ -133,6 +138,7 @@ void Game::ProcessInput()
         }
         if (GetKeyPressed() > 0)
         {
+          PlaySoundFromMap("to-menu");
           mGameState = MENU;
         }
       }
@@ -221,6 +227,7 @@ void Game::GenerateOutput()
                     "START"))
       {
         TraceLog(LOG_DEBUG, "START GAME!");
+        PlaySoundFromMap("mouse-click");
         mGrid->Reset();
         mGameState = PLAYING;
       }
@@ -231,6 +238,7 @@ void Game::GenerateOutput()
                     "EXIT"))
       {
         TraceLog(LOG_DEBUG, "EXIT GAME!");
+        PlaySoundFromMap("mouse-click");
         mIsRunning = false;
       }
     }
@@ -273,8 +281,6 @@ void Game::GenerateOutput()
         DrawText("CONGRATULATIONS, YOU HAVE WON!", (mScreenWidth / 2) - 500, (mScreenHeight / 2) - 40, fontSize, GREEN);
         DrawText("PRESS SPACE BAR TO PLAY AGAIN!", (mScreenWidth / 2) - 500, (mScreenHeight / 2) + 20, fontSize, GREEN);
       }
-      // Draw back button
-//      DrawTextureEx(texture, { mScreenWidth - 100.f, mScreenHeight - 100.f }, 0.f, 0.5f, LIGHTGRAY);
     }
     break;
   }
@@ -330,14 +336,13 @@ bool Game::IsRunning() const
 void Game::Shutdown()
 {
   UnloadData();
-  UnloadFont(mFont);
   CloseWindow();
 }
 
 void Game::UnloadData()
 {
   // Delete the actors in the hash map's vector
-  for (auto pair : mActorsMap)
+  for (auto& pair : mActorsMap)
   {
     while (!pair.second->empty())
     {
@@ -352,6 +357,28 @@ void Game::UnloadData()
   // The individual deletion of DrawComponent* is handled in their Actor's destructor
   delete mDrawsMap[SPLASH_SCREEN];
   delete mDrawsMap[PLAYING];
+
+  // Unload all sounds in sound hash map
+  for (auto& pair : mSoundMap)
+  {
+    UnloadSound(pair.second);
+  }
+  mSoundMap.clear();
+
+  UnloadFont(mFont);
+}
+
+void Game::PlaySoundFromMap(const std::string& name)
+{
+  auto iter = mSoundMap.find(name);
+  if (iter != mSoundMap.end())
+  {
+    PlaySound(mSoundMap[name]);
+  }
+  else
+  {
+    TraceLog(LOG_ERROR, "mouse-click sound not found!!!");
+  }
 }
 
 //

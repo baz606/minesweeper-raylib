@@ -33,6 +33,7 @@ void BackButton::UpdateActor(float deltaTime)
         int value = boxCollider->OnClick();
         if (value == MOUSE_BUTTON_LEFT)
         {
+          GetGame()->PlaySoundFromMap("mouse-click");
           GetGame()->SetGameState(Game::MENU);
         }
       }

@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <string>
 #include "raylib.h"
 
 class Game
@@ -42,6 +43,9 @@ public:
   [[nodiscard]] const Font& GetFont() const { return mFont; }
   int GetScreenWidth() const { return mScreenWidth; }
   int GetScreenHeight() const { return mScreenHeight; }
+  std::unordered_map<std::string, Sound>& GetSoundMap() { return mSoundMap; }
+
+  void PlaySoundFromMap(const std::string& name);
 
 //  void AddFont(class Font* font);
 //  void RemoveFont(class Font* font);
@@ -70,6 +74,8 @@ private:
   std::unordered_map<GameState, std::vector<class Actor*>*> mActorsMap;
   // DrawComponent HashMap -> Render actor draw components based on game state
   std::unordered_map<GameState, std::vector<class DrawComponent*>*> mDrawsMap;
+  // HashMap to store all sounds in the game
+  std::unordered_map<std::string, Sound> mSoundMap;
 
   // Game Specific
   // This mGrid contains all cells

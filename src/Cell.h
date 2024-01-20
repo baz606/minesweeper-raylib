@@ -28,6 +28,7 @@ class Cell : public Actor
 public:
   Cell(class Game* game, Game::GameState gameState, class Grid* grid);
 
+  void SetupComponents();
   void UpdateActor(float deltaTime) override;
 
   // Getters/Setters

@@ -84,5 +84,6 @@ private:
   class Logo* mLogo;
   // Caption under the logo
   class Actor* mCaption;
+  // Custom font for the game
   Font mFont;
 };

@@ -37,4 +37,12 @@ private:
   void ToggleSeal(Cell *cell);
 
   void CheckForWin();
+  void CheckAllMinesSealed();
+  void CheckAllCellsExposed();
+
+  // Secret feature related variables
+  const float MAX_TIME = 1.0f; // seconds
+  float currentTime; // seconds
+  int bufferIndex;
+  char buffer[6];
 };

@@ -4,6 +4,7 @@
 
 #include <ctime>
 #include <cmath>
+#include <cstring>
 #include "Grid.h"
 #include "Game.h"
 #include "Cell.h"
@@ -17,6 +18,8 @@ Grid::Grid(Game* game, Game::GameState gameState, int rows, int columns, int min
 ,mColumns(columns)
 ,mMines(mines)
 ,mTotalSeals(mines)
+,bufferIndex(0)
+,currentTime(0.f)
 {
 }
 
@@ -71,6 +74,48 @@ void Grid::UpdateActor(float deltaTime)
 
 void Grid::ProcessInput(int mouseX, int mouseY)
 {
+  // Check reveal mines
+  char c = (char)GetCharPressed();
+  if(c > 0)
+  {
+    buffer[bufferIndex] = c;
+    buffer[bufferIndex + 1] = '\0';
+    bufferIndex++;
+    TraceLog(LOG_DEBUG,"BUFFER: %s\n", buffer);
+    if (bufferIndex > 4)
+    {
+      if (strcmp(buffer, "siuuu") == 0)
+      {
+        GetGame()->PlaySoundFromMap("reveal-mines.mp3");
+        // Reveal all mines
+        for (auto mine : mMineList)
+        {
+          mine->SetCellType(MINE_EXPOSE);
+        }
+      }
+      for (char & i : buffer)
+      {
+        i = '\0';
+      }
+      bufferIndex = 0;
+    }
+    currentTime = 0.f;
+  }
+  else
+  {
+    float deltaTime = GetFrameTime();
+    currentTime += deltaTime;
+    if (currentTime > MAX_TIME)
+    {
+      // Clear out the buffer
+      for (char & i : buffer)
+      {
+        i = '\0';
+      }
+      bufferIndex = 0;
+      currentTime = 0.f;
+    }
+  }
   if(IsMouseButtonReleased(MOUSE_BUTTON_LEFT))
   {
     int i = std::lround(mouseY / Cell::LENGTH);
@@ -165,7 +210,7 @@ int Grid::GetAdjacentCells(Cell *cell, std::vector<Cell*>& adjacentCells)
       {
         // Valid adjacent cell
         adjacentCells.push_back(mCellList[i][j]);
-        if (mCellList[i][j]->GetCellType() == MINE || mCellList[i][j]->GetCellType() == MINE_SEALED)
+        if (mCellList[i][j]->GetCellType() == MINE || mCellList[i][j]->GetCellType() == MINE_SEALED || mCellList[i][j]->GetCellType() == MINE_EXPOSE)
         {
           numOfMines++;
         }
@@ -174,7 +219,7 @@ int Grid::GetAdjacentCells(Cell *cell, std::vector<Cell*>& adjacentCells)
       {
         // Valid adjacent cell
         adjacentCells.push_back(mCellList[z][j]);
-        if (mCellList[z][j]->GetCellType() == MINE || mCellList[z][j]->GetCellType() == MINE_SEALED)
+        if (mCellList[z][j]->GetCellType() == MINE || mCellList[z][j]->GetCellType() == MINE_SEALED || mCellList[z][j]->GetCellType() == MINE_EXPOSE)
         {
           numOfMines++;
         }
@@ -190,7 +235,7 @@ int Grid::GetAdjacentCells(Cell *cell, std::vector<Cell*>& adjacentCells)
   if ((y - 1) >= 0)
   {
     adjacentCells.push_back(mCellList[x][y - 1]);
-    if (mCellList[x][y - 1]->GetCellType() == MINE || mCellList[x][y - 1]->GetCellType() == MINE_SEALED)
+    if (mCellList[x][y - 1]->GetCellType() == MINE || mCellList[x][y - 1]->GetCellType() == MINE_SEALED || mCellList[x][y - 1]->GetCellType() == MINE_EXPOSE)
     {
       numOfMines++;
     }
@@ -199,7 +244,7 @@ int Grid::GetAdjacentCells(Cell *cell, std::vector<Cell*>& adjacentCells)
   if ((y + 1) < mColumns)
   {
     adjacentCells.push_back(mCellList[x][y + 1]);
-    if (mCellList[x][y + 1]->GetCellType() == MINE || mCellList[x][y + 1]->GetCellType() == MINE_SEALED)
+    if (mCellList[x][y + 1]->GetCellType() == MINE || mCellList[x][y + 1]->GetCellType() == MINE_SEALED || mCellList[x][y + 1]->GetCellType() == MINE_EXPOSE)
     {
       numOfMines++;
     }
@@ -257,21 +302,65 @@ void Grid::Expose(Cell *cell)
         }
       }
     }
+    CheckForWin();
+  }
+}
+
+void Grid::CheckAllMinesSealed()
+{
+  // Check whether all mines are sealed
+  if (GetGame()->GetGameState() != Game::WIN)
+  {
+    for (auto mine : mMineList)
+    {
+      if (mine->GetCellType() != MINE_SEALED)
+      {
+        // There is at least one mine cell that is not sealed
+        return;
+      }
+    }
+    // Once we get to this point, we know all mines are sealed.
+    // Hence, set game condition to WIN and expose any of the remaining cells.
+    GetGame()->PlaySoundFromMap("win-sound.wav");
+    GetGame()->SetGameState(Game::WIN);
+    // Expose the rest of the cells
+    for (auto row : mCellList)
+    {
+      for (auto cell : row)
+      {
+        if (cell->GetCellType() == UNEXPOSE)
+        {
+          Expose(cell);
+        }
+      }
+    }
+  }
+}
+
+void Grid::CheckAllCellsExposed()
+{
+  if (GetGame()->GetGameState() != Game::WIN)
+  {
+    for (auto& row : mCellList)
+    {
+      for (auto cell : row)
+      {
+        if (cell->GetCellType() == UNEXPOSE)
+        {
+          return;
+        }
+      }
+    }
+    // Once we get to this point, we know all cells are exposed.
+    // Hence, set game condition to WIN
+    GetGame()->PlaySoundFromMap("win-sound.wav");
+    GetGame()->SetGameState(Game::WIN);
   }
 }
 
 void Grid::CheckForWin()
 {
-  for (auto mine : mMineList)
-  {
-    if (mine->GetCellType() == MINE)
-    {
-      // There is at least one mine cell that is not sealed
-      return;
-    }
-  }
-  // Once we get to this point, we know all mines are set to MINE_SEALED state.
-  // Hence, set game condition to WIN
-  GetGame()->PlaySoundFromMap("win-sound.wav");
-  GetGame()->SetGameState(Game::WIN);
+  // We win by either exposing all non-mine cells or sealing all mine cells
+  CheckAllMinesSealed();
+  CheckAllCellsExposed();
 }

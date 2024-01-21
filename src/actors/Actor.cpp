@@ -3,9 +3,9 @@
 //
 
 #include <algorithm>
-#include "Game.h"
+#include "../Game.h"
 #include "Actor.h"
-#include "Component.h"
+#include "../components/Component.h"
 
 Actor::Actor(Game *game, Game::GameState gameState)
 :mState(EActive)

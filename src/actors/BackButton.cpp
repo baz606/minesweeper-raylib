@@ -3,8 +3,8 @@
 //
 
 #include "BackButton.h"
-#include "BoxCollider.h"
-#include "SpriteComponent.h"
+#include "../components/BoxCollider.h"
+#include "../components/SpriteComponent.h"
 
 BackButton::BackButton(Game *game, Game::GameState gameState)
 :Actor(game, gameState)

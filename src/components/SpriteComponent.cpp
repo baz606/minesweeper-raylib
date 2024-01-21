@@ -3,7 +3,7 @@
 //
 
 #include "SpriteComponent.h"
-#include "Actor.h"
+#include "../actors/Actor.h"
 
 SpriteComponent::SpriteComponent(const std::string& name, Actor *owner, int drawOrder)
 :DrawComponent(name, owner, drawOrder)

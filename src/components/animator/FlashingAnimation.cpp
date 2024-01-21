@@ -3,7 +3,7 @@
 //
 
 #include "FlashingAnimation.h"
-#include "DrawComponent.h"
+#include "../DrawComponent.h"
 #include "raylib.h"
 
 FlashingAnimation::FlashingAnimation(Animator *animator, DrawComponent* drawComponent, float speed)

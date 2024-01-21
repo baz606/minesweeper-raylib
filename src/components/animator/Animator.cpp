@@ -5,7 +5,7 @@
 #include <algorithm>
 #include "Animator.h"
 #include "Animation.h"
-#include "Actor.h"
+#include "../../actors/Actor.h"
 
 Animator::Animator(const std::string &name, Actor *owner, int updateOrder)
 : Component(name, owner, updateOrder)

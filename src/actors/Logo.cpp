@@ -3,9 +3,9 @@
 //
 
 #include "Logo.h"
-#include "TextComponent.h"
-#include "Animator.h"
-#include "TransformAnimation.h"
+#include "../components/TextComponent.h"
+#include "../components/animator/Animator.h"
+#include "../components/animator/TransformAnimation.h"
 
 Logo::Logo(Game *game, Game::GameState gameState)
 :Actor(game, gameState)

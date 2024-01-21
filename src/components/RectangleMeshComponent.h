@@ -5,7 +5,7 @@
 #pragma once
 
 #include "Component.h"
-#include "Actor.h"
+#include "../actors/Actor.h"
 #include "DrawComponent.h"
 
 class RectangleMeshComponent : public DrawComponent

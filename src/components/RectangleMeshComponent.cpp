@@ -3,7 +3,7 @@
 //
 
 #include "RectangleMeshComponent.h"
-#include "Cell.h"
+#include "../actors/Cell.h"
 
 RectangleMeshComponent::RectangleMeshComponent(const std::string& name, Actor *owner, int drawOrder)
 :DrawComponent(name, owner, drawOrder)

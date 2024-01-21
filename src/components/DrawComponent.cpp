@@ -3,7 +3,7 @@
 //
 
 #include "DrawComponent.h"
-#include "Actor.h"
+#include "../actors/Actor.h"
 
 DrawComponent::DrawComponent(const std::string &name, Actor *owner, int drawOrder)
 :Component(name, owner)

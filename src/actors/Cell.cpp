@@ -4,11 +4,11 @@
 
 //#include <string>
 #include "Cell.h"
-#include "Game.h"
+#include "../Game.h"
 #include "Grid.h"
-#include "RectangleMeshComponent.h"
-#include "LineMeshComponent.h"
-#include "TextComponent.h"
+#include "../components/RectangleMeshComponent.h"
+#include "../components/LineMeshComponent.h"
+#include "../components/TextComponent.h"
 
 Cell::Cell(Game *game, Game::GameState gameState, Grid *grid)
 :Actor(game, gameState)

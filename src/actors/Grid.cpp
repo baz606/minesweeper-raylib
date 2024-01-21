@@ -6,11 +6,11 @@
 #include <cmath>
 #include <cstring>
 #include "Grid.h"
-#include "Game.h"
+#include "../Game.h"
 #include "Cell.h"
-#include "RectangleMeshComponent.h"
-#include "TextComponent.h"
-#include "LineMeshComponent.h"
+#include "../components/RectangleMeshComponent.h"
+#include "../components/TextComponent.h"
+#include "../components/LineMeshComponent.h"
 
 Grid::Grid(Game* game, Game::GameState gameState, int rows, int columns, int mines)
 :Actor(game, gameState)

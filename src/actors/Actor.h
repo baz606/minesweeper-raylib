@@ -8,7 +8,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "Game.h"
+#include "../Game.h"
 #include "raylib.h"
 
 class Actor

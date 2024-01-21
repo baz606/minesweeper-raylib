@@ -6,21 +6,21 @@
 #include <filesystem>
 
 #include "Game.h"
-#include "Grid.h"
-#include "Cell.h"
-#include "DrawComponent.h"
+#include "actors/Grid.h"
+#include "actors/Cell.h"
+#include "components/DrawComponent.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
-#include "Animator.h"
-#include "SpriteComponent.h"
-#include "BoxCollider.h"
-#include "BackButton.h"
-#include "TextComponent.h"
-#include "TransformAnimation.h"
-#include "FlashingAnimation.h"
-#include "Logo.h"
+#include "components/animator/Animator.h"
+#include "components/SpriteComponent.h"
+#include "components/BoxCollider.h"
+#include "actors/BackButton.h"
+#include "components/TextComponent.h"
+#include "components/animator/TransformAnimation.h"
+#include "components/animator/FlashingAnimation.h"
+#include "actors/Logo.h"
 
 Game::Game(int screenWidth, int screenHeight, const char *title)
 :mScreenWidth(screenWidth)

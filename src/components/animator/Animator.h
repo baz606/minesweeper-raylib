@@ -6,8 +6,8 @@
 
 #include <vector>
 
-#include "Component.h"
-#include "Actor.h"
+#include "../Component.h"
+#include "../../actors/Actor.h"
 
 class Animator : public Component
 {

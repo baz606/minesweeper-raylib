@@ -3,7 +3,7 @@
 //
 
 #include "BoxCollider.h"
-#include "Actor.h"
+#include "../actors/Actor.h"
 #include "SpriteComponent.h"
 
 BoxCollider::BoxCollider(const std::string &name, Actor *owner, int updateOrder)

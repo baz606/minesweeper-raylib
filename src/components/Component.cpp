@@ -3,7 +3,7 @@
 //
 
 #include "Component.h"
-#include "Actor.h"
+#include "../actors/Actor.h"
 
 Component::Component(const std::string &name, class Actor *owner, int updateOrder)
 :mOwner(owner)

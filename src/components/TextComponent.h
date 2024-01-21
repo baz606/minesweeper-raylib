@@ -5,7 +5,7 @@
 #pragma once
 
 #include "DrawComponent.h"
-#include "Actor.h"
+#include "../actors/Actor.h"
 
 class TextComponent : public DrawComponent
 {

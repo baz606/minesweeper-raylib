@@ -272,5 +272,6 @@ void Grid::CheckForWin()
   }
   // Once we get to this point, we know all mines are set to MINE_SEALED state.
   // Hence, set game condition to WIN
+  GetGame()->PlaySoundFromMap("win-sound.wav");
   GetGame()->SetGameState(Game::WIN);
 }

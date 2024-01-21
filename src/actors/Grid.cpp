@@ -107,12 +107,17 @@ void Grid::ProcessInput(int mouseX, int mouseY)
     currentTime += deltaTime;
     if (currentTime > MAX_TIME)
     {
-      // Clear out the buffer
-      for (char & i : buffer)
+      // Check if buffer char array has at least one element
+      if (bufferIndex > 0)
       {
-        i = '\0';
+        printf("Clearing buffer char array\n");
+        // Clear out the buffer
+        for (char & i : buffer)
+        {
+          i = '\0';
+        }
+        bufferIndex = 0;
       }
-      bufferIndex = 0;
       currentTime = 0.f;
     }
   }
